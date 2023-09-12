@@ -1,13 +1,13 @@
-name: Build Images for example #change title 
+name: Build Images for Example #change title 
 
 on:
   push:
     branches: [ main, '**_staging' ]
     paths:
-      - 'example/**' #change new_file to your dir path
+      - 'Example/**' #change new_file to your dir path
 
 env:
-  dir_path: 'example' #change new_file to your dir path
+  dir_path: 'Example' #change new_file to your dir path
   repo_name: 'test-python'
 
 jobs:
