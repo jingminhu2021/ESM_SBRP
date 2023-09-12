@@ -1,0 +1,69 @@
+name: Build Images for Example #change title 
+
+on:
+  push:
+    branches: [ main, '**_staging' ]
+    paths:
+      - 'Example/**' #change new_file to your dir path
+
+env:
+  dir_path: 'Example' #change new_file to your dir path
+  repo_name: 'test-python'
+
+jobs:
+
+  Pylint_Test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --no-cache-dir -r ${{env.dir_path}}/requirements.txt
+        pip install pylint
+
+    - name: Analysing the code with pylint
+      run: |
+        pylint -d C0114,C0116  $(git ls-files '${{env.dir_path}}/*.py')
+
+  Docker_Image_Builder:
+    needs: Pylint_Test
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker Login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run:
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+    - name: Build the Docker image for main
+      if: github.ref == 'refs/heads/main'
+      run: |
+        docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }}
+
+    - name: Build the Docker image for staging
+      if: startsWith(github.ref, 'refs/heads/') && endsWith(github.ref,'_staging')
+      run: |
+        docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }}
+
+    - name: Docker Push for main
+      if: github.ref == 'refs/heads/main'
+      run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }}
+    
+    - name: Docker Push for staging
+      if: startsWith(github.ref, 'refs/heads/') && endsWith(github.ref,'_staging')
+      run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }}
