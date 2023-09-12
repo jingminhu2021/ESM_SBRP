@@ -1,0 +1,44 @@
+name: Build Images for Example #change title 
+
+on:
+  push:
+    branches: [ main, '**_staging' ]
+    paths:
+      - 'Example/**' #change new_file to your dir path
+
+env:
+  dir_path: 'Example' #change new_file to your dir path
+  repo_name: 'test-python'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run:
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+    - name: Build the Docker image for main
+      if: github.ref == 'refs/heads/main'
+      run: |
+        docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }}
+
+    - name: Build the Docker image for staging
+      if: startsWith(github.ref, 'refs/heads/') && endsWith(github.ref,'_staging')
+      run: |
+        docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }}
+
+    - name: Docker Push for main
+      if: github.ref == 'refs/heads/main'
+      run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }}
+    
+    - name: Docker Push for staging
+      if: startsWith(github.ref, 'refs/heads/') && endsWith(github.ref,'_staging')
+      run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }}
