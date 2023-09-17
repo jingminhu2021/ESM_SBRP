@@ -1,4 +1,5 @@
-import Preloader from "./preloader";
+import Preloader from "./preloader"
+import 'slicknav/dist/slicknav.css'
 
 function Header(){
 
@@ -53,7 +54,7 @@ function Header(){
                   </div>
              </div>
          </div>
-          
+        
       </header>
       </>
     )

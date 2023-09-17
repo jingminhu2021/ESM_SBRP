@@ -2,8 +2,25 @@
 import { Form, FormGroup } from 'react-bootstrap'
 import Header from './components/header.jsx'
 import Footer from './components/footer.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'jquery-nice-select/css/nice-select.css'
+
+
+import { useEffect, useRef } from 'react'
 
 function SliderArea(){
+
+  const selectRef = useRef()
+  useEffect(() => {
+    $(selectRef.current).niceSelect();
+  }, [])
+
+  // const getItem = (item) => {
+  //   item.preventDefault()
+  //   let selected = $(selectRef.current).val()
+  //   alert(`You selected ${selected}`)
+  // }
+
   return (
     <>
         {/* slider Area Start */}
@@ -30,7 +47,8 @@ function SliderArea(){
                                     <Form.Control type="text" placeholder="Job Title or keyword"/>
                                   </FormGroup>
                                   <FormGroup className='select-form'>
-                                    <Form.Select>
+                                    <Form.Select ref={selectRef}>
+                                    {/* <Form.Select> */}
                                       <option value="">Location BD</option>
                                       <option value="">Location PK</option>
                                       <option value="">Location US</option>
