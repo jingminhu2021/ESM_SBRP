@@ -30,12 +30,12 @@ function SliderArea(){
                                     <Form.Control type="text" placeholder="Job Title or keyword"/>
                                   </FormGroup>
                                   <FormGroup className='select-form'>
-                                    <Form.Control as='select'>
+                                    <Form.Select>
                                       <option value="">Location BD</option>
                                       <option value="">Location PK</option>
                                       <option value="">Location US</option>
                                       <option value="">Location UK</option>
-                                    </Form.Control>
+                                    </Form.Select>
                                   </FormGroup>
                                   <FormGroup className='search-form'>
                                     <a href="#">Find job</a>
