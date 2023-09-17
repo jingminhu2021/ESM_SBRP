@@ -10,7 +10,9 @@ function SliderArea(){
         <div className="slider-area ">
             {/* Mobile Menu */}
             <div className="slider-active">
-                <div className="single-slider slider-height d-flex align-items-center" data-background="/src/assets/img/hero/h1_hero.jpg">
+                <div className="single-slider slider-height d-flex align-items-center" style={{
+                  backgroundImage: "url(/src/assets/img/hero/h1_hero.jpg)"
+                }}>
                     <div className="container">
                         <div className="row">
                             <div className="col-xl-6 col-lg-9 col-md-10">
@@ -181,7 +183,9 @@ function App() {
         {SliderArea()}
         {OurServices()}
         {/* Online CV Area Start */}
-         <div className="online-cv cv-bg section-overly pt-90 pb-120"  data-background="/src/assets/img/gallery/cv_bg.jpg">
+         <div className="online-cv cv-bg section-overly pt-90 pb-120" style={{
+          backgroundImage: "url(/src/assets/img/gallery/cv_bg.jpg)"
+         }}>
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-xl-10">
@@ -295,7 +299,7 @@ function App() {
         </section>
         {/*  Featured_job_end  */}
         {/*  How  Apply Process Start */}
-        <div className="apply-process-area apply-bg pt-150 pb-150" data-background={"/src/assets/img/gallery/how-applybg.png"}>
+        <div className="apply-process-area apply-bg pt-150 pb-150" style={{ backgroundImage: "url(/src/assets/img/gallery/how-applybg.png)"}}>
             <div className="container">
                 {/* Section Title  */}
                 <div className="row">
