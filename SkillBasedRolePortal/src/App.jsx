@@ -1,4 +1,4 @@
-import './App.css'
+// import './App.css'
 import { Form, FormGroup } from 'react-bootstrap'
 import Header from './components/header.jsx'
 import Footer from './components/footer.jsx'
