@@ -50,13 +50,13 @@
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <li><a href="index.html" class="nav-link">Home</a></li>
+              <li><a href="index.html" class="nav-link active">Home</a></li>
               <li><a href="about.html">About</a></li>
               <li class="has-children">
-                <a href="job-listings.html">Job Listings</a>
+                <a href="job-listings.html" class="active">Job Listings</a>
                 <ul class="dropdown">
                   <li><a href="job-single.html">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
+                  <li><a href="post-job.html" class="active">Post a Job</a></li>
                 </ul>
               </li>
               <li class="has-children">
@@ -72,7 +72,7 @@
                   <li><a href="gallery.html">Gallery</a></li>
                 </ul>
               </li>
-              <li><a href="blog.html" class="active">Blog</a></li>
+              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.html">Contact</a></li>
               <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
               <li class="d-lg-none"><a href="login.html">Log In</a></li>
@@ -96,68 +96,163 @@
       <div class="container">
         <div class="row">
           <div class="col-md-7">
-            <h1 class="text-white font-weight-bold">Our Blog</h1>
+            <h1 class="text-white font-weight-bold">Post A Job</h1>
             <div class="custom-breadcrumbs">
               <a href="#">Home</a> <span class="mx-2 slash">/</span>
-              <span class="text-white"><strong>About Us</strong></span>
+              <a href="#">Job</a> <span class="mx-2 slash">/</span>
+              <span class="text-white"><strong>Post a Job</strong></span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    
     <section class="site-section">
       <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-6 col-lg-4 mb-5">
-            <a href="blog-single.html"><img src="images/sq_img_1.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
-            <h3><a href="blog-single.html" class="text-black">7 Factors for Choosing Between Two Jobs</a></h3>
-            <div>April 15, 2019 <span class="mx-2">|</span> <a href="#">2 Comments</a></div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-5">
-            <a href="blog-single.html"><img src="images/sq_img_2.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
-            <h3><a href="blog-single.html" class="text-black">How to Write a Creative Cover Letter</a></h3>
-            <div>April 15, 2019 <span class="mx-2">|</span> <a href="#">2 Comments</a></div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-5">
-            <a href="blog-single.html"><img src="images/sq_img_4.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
-            <h3><a href="blog-single.html" class="text-black">The Right Way to Quit a Job You Started</a></h3>
-            <div>April 15, 2019 <span class="mx-2">|</span> <a href="#">2 Comments</a></div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-5">
-            <a href="blog-single.html"><img src="images/sq_img_7.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
-            <h3><a href="blog-single.html" class="text-black">7 Factors for Choosing Between Two Jobs</a></h3>
-            <div>April 15, 2019 <span class="mx-2">|</span> <a href="#">2 Comments</a></div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-5">
-            <a href="blog-single.html"><img src="images/sq_img_5.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
-            <h3><a href="blog-single.html" class="text-black">How to Write a Creative Cover Letter</a></h3>
-            <div>April 15, 2019 <span class="mx-2">|</span> <a href="#">2 Comments</a></div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-5">
-            <a href="blog-single.html"><img src="images/sq_img_6.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
-            <h3><a href="blog-single.html" class="text-black">The Right Way to Quit a Job You Started</a></h3>
-            <div>April 15, 2019 <span class="mx-2">|</span> <a href="#">2 Comments</a></div>
-          </div>
-        </div>
-        <div class="row pagination-wrap mt-5">
-          
-          <div class="col-md-12 text-center ">
-            <div class="custom-pagination ml-auto">
-              <a href="#" class="prev">Prev</a>
-              <div class="d-inline-block">
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
+
+        <div class="row align-items-center mb-5">
+          <div class="col-lg-8 mb-4 mb-lg-0">
+            <div class="d-flex align-items-center">
+              <div>
+                <h2>Post A Job</h2>
               </div>
-              <a href="#" class="next">Next</a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="row">
+              <div class="col-6">
+                <a href="#" class="btn btn-block btn-light btn-md"><span class="icon-open_in_new mr-2"></span>Preview</a>
+              </div>
+              <div class="col-6">
+                <a href="#" class="btn btn-block btn-primary btn-md">Save Job</a>
+              </div>
             </div>
           </div>
         </div>
+        <div class="row mb-5">
+          <div class="col-lg-12">
+            <form class="p-4 p-md-5 border rounded" method="post">
+              <h3 class="text-black mb-5 border-bottom pb-2">Job Details</h3>
+              
+              <div class="form-group">
+                <label for="company-website-tw d-block">Upload Featured Image</label> <br>
+                <label class="btn btn-primary btn-md btn-file">
+                  Browse File<input type="file" hidden>
+                </label>
+              </div>
 
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="you@yourdomain.com">
+              </div>
+              <div class="form-group">
+                <label for="job-title">Job Title</label>
+                <input type="text" class="form-control" id="job-title" placeholder="Product Designer">
+              </div>
+              <div class="form-group">
+                <label for="job-location">Location</label>
+                <input type="text" class="form-control" id="job-location" placeholder="e.g. New York">
+              </div>
+
+              <div class="form-group">
+                <label for="job-region">Job Region</label>
+                <select class="selectpicker border rounded" id="job-region" data-style="btn-black" data-width="100%" data-live-search="true" title="Select Region">
+                      <option>Anywhere</option>
+                      <option>San Francisco</option>
+                      <option>Palo Alto</option>
+                      <option>New York</option>
+                      <option>Manhattan</option>
+                      <option>Ontario</option>
+                      <option>Toronto</option>
+                      <option>Kansas</option>
+                      <option>Mountain View</option>
+                    </select>
+              </div>
+
+              <div class="form-group">
+                <label for="job-type">Job Type</label>
+                <select class="selectpicker border rounded" id="job-type" data-style="btn-black" data-width="100%" data-live-search="true" title="Select Job Type">
+                  <option>Part Time</option>
+                  <option>Full Time</option>
+                </select>
+              </div>
+
+
+              <div class="form-group">
+                <label for="job-description">Job Description</label>
+                <div class="editor" id="editor-1">
+                  <p>Write Job Description!</p>
+                </div>
+              </div>
+
+
+              <h3 class="text-black my-5 border-bottom pb-2">Company Details</h3>
+              <div class="form-group">
+                <label for="company-name">Company Name</label>
+                <input type="text" class="form-control" id="company-name" placeholder="e.g. New York">
+              </div>
+
+              <div class="form-group">
+                <label for="company-tagline">Tagline (Optional)</label>
+                <input type="text" class="form-control" id="company-tagline" placeholder="e.g. New York">
+              </div>
+
+              <div class="form-group">
+                <label for="job-description">Company Description (Optional)</label>
+                <div class="editor" id="editor-2">
+                  <p>Description</p>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="company-website">Website (Optional)</label>
+                <input type="text" class="form-control" id="company-website" placeholder="https://">
+              </div>
+
+              <div class="form-group">
+                <label for="company-website-fb">Facebook Username (Optional)</label>
+                <input type="text" class="form-control" id="company-website-fb" placeholder="companyname">
+              </div>
+
+              <div class="form-group">
+                <label for="company-website-tw">Twitter Username (Optional)</label>
+                <input type="text" class="form-control" id="company-website-tw" placeholder="@companyname">
+              </div>
+              <div class="form-group">
+                <label for="company-website-tw">Linkedin Username (Optional)</label>
+                <input type="text" class="form-control" id="company-website-tw" placeholder="companyname">
+              </div>
+
+              <div class="form-group">
+                <label for="company-website-tw d-block">Upload Logo</label> <br>
+                <label class="btn btn-primary btn-md btn-file">
+                  Browse File<input type="file" hidden>
+                </label>
+              </div>
+
+            </form>
+          </div>
+
+         
+        </div>
+        <div class="row align-items-center mb-5">
+          
+          <div class="col-lg-4 ml-auto">
+            <div class="row">
+              <div class="col-6">
+                <a href="#" class="btn btn-block btn-light btn-md"><span class="icon-open_in_new mr-2"></span>Preview</a>
+              </div>
+              <div class="col-6">
+                <a href="#" class="btn btn-block btn-primary btn-md">Save Job</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+
+    
     
     <footer class="site-footer">
 
