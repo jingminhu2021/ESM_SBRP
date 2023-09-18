@@ -27,7 +27,7 @@ function home(){
 
     return(
         <div>
-        <section className="home-section section-hero overlay bg-image" style={{backgroundImage: 'url(/src/assets/images/hero_1.jpg)'}} id="home-section">
+        <section className="home-section section-hero overlay bg-image" style={{backgroundImage: 'url(/images/hero_1.jpg)'}} id="home-section">
             <div className="container">
             <div className="row align-items-center justify-content-center">
                 <div className="col-md-12">
@@ -70,7 +70,7 @@ function home(){
             </a>
         </section>
 
-        <section className="py-5 bg-image overlay-primary fixed overlay" id="next" style={{backgroundImage: 'url(/hero_1.jpg)'}}>
+        <section className="py-5 bg-image overlay-primary fixed overlay" id="next" style={{backgroundImage: 'url(/images/hero_1.jpg)'}}>
             <div className="container">
             <div className="row mb-5 justify-content-center">
                 <div className="col-md-7 text-center">
@@ -126,7 +126,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -146,7 +146,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -166,7 +166,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_3.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_3.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -186,7 +186,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_4.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_4.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -206,7 +206,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_5.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_5.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -225,7 +225,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -245,7 +245,7 @@ function home(){
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div className="job-listing-logo">
-              <img src="/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
+              <img src="/images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" className="img-fluid"/>
             </div>
 
             <div className="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
