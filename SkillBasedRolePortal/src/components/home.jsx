@@ -1,9 +1,33 @@
-import * as React from 'react';
+import * as React from 'react'
+
+import Select from 'react-select'
 
 function home(){
+    const [selectedOption, setSelectedOption] = React.useState(null)
+    
+    const region = [
+        { value: '', label: 'Anywhere' },
+        { value: 'San Francisco', label: 'San Francisco' },
+        { value: 'Palo Alto', label: 'Palo Alto' },
+        { value: 'New York', label: 'New York' },
+        { value: 'Mahattan', label: 'Mahattan' },
+        { value: 'Ontario', label: 'Ontario' },
+        { value: 'Toronto', label: 'Toronto' },
+        { value: 'Kansas', label: 'Kansas' },
+        { value: 'Mountain View', label: 'Mountain View' }
+    ]
+
+    const Job_Type = [
+      { value: 'Full Time', label: 'Full Time' },
+      { value: 'Part Time', label: 'Part Time' },
+      { value: 'Freelance', label: 'Freelance' },
+      { value: 'Internship', label: 'Internship' },
+      { value: 'Temporary', label: 'Temporary' }
+    ]
+
     return(
         <div>
-        <section className="home-section section-hero overlay bg-image" style={{backgroundImage: 'url(/hero_1.jpg)'}} id="home-section">
+        <section className="home-section section-hero overlay bg-image" style={{backgroundImage: 'url(/src/assets/images/hero_1.jpg)'}} id="home-section">
             <div className="container">
             <div className="row align-items-center justify-content-center">
                 <div className="col-md-12">
@@ -17,23 +41,10 @@ function home(){
                         <input type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <select className="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Region">
-                        <option>Anywhere</option>
-                        <option>San Francisco</option>
-                        <option>Palo Alto</option>
-                        <option>New York</option>
-                        <option>Manhattan</option>
-                        <option>Ontario</option>
-                        <option>Toronto</option>
-                        <option>Kansas</option>
-                        <option>Mountain View</option>
-                        </select>
+                        <Select className={"selectpicker"} placeholder="Select Region" options={region} onChange={setSelectedOption} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <select className="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Job Type">
-                        <option>Part Time</option>
-                        <option>Full Time</option>
-                        </select>
+                        <Select placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={setSelectedOption} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
@@ -43,9 +54,9 @@ function home(){
                     <div className="col-md-12 popular-keywords">
                         <h3>Trending Keywords:</h3>
                         <ul className="keywords list-unstyled m-0 p-0">
-                        <li><a href="#" className="">UI Designer</a></li>
-                        <li><a href="#" className="">Python</a></li>
-                        <li><a href="#" className="">Developer</a></li>
+                          <li><a href="#" className="">UI Designer</a></li>
+                          <li><a href="#" className="">Python</a></li>
+                          <li><a href="#" className="">Developer</a></li>
                         </ul>
                     </div>
                     </div>
