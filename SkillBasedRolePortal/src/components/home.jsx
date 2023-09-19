@@ -1,9 +1,10 @@
 import * as React from 'react'
+import { useState } from "react";
 
 import Select from 'react-select'
 
 function home(){
-    const [selectedOption, setSelectedOption] = React.useState(null)
+    const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
     
     const region = [
         { value: '', label: 'Anywhere' },
@@ -25,6 +26,21 @@ function home(){
       { value: 'Temporary', label: 'Temporary' }
     ]
 
+
+    const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: ""});
+    const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    };
+    const  handleDropdownChange = (event) => {
+      setSelectedOption(event.target);
+    };
+    const handleSubmit = (event) => {
+      jobTitle: {FormData.jobTitle};
+      jobRegion: {FormData.jobRegion.value};
+      jobType: {FormData.jobTpe}
+    }
+
     return(
         <div>
         <section className="home-section section-hero overlay bg-image" style={{backgroundImage: 'url(/images/hero_1.jpg)'}} id="home-section">
@@ -35,29 +51,19 @@ function home(){
                     <h1 className="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est, consequuntur perferendis.</p>
                 </div>
-                <form method="post" className="search-jobs-form">
+                <form className="search-jobs-form" onSubmit={handleSubmit}>
                     <div className="row mb-5">
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <input type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
+                        <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select className={"selectpicker"} placeholder="Select Region" options={region} onChange={setSelectedOption} />
+                        <Select name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={setSelectedOption} />
+                        <Select name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={handleDropdownChange} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
-                    </div>
-                    </div>
-                    <div className="row">
-                    <div className="col-md-12 popular-keywords">
-                        <h3>Trending Keywords:</h3>
-                        <ul className="keywords list-unstyled m-0 p-0">
-                          <li><a href="#" className="">UI Designer</a></li>
-                          <li><a href="#" className="">Python</a></li>
-                          <li><a href="#" className="">Developer</a></li>
-                        </ul>
                     </div>
                     </div>
                 </form>
