@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from "react";
-
 import Select from 'react-select'
+import navbar from '../components/navbar.jsx'
 
 function home(){
     const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
@@ -43,6 +43,7 @@ function home(){
 
     return(
         <div>
+        {navbar()}
         <section className="home-section section-hero overlay bg-image" style={{backgroundImage: 'url(/images/hero_1.jpg)'}} id="home-section">
             <div className="container">
             <div className="row align-items-center justify-content-center">
