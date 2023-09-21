@@ -9,7 +9,7 @@ function profile(){
     function skillList(){
         for (let i = 0; i < skill.length; i++){
                 arr.push(
-                    <button class="btn btn-primary border-width-2 mr-2 mb-2" key={skill[i]} disabled>{skill[i]}</button>)
+                    <button className="btn btn-primary border-width-2 mr-2 mb-2" key={skill[i]} disabled>{skill[i]}</button>)
             }
             return (
                 <div>{arr}</div>

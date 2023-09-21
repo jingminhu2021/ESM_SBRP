@@ -16,9 +16,9 @@ import './assets/css/style.css'
 export default function App() {
   return (
     <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

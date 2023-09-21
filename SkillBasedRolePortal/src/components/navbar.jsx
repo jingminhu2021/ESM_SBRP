@@ -4,21 +4,27 @@ import { Outlet, Link } from "react-router-dom";
 
 function navbar(){
     
+    const user = "True"
+
     function checkUser(){
-        if(user){
+        if(user=="False"){
             return (
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
                     <Link to="post-job.html" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-add"></span>Post a Job</Link>
                     <Link to="login.html" className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link>
-                    </div>
+                    </div> 
                     <Link to="#" className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span className="icon-menu h3 m-0 p-0 mt-2"></span></Link>
                 </div>
             )
-        }
+        } else {
         return (
-            <div>Test</div>
-        )
+            <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
+                <div className="ml-auto">
+                    <Link to="profile" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-user"></span>My Account</Link>
+                </div>
+            </div>
+        )}
     }
 
 
@@ -72,13 +78,14 @@ function navbar(){
                     </ul>
                     
                 </nav>
-                    <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
+                    {/* <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                         <div className="ml-auto">
                         <Link to="post-job.html" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-add"></span>Post a Job</Link>
                         <Link to="login.html" className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link>
                         </div>
                         <Link to="#" className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span className="icon-menu h3 m-0 p-0 mt-2"></span></Link>
-                    </div>
+                    </div> */}
+                    {checkUser()}
                 </div>
             </div>
         </header>
