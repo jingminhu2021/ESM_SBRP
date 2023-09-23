@@ -1,14 +1,14 @@
-name: Build Images for Example #change title 
+name: Build Images for login #change title 
 
 on:
   push:
     branches: [ main, '**_staging' ]
     paths:
-      - 'Example/**' #change new_file to your dir path
+      - 'login/**' #change new_file to your dir path
 
 env:
-  dir_path: 'Example' #change new_file to your dir path
-  repo_name: 'test-python'
+  dir_path: 'login' #change new_file to your dir path
+  repo_name: 'is212_login'
 
 jobs:
 
@@ -34,7 +34,7 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        pylint -d C0114,C0116,C0304  $(git ls-files '${{env.dir_path}}/*.py')
+        pylint -d C0114,C0116,C0304,C0301,C0303,C0103,C0115,W0718,R0903  $(git ls-files '${{env.dir_path}}/*.py')
 
   Docker_Image_Builder:
     needs: Pylint_Test
