@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import login from '../components/login.jsx'
 
 function navbar(){
     
-    const user = "True"
+    const user = "False"
 
     function checkUser(){
         if(user=="False"){
@@ -12,7 +13,8 @@ function navbar(){
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
                     <Link to="post-job.html" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-add"></span>Post a Job</Link>
-                    <Link to="login.html" className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link>
+                    {/* <Link className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link> */}
+                    {login("lg")}
                     </div> 
                     <Link to="#" className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span className="icon-menu h3 m-0 p-0 mt-2"></span></Link>
                 </div>
@@ -74,7 +76,7 @@ function navbar(){
                         <li><Link to="blog.html">Blog</Link></li>
                         <li><Link to="contact.html">Contact</Link></li>
                         <li className="d-lg-none"><Link to="post-job.html"><span className="m-2">+</span> Post a Job</Link></li>
-                        <li className="d-lg-none"><Link to="login.html">Log In</Link></li>
+                        <li className="d-lg-none">{login("sm")}</li>
                     </ul>
                     
                 </nav>
