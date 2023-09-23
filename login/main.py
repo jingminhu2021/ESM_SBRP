@@ -18,7 +18,6 @@ db = SQLAlchemy(app)
 # For Cross-Origin Resource Sharing
 CORS(app)
 
-
 @app.before_request
 def make_session_permanent():
     session.permanent = True #By default, permanent session will last for 31 days

@@ -1,6 +1,11 @@
 name: Build Images for login #change title 
 
 on:
+  pull_request:
+    branches: [ main, '**_staging' ]
+    paths:
+      - 'login/**' #change new_file to your dir path
+
   push:
     branches: [ main, '**_staging' ]
     paths:
@@ -38,7 +43,7 @@ jobs:
 
   Docker_Image_Builder:
     needs: Pylint_Test
-    if: always()
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
