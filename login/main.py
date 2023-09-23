@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+import os
 from flask import Flask, request, jsonify, session, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-import os
 
 DB_USERNAME = os.environ.get('DB_USERNAME')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
@@ -39,7 +39,7 @@ class Account(db.Model):
     dept = db.Column(db.String(50), nullable=False)
     biz_address = db.Column(db.String(255), nullable=True)
     profile_picture = db.Column(db.String(255), nullable=False)
-  
+
     def json(self):
         item = {
             'accounts_id': self.accounts_id,
@@ -55,39 +55,39 @@ class Account(db.Model):
             'profile_picture': self.profile_picture,
         }
         return item
-    
+
 @app.route("/login", methods=['POST'])
 def login():
     try:
         email = request.form['email']
         password = request.form['password']
         account = Account.query.filter_by(email=email, password=password).first()
-        
+
         if account is None:
             return jsonify({'message': 'No account found!', 'status': 'fail'})
-        else:
-            # return jsonify({'account': account.json()})
-            session['accounts_id'] = account.accounts_id
-            session['staff_id'] = account.staff_id 
-            session['email'] = account.email
-            session['fname'] = account.fname
-            session['lname'] = account.lname
-            session['phone'] = account.phone
-            session['sys_role'] = account.sys_role
-            session['dept'] = account.dept
-            session['biz_address'] = account.biz_address
-            session['profile_picture'] = account.profile_picture
-            session['status'] = 'success'
-            
-            return jsonify({'message': 'Login successful!','status': 'success'})
     
+        # Create session data, we can access this data in other routes
+        session['accounts_id'] = account.accounts_id
+        session['staff_id'] = account.staff_id
+        session['email'] = account.email
+        session['fname'] = account.fname
+        session['lname'] = account.lname
+        session['phone'] = account.phone
+        session['sys_role'] = account.sys_role
+        session['dept'] = account.dept
+        session['biz_address'] = account.biz_address
+        session['profile_picture'] = account.profile_picture
+        session['status'] = 'success'
+
+        return jsonify({'message': 'Login successful!','status': 'success'})
+
     except Exception as e:
         return jsonify({'error': str(e)})
-    
+
 @app.route("/logout", methods=['POST'])
 def logout():
     session.clear()
     return redirect("/")
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True) #testing purpose
+    app.run(host="0.0.0.0", port=5003, debug=True) #testing purpose
