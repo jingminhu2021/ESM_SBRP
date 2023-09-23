@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  #######################################
+  # Login: The Login microservice
+  #######################################
+
+  login:
+    image: spmg7t6/is212_login
+    ports:
+      - "5000:5000"
+    restart: always
+    env_file:
+      - db.env
