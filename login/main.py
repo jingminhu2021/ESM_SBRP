@@ -65,7 +65,7 @@ def login():
 
         if account is None:
             return jsonify({'message': 'No account found!', 'status': 'fail'})
-    
+
         # Create session data, we can access this data in other routes
         session['accounts_id'] = account.accounts_id
         session['staff_id'] = account.staff_id
