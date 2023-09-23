@@ -6,14 +6,11 @@ import login from '../components/login.jsx'
 
 function navbar(){
     
-    var user = "False"
 
-    // if (ReactSession.get("status") == true){
-    //     user = "True"
-    // }    
+    var user = sessionStorage.getItem('status')
 
     function checkUser(){
-        if(user=="False"){
+        if(sessionStorage.getItem('status')!='true'){
             return (
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
