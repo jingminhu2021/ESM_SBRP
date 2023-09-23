@@ -3,6 +3,19 @@ import { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+// import axios from 'axios';
+
+// function send_onsubmit(email, password){
+//     let api_endpoint_url = 'localhost:5000/login' //Placeholder
+//     var bodyFormData = new FormData();
+//     bodyFormData.append('email', email);
+//     bodyFormData.append('password', password);
+//     axios.get(api_endpoint_url, bodyFormData)
+//     .then(function (response) {
+//         console.log(response);
+//     })
+// }
+
 
 function login(size){
     
@@ -15,6 +28,27 @@ function login(size){
         btn_className = "m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"
         span_className = "mr-2 icon-lock_outline"
     }
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    })
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form data submitted:', formData);
+        // Add your authentication logic here, e.g., send data to an API
+      };
+    
+
     return (
         <>
             
@@ -28,13 +62,16 @@ function login(size){
                 </Modal.Header>
                 
                 <Modal.Body>
-                <Form>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="email">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                             type="email"
+                            name="email"
                             placeholder="name@example.com"
                             autoFocus
+                            value={formData.email}
+                            onChange={handleInputChange}
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="password"
@@ -42,20 +79,23 @@ function login(size){
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                             type="password"
+                            name='password'
                             placeholder="Password"
+                            value={formData.password}
+                            onChange={handleInputChange}
                         />
                     </Form.Group>
-                </Form>
 
-                </Modal.Body>
-                <Modal.Footer>
                     <Button variant = "secondary" onClick = {handleClose}>
                         Close
                     </Button>
-                    <Button variant = "primary" onClick = {handleClose}>
+
+                    <Button className="ml-2" variant = "primary" type="submit">
                         Login
                     </Button>
-                </Modal.Footer>
+                </Form>
+
+                </Modal.Body>
             </Modal>
         </>
     )

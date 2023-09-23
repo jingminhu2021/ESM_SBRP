@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+// import { ReactSession } from 'react-client-session';
 import login from '../components/login.jsx'
 
 function navbar(){
     
-    const user = "False"
+    var user = "False"
+
+    // if (ReactSession.get("status") == true){
+    //     user = "True"
+    // }    
 
     function checkUser(){
         if(user=="False"){
