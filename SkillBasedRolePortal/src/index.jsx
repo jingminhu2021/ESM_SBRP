@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import Profile from './pages/profile.jsx'
+import Logout from './components/logout.jsx'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
@@ -20,6 +21,7 @@ export default function App() {
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </BrowserRouter>
