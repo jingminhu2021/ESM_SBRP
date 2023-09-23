@@ -1,4 +1,4 @@
-profile = "default"
+profile = "spm-default"
 aws_region = "ap-southeast-1"
 service_name = "SBRP"
 

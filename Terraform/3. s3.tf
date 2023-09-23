@@ -4,4 +4,3 @@
 #   acl    = "private"
 #   tags   = var.tags
 # }
-  
