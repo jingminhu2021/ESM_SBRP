@@ -14,7 +14,6 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-
 # Initialize the SQLAlchemy database object
 db = SQLAlchemy(app)
 
