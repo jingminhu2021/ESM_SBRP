@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-from flask import Flask, request, jsonify, redirect
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
