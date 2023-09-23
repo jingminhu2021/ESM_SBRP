@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
 import os
-from flask import Flask, request, jsonify, session, redirect
+from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+
 
 DB_USERNAME = os.environ.get('DB_USERNAME')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
 ENDPOINT = os.environ.get('DB_HOST')
 
 app = Flask(__name__)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
 
 # Initialize the SQLAlchemy database object
 db = SQLAlchemy(app)
 
 # For Cross-Origin Resource Sharing
-CORS(app)
-
-
-@app.before_request
-def make_session_permanent():
-    session.permanent = True #By default, permanent session will last for 31 days
-
+CORS(app, supports_credentials=True)
 
 # Create a SQLAlchemy model for the accounts table
 class Account(db.Model):
@@ -55,6 +52,21 @@ class Account(db.Model):
             'profile_picture': self.profile_picture,
         }
         return item
+    
+    def get_profile(self):
+        item = {
+            'accounts_id': self.accounts_id,
+            'staff_id': self.staff_id,
+            'email': self.email,
+            'fname': self.fname,
+            'lname': self.lname,
+            'phone': self.phone,
+            'sys_role': self.sys_role,
+            'dept': self.dept,
+            'biz_address': self.biz_address,
+            'profile_picture': self.profile_picture,
+        }
+        return item
 
 @app.route("/login", methods=['POST'])
 def login():
@@ -66,28 +78,12 @@ def login():
         if account is None:
             return jsonify({'message': 'No account found!', 'status': 'fail'})
 
-        # Create session data, we can access this data in other routes
-        session['accounts_id'] = account.accounts_id
-        session['staff_id'] = account.staff_id
-        session['email'] = account.email
-        session['fname'] = account.fname
-        session['lname'] = account.lname
-        session['phone'] = account.phone
-        session['sys_role'] = account.sys_role
-        session['dept'] = account.dept
-        session['biz_address'] = account.biz_address
-        session['profile_picture'] = account.profile_picture
-        session['status'] = 'success'
-
-        return jsonify({'message': 'Login successful!','status': 'success'})
+        
+        return jsonify({'message': 'Login successful!','status': 'success', 'data': account.get_profile()})
 
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@app.route("/logout", methods=['POST'])
-def logout():
-    session.clear()
-    return redirect("/")
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True) #testing purpose
