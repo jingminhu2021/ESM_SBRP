@@ -14,7 +14,6 @@ function navbar(){
             return (
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
-                    <Link to="post-job.html" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-add"></span>Post a Job</Link>
                     {/* <Link className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link> */}
                     {login("lg")}
                     </div> 
@@ -24,9 +23,15 @@ function navbar(){
         } else {
         return (
             <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
-                <div className="ml-auto">
-                    <Link to="profile" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-user"></span>My Account</Link>
-                </div>
+                <div className="ml-auto dropdown account">
+                    <button className="btn btn-outline-white border-width-2 d-none d-lg-inline-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">
+                        <span className="mr-2 icon-user"></span>My Account  
+                    </button>
+                    <div className="mt-0 dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <   Link to="/profile" className="dropdown-item">Profile</Link>     
+                        <   Link to="#" className="dropdown-item">Log Out</Link>     
+                    </div>
+                </div>               
             </div>
         )}
     }
