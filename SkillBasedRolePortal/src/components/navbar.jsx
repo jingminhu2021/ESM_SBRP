@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+// import { ReactSession } from 'react-client-session';
 import login from '../components/login.jsx'
 
 function navbar(){
     
-    const user = "False"
+
+    var user = sessionStorage.getItem('status')
 
     function checkUser(){
-        if(user=="False"){
+        if(sessionStorage.getItem('status')!='true'){
             return (
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
