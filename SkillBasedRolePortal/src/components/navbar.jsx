@@ -3,14 +3,19 @@ import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 // import { ReactSession } from 'react-client-session';
 import login from '../components/login.jsx'
+import logout from '../components/logout.jsx'
 
 function navbar(){
     
 
     var user = sessionStorage.getItem('status')
 
+    const handleLogout = () => {
+        {logout()}
+    }
+
     function checkUser(){
-        if(sessionStorage.getItem('status')!='true'){
+        if(sessionStorage.getItem('status')=='true'){
             return (
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
@@ -28,8 +33,8 @@ function navbar(){
                         <span className="mr-2 icon-user"></span>My Account  
                     </button>
                     <div className="mt-0 dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <   Link to="/profile" className="dropdown-item">Profile</Link>     
-                        <   Link to="#" className="dropdown-item">Log Out</Link>     
+                        <Link to="/profile" className="dropdown-item">Profile</Link>
+                        <Link onClick={handleLogout()} className="dropdown-item">Log Out</Link>   
                     </div>
                 </div>               
             </div>
