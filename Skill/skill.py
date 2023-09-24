@@ -46,5 +46,50 @@ def create_skill():
     except Exception as e:
         return jsonify("Error: " + str(e)), 400
 
+@app.route("/update_skill", methods=['PUT'])
+def update_skill():
+    try:
+        # # Check current user's role
+        # if session['sys_role'] != "hr":
+        #     return jsonify(
+        #         {
+        #             "code": 403,
+        #             "message": "You are not authorized to access this page!"
+        #         }
+        #     ), 403
+        
+        # Get skill to update
+        data = request.get_json()
+        skill_id = data['skill_id']
+        skill = Skill.query.filter_by(skill_id=skill_id).first()
+        
+        # If skill does not exist
+        if skill is None:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Skill not found!"
+                }
+            ), 404
+        
+        # Update skill info
+        skill.skill_name = data['skill_name']
+        skill.skill_description = data['skill_description']
+        
+        # Commit changes to database
+        db.session.commit()
+
+        # Return success response
+        return jsonify(
+            {
+                "code": 200,
+                "data": skill.json(),
+                "message": "Skill updated successfully!"
+            }
+        ), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
