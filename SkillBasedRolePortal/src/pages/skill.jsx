@@ -1,121 +1,135 @@
-import * as React from 'react'
-import navbar from '../components/navbar.jsx'
+import { useState } from "react";
+import navbar from '../components/navbar.jsx';
+import axios from 'axios';
 
-function contact(){
-    return(
-        <div>
-            {navbar()}
-            <section className="section-hero overlay inner-page bg-image" style={{backgroundImage: 'url(/images/hero_1.jpg)'}} id="home-section">
-                <div className="container">
-                    <div className="row">
-                    <div className="col-md-7">
-                        <h1 className="text-white font-weight-bold">Skills</h1>
-                        <div className="custom-breadcrumbs">
-                        <a href="/">Home</a> <span className="mx-2 slash">/</span>
-                        <span className="text-white"><strong>Skills</strong></span>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </section>
+function skill() {
+  const [skillName, setSkillName] = useState('');
+  const [skillDescription, setSkillDescription] = useState('');
+  const [skillStatus, setSkillStatus] = useState('active'); 
+  const [errors, setErrors] = useState({});
 
-            <section className="site-section" id="next-section">
-                <div className="container">
-                    <div className="row">
-                    <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
-                        <form action="#" className="">
+  const handleSkillNameChange = async (event) => {
+    const skillName = await event.target.value;
+    setSkillName(skillName);
+    setErrors({... errors, skillName: ''});
+  };
 
-                        <div className="row form-group">
-                            <div className="col-md-6 mb-3 mb-md-0">
-                            <label className="text-black" htmlFor="fname">First Name</label>
-                            <input type="text" id="fname" className="form-control" />
-                            </div>
-                            <div className="col-md-6">
-                            <label className="text-black" htmlFor="lname">Last Name</label>
-                            <input type="text" id="lname" className="form-control" />
-                            </div>
-                        </div>
+  const handleSkillDescriptionChange = async (event) => {
+    const skillDescription = await event.target.value;
+    setSkillDescription(skillDescription);
+    setErrors({... errors, skillDescription: ''});
+  };
 
-                        <div className="row form-group">
-                            
-                            <div className="col-md-12">
-                            <label className="text-black" htmlFor="email">Email</label> 
-                            <input type="email" id="email" className="form-control" />
-                            </div>
-                        </div>
+  const handleSkillStatusChange = (event) => {
+    setSkillStatus(event.target.value);
+  };
 
-                        <div className="row form-group">
-                            
-                            <div className="col-md-12">
-                            <label className="text-black" htmlFor="subject">Subject</label> 
-                            <input type="subject" id="subject" className="form-control" />
-                            </div>
-                        </div>
+  function checkErrors(){
+    const errors = {};
+    if (skillName === '') {
+      errors.skillName = 'Skill name is required';
+    }
+    if (skillDescription === '') {
+      errors.skillDescription = 'Skill description is required';
+    }
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return true;
+    }
+    return false;
+  }
 
-                        <div className="row form-group">
-                            <div className="col-md-12">
-                            <label className="text-black" htmlFor="message">Message</label> 
-                            <textarea name="message" id="message" cols="30" rows="7" className="form-control" placeholder="Write your notes or questions here..."></textarea>
-                            </div>
-                        </div>
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-                        <div className="row form-group">
-                            <div className="col-md-12">
-                            <input type="submit" value="Send Message" className="btn btn-primary btn-md text-white" />
-                            </div>
-                        </div>
+    if (checkErrors()){
+      return;
+    }
 
-            
-                        </form>
-                    </div>
-                    </div>
-                </div>
-            </section>
+    const skillData = {
+      skill_name: skillName,
+      skill_description: skillDescription,
+      skill_status: skillStatus,
+    };
+    
+    const response = await axios.post('http://localhost:5001/create_skill', skillData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  
+    if (response.status === 200) {
+      // Skill created successfully
+      alert("Skill created successfully");
 
-            <section className="site-section bg-light">
-                <div className="container">
-                    <div className="row mb-5">
-                    <div className="col-12 text-center" data-aos="fade">
-                        <h2 className="section-title mb-3">Happy Candidates Says</h2>
-                    </div>
-                    </div>
-                    <div className="row">
-                    <div className="col-lg-6">
-                        <div className="block__87154 bg-white rounded">
-                        <blockquote>
-                            <p>&ldquo;Ipsum harum assumenda in eum vel eveniet numquam cumque vero vitae enim cupiditate deserunt eligendi officia modi consectetur. Expedita tempora quos nobis earum hic ex asperiores quisquam optio nostrum sit&rdquo;</p>
-                        </blockquote>
-                        <div className="block__91147 d-flex align-items-center">
-                            <figure className="mr-4"><img src="images/person_1.jpg" alt="Image" className="img-fluid" /></figure>
-                            <div>
-                            <h3>Elisabeth Smith</h3>
-                            <span className="position">Creative Director</span>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+    } else {
+      // Error creating skill
+      console.log("Error: ", response.data);
+    }
+  };
 
-                    <div className="col-lg-6">
-                        <div className="block__87154 bg-white rounded">
-                        <blockquote>
-                            <p>&ldquo;Ipsum harum assumenda in eum vel eveniet numquam, cumque vero vitae enim cupiditate deserunt eligendi officia modi consectetur. Expedita tempora quos nobis earum hic ex asperiores quisquam optio nostrum sit&rdquo;</p>
-                        </blockquote>
-                        <div className="block__91147 d-flex align-items-center">
-                            <figure className="mr-4"><img src="images/person_2.jpg" alt="Image" className="img-fluid" /></figure>
-                            <div>
-                            <h3>Chris Peter</h3>
-                            <span className="position">Web Designer</span>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-
-
-                    </div>
-                </div>
-            </section>
+  return (
+    <div>
+      {navbar()}
+      <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-7">
+              <h1 className="text-white font-weight-bold">Create Skill</h1>
+              <div className="custom-breadcrumbs">
+                <a href="/">Home</a> <span className="mx-2 slash">/</span>
+                <a href="#">Skills</a> <span className="mx-2 slash">/</span>
+                <span className="text-white"><strong>Create Skill</strong></span>
+              </div>
+            </div>
+          </div>
         </div>
-    )
-}
+      </section>
 
-export default contact
+      <section className="site-section" id="next-section">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
+
+              <form action="#" className="" onSubmit={handleSubmit}>
+                <div className="row form-group">
+                  <div className="col-md-12">
+                    <label className="text-black" htmlFor="skillName">Name</label>
+                    <input type="text" id="skillName"  className="form-control" value={skillName} onChange={handleSkillNameChange} />
+                    <p className="text-danger">{errors.skillName}</p>
+                  </div>
+                </div>
+
+                <div className="row form-group">
+                  <div className="col-md-12">
+                    <label className="text-black" htmlFor="skillDescription">Description</label>
+                    <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value={skillDescription} onChange={handleSkillDescriptionChange}></textarea>
+                    <p className="text-danger">{errors.skillDescription}</p>
+                  </div>
+                </div>
+
+                <div className="row form-group">
+                  <div className="col-md-6 mb-3 mb-md-0">
+                    <label className="text-black" htmlFor="skillStatus">Status</label>
+                    <select id="skillStatus" className="form-control" value={skillStatus} onChange={handleSkillStatusChange}>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="row form-group">
+                  <div className="col-md-auto">
+                    <input type="submit" value="Create" className="btn btn-primary btn-md text-white col-md-12" />
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+          </div>
+        </section>
+        </div>
+    );
+}
+export default skill

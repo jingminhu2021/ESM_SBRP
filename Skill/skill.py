@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-endpoint = os.environ.get("DB_ENDPOINT")
+endpoint = os.environ.get("DB_HOST")
 username = os.environ.get("DB_USERNAME")
 password = os.environ.get("DB_PASSWORD")
 
