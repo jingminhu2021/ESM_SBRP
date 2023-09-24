@@ -60,6 +60,9 @@ function skill() {
   
     if (response.status === 200) {
       // Skill created successfully
+      setSkillName('');
+      setSkillDescription('');
+      setSkillStatus('active'); 
       alert("Skill created successfully");
 
     } else {
