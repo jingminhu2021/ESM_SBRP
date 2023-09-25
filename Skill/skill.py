@@ -32,6 +32,56 @@ class Skill(db.Model):
         }
         return item
 
+# @app.route("/get_skill_by_name/<skill_name>", methods=['GET'])
+# def get_skill_by_name(skill_name):
+#     try:
+#         # Get skill by skill name
+#         skill = Skill.query.filter_by(skill_name=skill_name).first()
+#         # If skill does not exist
+#         if skill is None:
+#             return jsonify(
+#                 {
+#                     "code": 404,
+#                     "message": "Skill not found!"
+#                 }
+#             ), 404
+#         # Return skill details
+#         return jsonify(
+#             {
+#                 "code": 200,
+#                 "data": skill.json(),
+#                 "message": "Skill retrieved successfully!"
+#             }
+#         ), 200
+#     except Exception as e:
+#         return jsonify({'error': str(e)})
+
+@app.route("/get_all_skills", methods=['GET'])
+def get_all_skills():
+    try:
+        # Get all skills
+        skills = Skill.query.all()
+        # If no skills exist
+        if not skills:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "No skills found!"
+                }
+            ), 404
+        # Return all skills
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [skill.json() for skill in skills]
+                },
+                "message": "Skills retrieved successfully!"
+            }
+        ), 200
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 @app.route("/create_skill", methods=['POST'])
 def create_skill():
     try:
