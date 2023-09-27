@@ -32,53 +32,57 @@ class Skill(db.Model):
         }
         return item
 
-# @app.route("/get_skill_by_name/<skill_name>", methods=['GET'])
-# def get_skill_by_name(skill_name):
-#     try:
-#         # Get skill by skill name
-#         skill = Skill.query.filter_by(skill_name=skill_name).first()
-#         # If skill does not exist
-#         if skill is None:
-#             return jsonify(
-#                 {
-#                     "code": 404,
-#                     "message": "Skill not found!"
-#                 }
-#             ), 404
-#         # Return skill details
-#         return jsonify(
-#             {
-#                 "code": 200,
-#                 "data": skill.json(),
-#                 "message": "Skill retrieved successfully!"
-#             }
-#         ), 200
-#     except Exception as e:
-#         return jsonify({'error': str(e)})
-
-@app.route("/get_all_skills", methods=['GET'])
-def get_all_skills():
+# View all skills
+@app.route("/view_skills", methods=['GET'])
+def view_skills():
     try:
         # Get all skills
         skills = Skill.query.all()
-        # If no skills exist
-        if not skills:
+        
+        # If no skill
+        if len(skills) == 0:
             return jsonify(
                 {
                     "code": 404,
                     "message": "No skills found!"
                 }
             ), 404
-        # Return all skills
+        
+        # Return success response
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    "skills": [skill.json() for skill in skills]
-                },
-                "message": "Skills retrieved successfully!"
+                "data": [skill.json() for skill in skills]
             }
         ), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+# View a single skill
+@app.route("/view_skill/<int:skill_id>", methods=['GET'])
+def view_skill(skill_id):
+    try:
+        # Get skill to view
+        skill = Skill.query.filter_by(skill_id=skill_id).first()
+        
+        # If skill does not exist
+        if skill is None:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Skill not found!"
+                }
+            ), 404
+        
+        # Return success response
+        return jsonify(
+            {
+                "code": 200,
+                "data": skill.json()
+            }
+        ), 200
+
     except Exception as e:
         return jsonify({'error': str(e)})
 
@@ -99,15 +103,6 @@ def create_skill():
 @app.route("/update_skill", methods=['PUT'])
 def update_skill():
     try:
-        # # Check current user's role
-        # if session['sys_role'] != "hr":
-        #     return jsonify(
-        #         {
-        #             "code": 403,
-        #             "message": "You are not authorized to access this page!"
-        #         }
-        #     ), 403
-        
         # Get skill to update
         data = request.get_json()
         skill_id = data['skill_id']

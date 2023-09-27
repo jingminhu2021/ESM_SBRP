@@ -2,7 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import Profile from './pages/profile.jsx'
+import ViewSkills from './pages/viewSkills.jsx'
+import ViewSkill from './pages/viewSingleSkill.jsx'
 import CreateSkill from './pages/createSkill.jsx'
+import UpdateSkill from './pages/updateSkill.jsx'
 import Logout from './components/logout.jsx'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
@@ -22,7 +25,10 @@ export default function App() {
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/viewSkills" element={<ViewSkills />} />  
+          <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />
+          <Route path="/updateSkill/:skillId" element={<UpdateSkill />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
