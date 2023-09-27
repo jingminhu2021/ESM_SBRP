@@ -15,7 +15,7 @@ function navbar(){
     }
 
     function checkUser(){
-        if(sessionStorage.getItem('status')=='true'){
+        if(sessionStorage.getItem('status')!='true'){
             return (
                 <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
                     <div className="ml-auto">
