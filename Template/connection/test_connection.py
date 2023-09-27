@@ -1,10 +1,10 @@
 import mysql.connector
 
 # Replace these values with your RDS instance's connection details
-rds_host = 'myrdsinstance.ctvrxbrt1hnb.ap-southeast-1.rds.amazonaws.com'
+rds_host = ''
 db_name = 'SBRP'
-db_user = 'sbrp_admin'
-db_password = '30e?lLIy^,248fX9T'
+db_user = ''
+db_password = ''
 
 try:
     conn = mysql.connector.connect(
