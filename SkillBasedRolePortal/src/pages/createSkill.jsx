@@ -25,9 +25,10 @@ function createSkill() {
   useEffect(() => {
     const getSkills = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/get_all_skills");
+        const response = await axios.get("http://localhost:5001/view_skills");
         if (response.status === 200) {
           setAllSkills(response.data.data);
+          console.log(response.data.data);
         }
       } catch (error) {
         console.log(error);
@@ -40,9 +41,8 @@ function createSkill() {
     const skillName = await event.target.value;
     setSkillName(skillName);
     //Check duplicate skill name
-    for (const s of allSkills.skills){
+    for (const s of allSkills){
       if (s.skill_name.toLowerCase() === skillName.toLowerCase()){
-        // setErrors({... errors, duplicate: 'Skill name already existed'});
         setDuplicate('Skill name already existed');
         return;
       }
