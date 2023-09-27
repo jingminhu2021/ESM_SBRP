@@ -3,11 +3,11 @@ import navbar from '../components/navbar.jsx';
 import axios from 'axios';
 import Select from 'react-select'
 
-function skill() {
+function createSkill() {
   const [skillName, setSkillName] = useState('');
   const [skillDescription, setSkillDescription] = useState('');
   const [allSkills, setAllSkills] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({skillname: '', skillDescription: ''});
   const [duplicate, setDuplicate] = useState('');
   
   // Handle dropdown - status
@@ -120,8 +120,8 @@ function skill() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Create Skill</h1>
               <div className="custom-breadcrumbs">
-                <a href="/">Home</a> <span className="mx-2 slash">/</span>
-                <a href="#">Skills</a> <span className="mx-2 slash">/</span>
+                <a href="/">Home</a><span className="mx-2 slash">/</span>
+                <a href="#">Skills</a><span className="mx-2 slash">/</span>
                 <span className="text-white"><strong>Create Skill</strong></span>
               </div>
             </div>
@@ -139,15 +139,19 @@ function skill() {
                   <div className="col-md-12">
                     <label className="text-black" htmlFor="skillName">Name</label>
                     <input type="text" id="skillName"  className="form-control" value={skillName} onChange={handleSkillNameChange} />
-                    <span className="text-danger">{errors.skillName}{duplicate}</span>
-                  </div>
+                    {(errors.skillName || duplicate !== '') && (
+                      <div className="alert alert-danger" role="alert">{errors.skillName}{duplicate}</div>
+                    )}
+                    </div>
                 </div>
 
                 <div className="row form-group">
                   <div className="col-md-12">
                     <label className="text-black" htmlFor="skillDescription">Description</label>
                     <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value={skillDescription} onChange={handleSkillDescriptionChange}></textarea>
-                    <span className="text-danger">{errors.skillDescription}</span>
+                    {(errors.skillDescription !== '') && (
+                    <div className="alert alert-danger" role="alert">{errors.skillDescription}</div>
+                    )}
                   </div>
                 </div>
 
@@ -176,4 +180,4 @@ function skill() {
         </div>
     );
 }
-export default skill
+export default createSkill
