@@ -3,7 +3,7 @@ import { useState } from "react";
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
 
-function home(){
+function rolelisting(){
     const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
     
     const region = [
@@ -299,4 +299,4 @@ function home(){
     )
 }
 
-export default home
+export default rolelisting

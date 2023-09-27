@@ -6,8 +6,6 @@ import login from '../components/login.jsx'
 // import logout from '../components/logout.jsx'
 
 function navbar(){
-    
-
     var user = sessionStorage.getItem('status')
 
     // const handleLogout = () => {
@@ -66,7 +64,7 @@ function navbar(){
                         <li><Link className="nav-link active" to="/">Home</Link></li>
                         <li><Link to="about.html">About</Link></li>
                         <li className="has-children">
-                            <Link to="job-listings.html">Job Listings</Link>
+                            <Link to="role-listings">Job Listings</Link>
                             <ul className="dropdown">
                                 <li><Link to="job-single.html">Job Single</Link></li>
                                 <li><Link to="post-job.html">Post a Job</Link></li>
