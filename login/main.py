@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-
 DB_USERNAME = os.environ.get('DB_USERNAME')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
 ENDPOINT = os.environ.get('DB_HOST')
@@ -77,8 +76,8 @@ def login():
         if account is None:
             return jsonify({'message': 'No account found!', 'status': 'fail'})
 
-        
-        return jsonify({'message': 'Login successful!','status': 'success', 'data': account.get_profile()})
+        response = jsonify({'message': 'Login successful!','status': 'success', 'data': account.json()})
+        return response
 
     except Exception as e:
         return jsonify({'error': str(e)})
