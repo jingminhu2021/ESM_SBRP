@@ -2,49 +2,15 @@ import * as React from 'react'
 import { useState } from "react";
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
+import SelectDate from '../components/select-date.jsx'
+import RoleDescriptionEditor from '../components/role-description.jsx'
 
 function postrole(){
-    // const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
-    
-    // const region = [
-    //     { value: '', label: 'Anywhere' },
-    //     { value: 'San Francisco', label: 'San Francisco' },
-    //     { value: 'Palo Alto', label: 'Palo Alto' },
-    //     { value: 'New York', label: 'New York' },
-    //     { value: 'Mahattan', label: 'Mahattan' },
-    //     { value: 'Ontario', label: 'Ontario' },
-    //     { value: 'Toronto', label: 'Toronto' },
-    //     { value: 'Kansas', label: 'Kansas' },
-    //     { value: 'Mountain View', label: 'Mountain View' }
-    // ]
-
-    // const Job_Type = [
-    //   { value: 'Full Time', label: 'Full Time' },
-    //   { value: 'Part Time', label: 'Part Time' },
-    //   { value: 'Freelance', label: 'Freelance' },
-    //   { value: 'Internship', label: 'Internship' },
-    //   { value: 'Temporary', label: 'Temporary' }
-    // ]
-
-
-    // const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: ""});
-    // const handleChange = (event) => {
-    //   const { name, value } = event.target;
-    //   setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    // };
-    // const  handleDropdownChange = (event) => {
-    //   setSelectedOption(event.target);
-    // };
-    // const handleSubmit = (event) => {
-    //   jobTitle: {FormData.jobTitle};
-    //   jobRegion: {FormData.jobRegion.value};
-    //   jobType: {FormData.jobTpe}
-    // }
 
     return(
         <div>
           {navbar()}
-            <section className="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+          <section className="section-hero overlay inner-page bg-image" style={{backgroundImage: 'url(/images/hero_1.jpg)'}} id="home-section">
               <div className="container">
                 <div className="row">
                   <div className="col-md-7">
@@ -59,7 +25,6 @@ function postrole(){
               </div>
             </section>
 
-            
             <section className="site-section">
               <div className="container">
 
@@ -89,36 +54,35 @@ function postrole(){
                       
                       <div className="form-group">
                         <label for="job-id">Role ID</label>
-                        <input type="text" className="form-control" id="job-id" placeholder="234567890"/>
+                        <input type="text" className="form-control" id="job-id" placeholder="234567890"></input>
                       </div>
                       <div className="form-group">
                         <label for="job-title">Role Title</label>
-                        <input type="text" className="form-control" id="job-title" placeholder="Product Designer"/>
+                        <input type="text" className="form-control" id="job-title" placeholder="Product Designer"></input>
+                      </div>
+                    
+                      <div className="form-group">
+                        <label htmlFor="role-create-date">Role Creation Date</label>
+                        {SelectDate()}
                       </div>
 
                       <div className="form-group">
-                        <label for="job-type">Role Type</label>
-                        <select className="selectpicker border rounded" id="job-type" data-style="btn-black" data-width="100%" data-live-search="true" title="Select Role Type">
-                          <option>Part Time</option>
-                          <option>Full Time</option>
-                        </select>
+                        <label htmlFor="role-end-date">Role Application End Date</label>
+                        {SelectDate()}
                       </div>
 
-                      <div className="form-group">
-                        <label for="job-skills">Role Skills</label>
+                      {/* <div className="form-group">
+                        <label htmlFor="job-skills">Role Skills</label>
                         <select className="selectpicker border rounded" id="job-skills" data-style="btn-black" data-width="100%" data-live-search="true" title="Select Role Skills">
                           <option>IT</option>
                           <option>UI/UX</option>
                         </select>
-                      </div>
+                      </div> */}
 
                       <div className="form-group">
-                        <label for="job-description">Role Description</label>
-                        <div className="editor" id="editor-1">
-                          <p>Enter Role Description</p>
-                        </div>
+                        <label htmlFor="job-description">Role Description</label>
+                        {RoleDescriptionEditor()} 
                       </div>
-
                     </form>
                   </div>
 
@@ -139,7 +103,7 @@ function postrole(){
                 </div>
               </div>
             </section>
-        </div>
+        </div>    
     )
 }
 
