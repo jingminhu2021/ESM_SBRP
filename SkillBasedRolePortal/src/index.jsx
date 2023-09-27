@@ -2,11 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import RoleListings from './pages/role-listings.jsx'
-<<<<<<< Updated upstream
-=======
-import SingleRole from './pages/single-role.jsx'
-import PostRole from './pages/post-role.jsx'
->>>>>>> Stashed changes
 import Profile from './pages/profile.jsx'
 import Contact from './pages/contact.jsx'
 import Logout from './components/logout.jsx'

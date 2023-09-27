@@ -64,11 +64,7 @@ function navbar(){
                         {/* <li><Link className="nav-link" to="/">Home</Link></li>
                         <li><Link to="about.html">About</Link></li> */}
                         <li className="has-children">
-<<<<<<< Updated upstream
-                            <Link to="role-listings">Job Listings</Link>
-=======
-                            <Link to="role-listings active">Role Listings</Link>
->>>>>>> Stashed changes
+                            <Link to="role-listings">Role Listings</Link>
                             <ul className="dropdown">
                                 <li><Link to="single-role">Single Role</Link></li>
                                 <li><Link to="post-role">Post a Role</Link></li>
