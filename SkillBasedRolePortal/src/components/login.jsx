@@ -38,20 +38,22 @@ function login(size){
       };
     
     const send_onsubmit = (email, password) => {
-        let api_endpoint_url = 'http://localhost:5000/login' //Placeholder
+        let api_endpoint_url = 'http://10.124.3.199:5000/login' //Placeholder
         var bodyFormData = new FormData();
         bodyFormData.append('email', email);
         bodyFormData.append('password', password);
         axios.post(api_endpoint_url, bodyFormData, {withCredentials: true})
         .then(function (response) {
             if (response.data.data == null){
-               setIncorrect("d-block")
-               setVariant("danger")
-            }else{ 
+                console.log(response)   
+                setIncorrect("d-block")
+                setVariant("danger")
+            }else{
+                console.log(response)
                 sessionStorage.setItem('status', true)
                 sessionStorage.setItem('account_id', response.data.data.accounts_id)
                 sessionStorage.setItem('email', response.data.data.email)
-                sessionStorage.setItem('sys_role', response.data.data.role)
+                sessionStorage.setItem('sys_role', response.data.data.sys_role)
                 sessionStorage.setItem('fname', response.data.data.fname)
                 sessionStorage.setItem('lname', response.data.data.lname)
                 sessionStorage.setItem('phone', response.data.data.phone)
