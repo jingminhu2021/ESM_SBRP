@@ -2,6 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import RoleListings from './pages/role-listings.jsx'
+<<<<<<< Updated upstream
+=======
+import SingleRole from './pages/single-role.jsx'
+import PostRole from './pages/post-role.jsx'
+>>>>>>> Stashed changes
 import Profile from './pages/profile.jsx'
 import Contact from './pages/contact.jsx'
 import Logout from './components/logout.jsx'
@@ -24,6 +29,9 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/role-listings" element={<RoleListings />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/role-listings" element={<RoleListings />} />
+          <Route path="/single-role" element={<SingleRole />} />
+          <Route path="/post-role" element={<PostRole />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<h1>Not Found</h1>} />

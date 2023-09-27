@@ -58,7 +58,11 @@ function rolelisting(){
                           <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+<<<<<<< Updated upstream
                           <Select name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
+=======
+                          <Select name="jobRegion" value={selectedRegion}  placeholder="Select Region" options={region} onChange={handleDropdownChange} />
+>>>>>>> Stashed changes
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                           <Select name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={handleDropdownChange} />
@@ -77,6 +81,7 @@ function rolelisting(){
               </a>
           </section>
 
+<<<<<<< Updated upstream
           <section className="py-5 bg-image overlay-primary fixed overlay" id="next" style={{backgroundImage: 'url(/images/hero_1.jpg)'}}>
               <div className="container">
               <div className="row mb-5 justify-content-center">
@@ -120,6 +125,8 @@ function rolelisting(){
               </div>
           </section>
 
+=======
+>>>>>>> Stashed changes
           <section className="site-section">
         <div className="container">
 
@@ -249,6 +256,7 @@ function rolelisting(){
               </div>
               
             </li>
+<<<<<<< Updated upstream
             <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
               <a href="job-single.html"></a>
               <div className="job-listing-logo">
@@ -268,6 +276,9 @@ function rolelisting(){
                 </div>
               </div>
             </li>
+=======
+            
+>>>>>>> Stashed changes
 
             
 

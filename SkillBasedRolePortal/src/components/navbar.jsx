@@ -57,20 +57,24 @@ function navbar(){
         <header className="site-navbar mt-3">
             <div className="container-fluid">
                 <div className="row align-items-center">
-                <div className="site-logo col-6"><Link to="/">Job Board</Link></div>
+                <div className="site-logo col-6"><Link to="/">SBRP</Link></div>
 
                 <nav className="mx-auto site-navigation">
                     <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                        <li><Link className="nav-link active" to="/">Home</Link></li>
-                        <li><Link to="about.html">About</Link></li>
+                        {/* <li><Link className="nav-link" to="/">Home</Link></li>
+                        <li><Link to="about.html">About</Link></li> */}
                         <li className="has-children">
+<<<<<<< Updated upstream
                             <Link to="role-listings">Job Listings</Link>
+=======
+                            <Link to="role-listings active">Role Listings</Link>
+>>>>>>> Stashed changes
                             <ul className="dropdown">
-                                <li><Link to="job-single.html">Job Single</Link></li>
-                                <li><Link to="post-job.html">Post a Job</Link></li>
+                                <li><Link to="single-role">Single Role</Link></li>
+                                <li><Link to="post-role">Post a Role</Link></li>
                             </ul>
                         </li>
-                        <li className="has-children">
+                        {/* <li className="has-children">
                             <Link to="services.html">Pages</Link>
                             <ul className="dropdown">
                             <li><Link to="services.html">Services</Link></li>
@@ -83,9 +87,9 @@ function navbar(){
                             <li><Link to="gallery.html">Gallery</Link></li>
                             </ul>
                         </li>
-                        <li><Link to="blog.html">Blog</Link></li>
+                        <li><Link to="blog.html">Blog</Link></li> */}
                         <li><Link to="contact">Contact</Link></li>
-                        <li className="d-lg-none"><Link to="post-job.html"><span className="m-2">+</span> Post a Job</Link></li>
+                        <li className="d-lg-none"><Link to="post-role"><span className="m-2">+</span> Post a Job</Link></li>
                         <li className="d-lg-none">{login("sm")}</li>
                     </ul>
                     
