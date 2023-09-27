@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { useState } from "react";
+// import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 // import { ReactSession } from 'react-client-session';
 import login from '../components/login.jsx'
-import logout from '../components/logout.jsx'
+// import logout from '../components/logout.jsx'
 
 function navbar(){
     
 
     var user = sessionStorage.getItem('status')
 
-    const handleLogout = () => {
-        {logout()}
-    }
+    // const handleLogout = () => {
+    //     {logout()}
+    // }
 
     function checkUser(){
         if(sessionStorage.getItem('status')!='true'){
@@ -34,7 +34,7 @@ function navbar(){
                     </button>
                     <div className="mt-0 dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <Link to="/profile" className="dropdown-item">Profile</Link>
-                        <Link onClick={handleLogout()} className="dropdown-item">Log Out</Link>   
+                        <Link to="/logout" className="dropdown-item">Log Out</Link>   
                     </div>
                 </div>               
             </div>
