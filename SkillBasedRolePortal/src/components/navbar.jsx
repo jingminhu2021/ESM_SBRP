@@ -86,7 +86,7 @@ function navbar(){
                             </ul>
                         </li>
                         <li><Link to="blog.html">Blog</Link></li>
-                        <li><Link to="contact">Contact</Link></li>
+                        <li><Link to="createSkill">Create Skill</Link></li>
                         <li className="d-lg-none"><Link to="post-job.html"><span className="m-2">+</span> Post a Job</Link></li>
                         <li className="d-lg-none">{login("sm")}</li>
                     </ul>
