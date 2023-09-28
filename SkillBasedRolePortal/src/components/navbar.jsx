@@ -41,7 +41,14 @@ function navbar(){
         )}
     }
 
-
+    // Display if HR is logged in
+    function checkHr() {
+        if(sessionStorage.getItem('sys_role') == 'hr'){
+            return (
+                <li><Link to="/ViewSkills">Skills</Link></li>
+            )
+        }
+    }
 
     return (
         <>
@@ -86,7 +93,7 @@ function navbar(){
                             </ul>
                         </li>
                         <li><Link to="blog.html">Blog</Link></li>
-                        <li><Link to="createSkill">Create Skill</Link></li>
+                        {checkHr()}
                         <li className="d-lg-none"><Link to="post-job.html"><span className="m-2">+</span> Post a Job</Link></li>
                         <li className="d-lg-none">{login("sm")}</li>
                     </ul>
