@@ -2,11 +2,40 @@ import { useState, useEffect } from "react";
 import navbar from "../components/navbar.jsx";
 import axios from "axios";
 import Select from "react-select";
+import { useNavigate, Link} from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal, Button } from "react-bootstrap";
 
 function deleteSkill() {
+  // Check if HR is logged in
+  if (sessionStorage.getItem('sys_role') != 'hr') {
+    return (
+        <div>
+            {navbar()}
+            <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-7">
+                            <h1 className="text-white font-weight-bold">-</h1>
+                            <div className="custom-breadcrumbs">
+                                <a href="/">Home</a><span className="mx-2 slash">/</span>
+                                <Link to="/ViewSkills">Skills</Link><span className="mx-2 slash">/</span>
+                                <span className="text-white"><strong>-</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section className="site-section" id="next-section">
+                <div className="container text-center">
+                    <p className="font-weight-bold" style={{ fontSize: '24px' }}>You are not authorized to view this page!</p>
+                </div>
+            </section>
+        </div>
+    )
+}
+else {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [activeSkills, setActiveSkills] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -31,7 +60,7 @@ function deleteSkill() {
   useEffect(() => {
     setTimeout(() => {
       setWait(true);
-    }, 1);
+    }, 1000);
   }, []);
 
   // Handle Select change
@@ -108,42 +137,43 @@ function deleteSkill() {
             </div>
           </div>
         </div>
-      </section>
+      </section>  
 
       <section className="site-section" id="next-section">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
-              <p className="font-weight-bold h6 pb-2">Select one or more skills to delete: </p>
-              {activeSkills.length === 0 && isLoaded && <p className="text-danger">There is no active skill to delete.</p>}
-              <Select
-                options={activeSkills.map((skill) => ({ value: skill.skill_id, label: skill.skill_name }))}
-                onChange={handleSelectChange}
-                isMulti
-                value={selectedOptions}
-              />
-              <button className="btn btn-danger mt-3" onClick={handleShowModal}>
-                Delete selected skills
-              </button>
+          <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
+            <p className="font-weight-bold h6 pb-2">Select one or more skills to delete: </p>
+            {activeSkills.length === 0 && isLoaded && <p className="text-danger">There is no active skill to delete.</p>}
+            <Select
+              options={activeSkills.map((skill) => ({ value: skill.skill_id, label: skill.skill_name }))}
+              onChange={handleSelectChange}
+              isMulti
+              value={selectedOptions}
+            />
+            <button className="btn btn-danger mt-sm-3" onClick={handleShowModal}>Delete selected skills</button>
+            <Link to={'/ViewSkills'} className="btn btn-secondary mt-sm-3 ml-sm-3">Cancel</Link>
+          </div>
+
+          <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
+            <div className="d-flex justify-content-end mb-sm-2">
+              <Link to={'/recoverSkills'} className="text-info font-italic">Recover Deleted Skills &gt;</Link>
             </div>
-            <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
-              <table className="table table-striped table-bordered">
-                <thead>
-                  <tr>
-                    <th>Skill Name</th>
-                    <th>Skill Description</th>
+            <table className="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Skill Name</th>
+                  <th>Skill Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activeSkills.map((skill) => (
+                  <tr key={skill.skill_id}>
+                    <td>{skill.skill_name}</td>
+                    <td>{skill.skill_description}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {activeSkills.map((skill) => (
-                    <tr key={skill.skill_id}>
-                      <td>{skill.skill_name}</td>
-                      <td>{skill.skill_description}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -165,6 +195,7 @@ function deleteSkill() {
       </Modal>
     </div>
   );
+  }
 }
 
 export default deleteSkill;
