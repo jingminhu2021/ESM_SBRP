@@ -67,7 +67,6 @@ function skill() {
           const response = await axios.get("http://localhost:5001/view_skills");
           if (response.status === 200) {
             setAllSkills(response.data.data);
-            console.log(response.data.data);
           }
         } catch (error) {
           console.log(error);
@@ -111,9 +110,14 @@ function skill() {
       if (skillName.trim() === '') {
         errors.skillName = 'Skill name is required';
       }
-      if (skillDescription.trim() === '') {
+      
+      if (skillDescription === null) {
         errors.skillDescription = 'Skill description is required';
       }
+      else if (skillDescription.trim() === '') {
+        errors.skillDescription = 'Skill description is required';
+      }
+
       if (Object.keys(errors).length > 0) {
         setErrors(errors);
         return true;
@@ -189,7 +193,11 @@ function skill() {
                   <div className="row form-group">
                     <div className="col-md-12">
                       <label className="text-black" htmlFor="skillDescription">Description</label>
-                      <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value={skillDescription} onChange={handleSkillDescriptionChange}></textarea>
+                      {skillDescription !== null ? (
+                        <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value={skillDescription} onChange={handleSkillDescriptionChange}></textarea>
+                      ) : (
+                        <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value="" onChange={handleSkillDescriptionChange}></textarea>
+                      )}
                       {(errors.skillDescription) && (
                         <div className="alert alert-danger" role="alert">{errors.skillDescription}</div>
                       )}
