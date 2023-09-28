@@ -84,6 +84,7 @@ function login(){
                             autoFocus
                             value={formData.email}
                             onChange={handleInputChange}
+                            autoComplete="off"
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="password"
@@ -95,6 +96,7 @@ function login(){
                             placeholder="Password"
                             value={formData.password}
                             onChange={handleInputChange}
+                            autoComplete="off"
                         />
                     </Form.Group>
 

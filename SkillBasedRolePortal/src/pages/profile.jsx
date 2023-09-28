@@ -6,6 +6,8 @@ import axios from 'axios'
 function profile(){
     
     const [skill, setSkill] = useState([])
+    const [allSkill, setAllSkill] = useState([])
+    const [skillToAdd, setSkillToAdd] = useState("")
     
     var account_id = ""
     if(sessionStorage.getItem('status') == 'true'){
@@ -25,6 +27,7 @@ function profile(){
 
     useEffect(() => {
         skillList()
+        allSkillList()
     }, [])
 
     const skillList = (account_id) =>{
@@ -40,10 +43,32 @@ function profile(){
                 setSkill(skill => [...skill, response.data.data[i].skill_name])
             }
     })
-
-
     }
 
+    const allSkillList = () =>{
+        let api_endpoint_url = 'http://localhost:5001/get_all_skills' //Placeholder
+        var bodyFormData = new FormData();
+
+        bodyFormData.append('account_id', account_id);
+        axios.post(api_endpoint_url, bodyFormData)
+        .then(function (response) {
+            console.log(response)
+            for (let i = 0; i < response.data.data.length; i++){
+                setAllSkill(allSkill => [...allSkill, response.data.data[i].skill_name])
+            }
+    })
+    }
+
+    function addSkill(e){
+        e.preventDefault()
+        var key = skill.length
+        for (let v of skill.values()){
+            if (v == skillToAdd + ' - Pending Verification'){
+                alert('You have already added this skill for verification!')
+                return
+            }
+        }
+    }
 
     return (
         <div>
@@ -85,13 +110,41 @@ function profile(){
                                     <li key={index}>{s}</li>
                                 ))}
                             </ul>
-                            <button className="btn btn-outline-primary border-width-2">Add Skill</button>
+                            <button className="btn btn-outline-primary border-width-2" data-toggle="modal" data-target="#skillList">Add Skill</button>
+
+                                                        
+                            <div className="modal fade" id="skillList" tabIndex="-1" role="dialog" aria-hidden="true">
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Add a new skill</h5>
+                                    <button type="button" className="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="form-group">
+                                        <label>Please select the skill you would like to add to your profile</label>
+                                            <select className="form-control" onChange={(e) => setSkillToAdd(e.target.value)}>
+                                                <option value="">Select Skill</option>
+                                                {allSkill.map((s, index) => (
+                                                    <option key={index} value={s}>{s}</option>
+                                                ))}
+                                            </select>
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" className="btn btn-primary" data-dismiss="modal" onClick={addSkill}>Save changes</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>                       
                         </div>
                     </div> 
                 </div>
             </div>
         </div>
     )
-}
-
+    }
 export default profile
