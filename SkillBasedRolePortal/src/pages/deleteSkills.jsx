@@ -10,8 +10,7 @@ import { Modal, Button } from "react-bootstrap";
 function deleteSkill() {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [activeSkills, setActiveSkills] = useState([]);
-  const navigate = useNavigate();
-
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   // Get all active skills when the component mounts
@@ -33,6 +32,7 @@ function deleteSkill() {
   const handleSelectChange = (selectedOptions) => {
     const newSelectedSkills = selectedOptions.map((option) => option.value);
     setSelectedSkills(newSelectedSkills);
+    setSelectedOptions(selectedOptions);
   };
 
   // Show delete confirmation modal
@@ -72,10 +72,17 @@ function deleteSkill() {
   
     // All skills deleted successfully
     toast.success("Skills deleted successfully");
-    navigate("/viewSkills");
 
     // Close modal
     handleCloseModal();
+    // Clear selected skills
+    setSelectedSkills([]);
+    // Clear the Select component's value
+    setSelectedOptions([]);
+    // Update the activeSkills array by filtering out the deleted skills
+    setActiveSkills((prevActiveSkills) =>
+    prevActiveSkills.filter((skill) => !selectedSkills.includes(skill.skill_id))
+);
   };
 
   return (
@@ -107,10 +114,29 @@ function deleteSkill() {
                 options={activeSkills.map((skill) => ({ value: skill.skill_id, label: skill.skill_name }))}
                 onChange={handleSelectChange}
                 isMulti
+                value={selectedOptions}
               />
               <button className="btn btn-danger mt-3" onClick={handleShowModal}>
                 Delete selected skills
               </button>
+            </div>
+            <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-5">
+              <table className="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Skill Name</th>
+                    <th>Skill Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activeSkills.map((skill) => (
+                    <tr key={skill.skill_id}>
+                      <td>{skill.skill_name}</td>
+                      <td>{skill.skill_description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
