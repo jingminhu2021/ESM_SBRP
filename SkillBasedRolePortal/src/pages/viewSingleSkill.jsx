@@ -83,7 +83,6 @@ function skill() {
                         )}
                         <div className="row">
                             <div className="col-lg-8">
-                                <span className="text-primary d-block mb-5"><span className="icon-magnet display-1"></span></span>
                                 <h2 className="mb-4">{skillName}</h2>
                                 {skillDescription !== null ? (
                                     <p>Description: {skillDescription}</p>
@@ -92,10 +91,7 @@ function skill() {
                                 )}
                                 <p>Status: {skillStatus}</p>
                                 <Link to={`/UpdateSkill/${skillId}`} className="btn btn-info btn-md mt-4">Update Skill</Link> &nbsp;
-                                <Link to="#" className="btn btn-danger btn-md mt-4">Delete Skill</Link>
-                            </div>
-                            <div className="col-lg-1">
-                                <Link to={'/ViewSkills'} className="btn btn-secondary btn-md">Close</Link>
+                                <Link to={'/ViewSkills'} className="btn btn-secondary btn-md mt-4">Return to Skills</Link>
                             </div>
                         </div>
                     </div>
