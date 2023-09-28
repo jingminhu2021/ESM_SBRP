@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import navbar from "../components/navbar.jsx";
 import axios from "axios";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal, Button } from "react-bootstrap";
@@ -12,6 +11,7 @@ function deleteSkill() {
   const [activeSkills, setActiveSkills] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [isLoaded, setWait] = useState(false);
 
   // Get all active skills when the component mounts
   useEffect(() => {
@@ -26,6 +26,12 @@ function deleteSkill() {
       }
     };
     getActiveSkills();
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setWait(true);
+    }, 1);
   }, []);
 
   // Handle Select change
@@ -81,8 +87,8 @@ function deleteSkill() {
     setSelectedOptions([]);
     // Update the activeSkills array by filtering out the deleted skills
     setActiveSkills((prevActiveSkills) =>
-    prevActiveSkills.filter((skill) => !selectedSkills.includes(skill.skill_id))
-);
+      prevActiveSkills.filter((skill) => !selectedSkills.includes(skill.skill_id))
+    );
   };
 
   return (
@@ -109,7 +115,7 @@ function deleteSkill() {
           <div className="row">
             <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
               <p className="font-weight-bold h6 pb-2">Select one or more skills to delete: </p>
-              {activeSkills.length === 0 && <p className="text-danger">There is no active skill to delete.</p>}
+              {activeSkills.length === 0 && isLoaded && <p className="text-danger">There is no active skill to delete.</p>}
               <Select
                 options={activeSkills.map((skill) => ({ value: skill.skill_id, label: skill.skill_name }))}
                 onChange={handleSelectChange}
@@ -120,7 +126,7 @@ function deleteSkill() {
                 Delete selected skills
               </button>
             </div>
-            <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-5">
+            <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
               <table className="table table-striped table-bordered">
                 <thead>
                   <tr>
