@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import navbar from '../components/navbar.jsx';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function skill() {
     // Check if HR is logged in
@@ -32,6 +34,7 @@ function skill() {
     }
     else {
         const [skills, setSkills] = useState([]);
+        const location = useLocation();
 
         useEffect(() => {
             axios.get('http://localhost:5001/view_skills')
@@ -42,6 +45,15 @@ function skill() {
                     console.error('Error fetching skills:', error);
                 });
         }, []);
+
+        // Check if the 'created=true' parameter is present in the URL
+        useEffect(() => {
+            const searchParams = new URLSearchParams(location.search);
+            const created = searchParams.get('created');
+            if (created === 'true') {
+                toast.success("Skill created successfully");
+            }
+        }, [location.search]);
 
         return (
             <div>
@@ -60,8 +72,14 @@ function skill() {
                     </div>
                 </section>
 
-                <section className="site-section services-section bg-light block__62849" id="next-section">
+                <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{padding:'0'}}>
                     <div className="container">
+                        <div className="text-right mb-5 mt-3" style={{padding:'0'}}>
+                            <span className="mr-3">
+                                <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/createSkill'}>+ Create</button>
+                            </span>
+                            <button className="btn btn-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteSkills'}>- Delete</button>
+                        </div>
                         <div className="row">
                             {skills ? skills.map(skill => (
                                 <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={skill.skill_id}>
@@ -83,6 +101,7 @@ function skill() {
                         </div>
                     </div>
                 </section>
+                <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
             </div>
         );
     }

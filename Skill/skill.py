@@ -134,7 +134,63 @@ def update_skill():
         ), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)})
+    
+@app.route("/delete_skill/<skill_id>", methods=['PUT'])
+def delete_skill(skill_id):
+    try:
+        # Get skill to update
+        skill = Skill.query.filter_by(skill_id=skill_id).first()
+        # If skill does not exist
+        if skill is None:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Skill not found!"
+                }
+            ), 404
+        # Update skill status
+        skill_status = request.json['skill_status']
+        skill.skill_status = skill_status
+        # Commit changes to database
+        db.session.commit()
+        # Return success response
+        return jsonify(
+            {
+                "code": 200,
+                "data": skill.json(),
+                "message": "Skill status updated successfully!"
+            }
+        ), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route("/get_skills_by_status/<skill_status>", methods=['GET'])
+def get_skills_by_status(skill_status):
+    try:
+        # Get skills by status
+        skills = Skill.query.filter_by(skill_status=skill_status).all()
+        # If no skills exist with the given status
+        if not skills:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "No skills found with the given status!"
+                }
+            ), 404
+        # Return all skills with the given status
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "skills": [skill.json() for skill in skills]
+                },
+                "message": "Skills retrieved successfully!"
+            }
+        ), 200
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
