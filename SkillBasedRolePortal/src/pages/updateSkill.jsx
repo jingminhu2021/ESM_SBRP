@@ -1,159 +1,215 @@
-import { useState,  useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import navbar from '../components/navbar.jsx';
 import axios from 'axios';
 
 function skill() {
-  // to get from prev page
-  const { skillId } = useParams();
-  const [skillName, setSkillName] = useState('');
-  const [skillDescription, setSkillDescription] = useState('');
-  const [skillStatus, setSkillStatus] = useState('');
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    axios.get('http://localhost:5001/view_skill/' + skillId, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => {
-        setSkillName(response.data.data.skill_name);
-        setSkillDescription(response.data.data.skill_description);
-        setSkillStatus(response.data.data.skill_status);
-      })
-      .catch(error => {
-        console.error('Error fetching skill:', error);
-      });
-  }, []);
-
-  const handleSkillNameChange = async (event) => {
-    const skillName = await event.target.value;
-    setSkillName(skillName);
-    setErrors({ ...errors, skillName: '' });
-  };
-
-  const handleSkillDescriptionChange = async (event) => {
-    const skillDescription = await event.target.value;
-    setSkillDescription(skillDescription);
-    setErrors({ ...errors, skillDescription: '' });
-  };
-
-  const handleSkillStatusChange = (event) => {
-    setSkillStatus(event.target.value);
-  };
-
-  function checkErrors() {
-    const errors = {};
-    if (skillName === '') {
-      errors.skillName = 'Skill name is required';
-    }
-    if (skillDescription === '') {
-      errors.skillDescription = 'Skill description is required';
-    }
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors);
-      return true;
-    }
-    return false;
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (checkErrors()) {
-      return;
-    }
-
-    const skillData = {
-      skill_id: skillId,
-      skill_name: skillName,
-      skill_description: skillDescription,
-      skill_status: skillStatus,
-    };
-
-    const response = await axios.put('http://localhost:5001/update_skill', skillData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.status === 200) {
-      // Skill created successfully
-      alert("Skill updated successfully!");
-
-    } else {
-      // Error creating skill
-      console.log("Error: ", response.data);
-    }
-
-
-  };
-
-  return (
-    <div>
-      {navbar()}
-      <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-7">
-              <h1 className="text-white font-weight-bold">Update Skill</h1>
-              <div className="custom-breadcrumbs">
-                <a href="/">Home</a><span className="mx-2 slash">/</span>
-                <Link to="/ViewSkills">Skills</Link><span className="mx-2 slash">/</span>
-                <Link to={`/ViewSkill/${skillId}`}>{skillName}</Link><span className="mx-2 slash">/</span>
-                <span className="text-white"><strong>Update Skill</strong></span>
+  // Check if HR is logged in
+  if (sessionStorage.getItem('sys_role') != 'hr') {
+    return (
+      <div>
+        {navbar()}
+        <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-7">
+                <h1 className="text-white font-weight-bold">Update Skill</h1>
+                <div className="custom-breadcrumbs">
+                  <a href="/">Home</a><span className="mx-2 slash">/</span>
+                  <Link to="/ViewSkills">Skills</Link><span className="mx-2 slash">/</span>
+                  <Link to="/ViewSkill/-">-</Link><span className="mx-2 slash">/</span>
+                  <span className="text-white"><strong>Update Skill</strong></span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="site-section" id="next-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
+        <section className="site-section" id="next-section">
+          <div className="container text-center">
+            <p className="font-weight-bold" style={{ fontSize: '24px' }}>You are not authorized to view this page!</p>
+          </div>
+        </section>
+      </div>
+    )
+  }
+  else {
+    // to get from prev page
+    const navigate = useNavigate();
+    const { skillId } = useParams();
+    const [allSkills, setAllSkills] = useState([]);
+    const [skillNameTitle, setSkillNameTitle] = useState(''); // store skill name for breadcrumb
+    const [skillName, setSkillName] = useState('');
+    const [skillDescription, setSkillDescription] = useState('');
+    const [errors, setErrors] = useState({ skillname: '', skillDescription: '' });
+    const [duplicate, setDuplicate] = useState('');
+    const [errorMessage, setErrorMessage] = useState(''); // error message if response is not 200
 
-              <form action="#" className="" onSubmit={handleSubmit}>
-                <div className="row form-group">
-                  <div className="col-md-12">
-                    <label className="text-black" htmlFor="skillName">Name</label>
-                    <input type="text" id="skillName" className="form-control" value={skillName} onChange={handleSkillNameChange} />
-                    <p className="text-danger">{errors.skillName}</p>
-                  </div>
+    useEffect(() => {
+      // Get to obtain skill details
+      axios.get('http://localhost:5001/view_skill/' + skillId, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          setSkillNameTitle(response.data.data.skill_name);
+          setSkillName(response.data.data.skill_name);
+          setSkillDescription(response.data.data.skill_description);
+        })
+        .catch(error => {
+          console.error('Error fetching skill:', error);
+        });
+
+      // Get to check on duplicate skill name
+      const getSkills = async () => {
+        try {
+          const response = await axios.get("http://localhost:5001/view_skills");
+          if (response.status === 200) {
+            setAllSkills(response.data.data);
+            console.log(response.data.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getSkills();
+    }, []);
+
+    const handleSkillNameChange = async (event) => {
+      const skillName = await event.target.value;
+      setSkillName(skillName);
+      //Check duplicate skill name + ignore if current name remains unchanged
+      for (const s of allSkills) {
+        if (s.skill_name.toLowerCase() === skillName.toLowerCase() && s.skill_name != skillNameTitle) {
+          setDuplicate('Skill name already exists');
+          return;
+        }
+        else {
+          setDuplicate('');
+        }
+      }
+      // Clear error message and make sure it only execute once
+      if (errors.skillName !== '') {
+        setErrors({ ...errors, skillName: '' });
+      }
+    };
+
+    const handleSkillDescriptionChange = async (event) => {
+      const skillDescription = await event.target.value;
+      setSkillDescription(skillDescription);
+      // Clear error message and make sure it only execute once
+      if (errors.skillDescription !== '') {
+        setErrors({ ...errors, skillDescription: '' });
+      }
+    };
+
+
+    // Check if the input fields are empty
+    function checkEmpty() {
+      const errors = {};
+      if (skillName.trim() === '') {
+        errors.skillName = 'Skill name is required';
+      }
+      if (skillDescription.trim() === '') {
+        errors.skillDescription = 'Skill description is required';
+      }
+      if (Object.keys(errors).length > 0) {
+        setErrors(errors);
+        return true;
+      }
+      return false;
+    }
+
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+
+      if (checkEmpty() || duplicate !== '') return;
+
+      const skillData = {
+        skill_id: skillId,
+        skill_name: skillName,
+        skill_description: skillDescription,
+      };
+
+      const response = await axios.put('http://localhost:5001/update_skill', skillData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        // Redirect back to view skills page with success message
+        navigate(`/ViewSkill/${skillId}`, { state: { message: 'Skill updated successfully!' } });
+
+      } else {
+        // Error creating skill
+        setErrorMessage('An error occurred while updating the skill. Please try again.');
+      }
+
+    };
+
+    return (
+      <div>
+        {navbar()}
+        <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-7">
+                <h1 className="text-white font-weight-bold">Update Skill</h1>
+                <div className="custom-breadcrumbs">
+                  <a href="/">Home</a><span className="mx-2 slash">/</span>
+                  <Link to="/ViewSkills">Skills</Link><span className="mx-2 slash">/</span>
+                  <Link to={`/ViewSkill/${skillId}`}>{skillNameTitle}</Link><span className="mx-2 slash">/</span>
+                  <span className="text-white"><strong>Update Skill</strong></span>
                 </div>
-
-                <div className="row form-group">
-                  <div className="col-md-12">
-                    <label className="text-black" htmlFor="skillDescription">Description</label>
-                    <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value={skillDescription} onChange={handleSkillDescriptionChange}></textarea>
-                    <p className="text-danger">{errors.skillDescription}</p>
-                  </div>
-                </div>
-
-                <div className="row form-group">
-                  <div className="col-md-6 mb-3 mb-md-0">
-                    <label className="text-black" htmlFor="skillStatus">Status</label>
-                    <select id="skillStatus" className="form-control" value={skillStatus} onChange={handleSkillStatusChange}>
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="row form-group">
-                  <div className="col-md-auto">
-                    <input type="submit" value="Update" className="btn btn-info btn-md text-white btn-md mt-4" /> &nbsp;
-                    <Link to={`/ViewSkill/${skillId}`} className="btn btn-danger btn-md mt-4">Cancel</Link>
-                  </div>
-                </div>
-              </form>
-
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
-  );
+        </section>
+
+        <section className="site-section" id="next-section">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
+                {(errorMessage) && (
+                  <div className="alert alert-danger" role="alert">{errorMessage}</div>
+                )}
+                <form action="#" className="" onSubmit={handleSubmit}>
+                  <div className="row form-group">
+                    <div className="col-md-12">
+                      <label className="text-black" htmlFor="skillName">Name</label>
+                      <input type="text" id="skillName" className="form-control" value={skillName} onChange={handleSkillNameChange} />
+                      {(errors.skillName || duplicate !== '') && (
+                        <div className="alert alert-danger" role="alert">{errors.skillName}{duplicate}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="row form-group">
+                    <div className="col-md-12">
+                      <label className="text-black" htmlFor="skillDescription">Description</label>
+                      <textarea name="message" id="skillDescription" cols="30" rows="7" className="form-control" value={skillDescription} onChange={handleSkillDescriptionChange}></textarea>
+                      {(errors.skillDescription) && (
+                        <div className="alert alert-danger" role="alert">{errors.skillDescription}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="row form-group">
+                    <div className="col-md-auto">
+                      <input type="submit" value="Update" className="btn btn-info btn-md text-white btn-md mt-4" /> &nbsp;
+                      <Link to={`/ViewSkill/${skillId}`} className="btn btn-danger btn-md mt-4">Cancel</Link>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 }
 export default skill
