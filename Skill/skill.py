@@ -36,8 +36,8 @@ class Skill(db.Model):
 @app.route("/view_skills", methods=['GET'])
 def view_skills():
     try:
-        # Get all skills
-        skills = Skill.query.all()
+        # Get all skills in descending order (Latest created skill first)
+        skills = Skill.query.order_by(Skill.skill_id.desc()).all()
         
         # If no skill
         if len(skills) == 0:
@@ -57,7 +57,7 @@ def view_skills():
         ), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 # View a single skill
 @app.route("/view_skill/<int:skill_id>", methods=['GET'])
@@ -84,7 +84,7 @@ def view_skill(skill_id):
         ), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @app.route("/create_skill", methods=['POST'])
 def create_skill():
@@ -134,7 +134,7 @@ def update_skill():
         ), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
