@@ -2,6 +2,9 @@ import { useState, useEffect} from "react";
 import navbar from '../components/navbar.jsx';
 import axios from 'axios';
 import Select from 'react-select'
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function createSkill() {
   const [skillName, setSkillName] = useState('');
@@ -9,6 +12,7 @@ function createSkill() {
   const [allSkills, setAllSkills] = useState([]);
   const [errors, setErrors] = useState({skillname: '', skillDescription: ''});
   const [duplicate, setDuplicate] = useState('');
+  const navigate = useNavigate();
   
   // Handle dropdown - status
   const [skillStatus, setSkillStatus] = useState('active');
@@ -28,7 +32,6 @@ function createSkill() {
         const response = await axios.get("http://localhost:5001/view_skills");
         if (response.status === 200) {
           setAllSkills(response.data.data);
-          console.log(response.data.data);
         }
       } catch (error) {
         console.log(error);
@@ -84,7 +87,10 @@ function createSkill() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (checkEmpty() || duplicate !== '') return;
+    if (checkEmpty() || duplicate !== ''){
+      toast.error("Skill create fail"); // Display error toast
+      return;
+    }
     //set skill data
     const skillData = {
       skill_name: skillName,
@@ -103,7 +109,8 @@ function createSkill() {
       setSkillName('');
       setSkillDescription('');
       setSkillStatus('active');
-      alert("Skill created successfully");
+      // Navigate to view skills page
+      navigate('/viewSkills?created=true');
 
     } else {
       // Error creating skill
@@ -114,6 +121,8 @@ function createSkill() {
   return (
     <div>
       {navbar()}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
       <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
         <div className="container">
           <div className="row">
@@ -121,7 +130,7 @@ function createSkill() {
               <h1 className="text-white font-weight-bold">Create Skill</h1>
               <div className="custom-breadcrumbs">
                 <a href="/">Home</a><span className="mx-2 slash">/</span>
-                <a href="#">Skills</a><span className="mx-2 slash">/</span>
+                <a href="/viewSkills">Skills</a><span className="mx-2 slash">/</span>
                 <span className="text-white"><strong>Create Skill</strong></span>
               </div>
             </div>
@@ -134,7 +143,7 @@ function createSkill() {
           <div className="row">
             <div className="col-lg-8 mb-5 mb-lg-0 mx-auto">
 
-              <form action="#" className="" onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}>
                 <div className="row form-group">
                   <div className="col-md-12">
                     <label className="text-black" htmlFor="skillName">Name</label>
