@@ -5,11 +5,14 @@ import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Modal, Button } from "react-bootstrap";
 
 function deleteSkill() {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [activeSkills, setActiveSkills] = useState([]);
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
 
   // Get all active skills when the component mounts
   useEffect(() => {
@@ -32,8 +35,8 @@ function deleteSkill() {
     setSelectedSkills(newSelectedSkills);
   };
 
-  // Delete selected skills
-  const handleDeleteSkills = async () => {
+  // Show delete confirmation modal
+  const handleShowModal = () => {
     if (activeSkills.length === 0) {
       toast.error("There is no active skill to delete");
       return;
@@ -42,6 +45,16 @@ function deleteSkill() {
       toast.error("Please select at least one skill to delete");
       return;
     }
+    setShowModal(true);
+  };
+
+  // Close delete confirmation modal
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  // Delete selected skills
+  const handleDeleteSkills = async () => {
   
     for (const skillId of selectedSkills) {
       const response = await axios.put(
@@ -60,6 +73,9 @@ function deleteSkill() {
     // All skills deleted successfully
     toast.success("Skills deleted successfully");
     navigate("/viewSkills");
+
+    // Close modal
+    handleCloseModal();
   };
 
   return (
@@ -92,13 +108,29 @@ function deleteSkill() {
                 onChange={handleSelectChange}
                 isMulti
               />
-              <button className="btn btn-danger mt-3" onClick={handleDeleteSkills}>
-                Delete
+              <button className="btn btn-danger mt-3" onClick={handleShowModal}>
+                Delete selected skills
               </button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Delete confirmation modal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete the selected skills?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteSkills}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
