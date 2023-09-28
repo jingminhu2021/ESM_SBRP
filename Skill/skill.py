@@ -169,8 +169,8 @@ def delete_skill(skill_id):
 @app.route("/get_skills_by_status/<skill_status>", methods=['GET'])
 def get_skills_by_status(skill_status):
     try:
-        # Get skills by status
-        skills = Skill.query.filter_by(skill_status=skill_status).all()
+        # Get skills by status, in descending order (Latest created skill first)
+        skills = Skill.query.filter_by(skill_status=skill_status).order_by(Skill.skill_id.desc()).all()
         # If no skills exist with the given status
         if not skills:
             return jsonify(
@@ -183,14 +183,13 @@ def get_skills_by_status(skill_status):
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    "skills": [skill.json() for skill in skills]
-                },
+                "data": [skill.json() for skill in skills],
                 "message": "Skills retrieved successfully!"
             }
         ), 200
     except Exception as e:
         return jsonify({'error': str(e)})
+        
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)

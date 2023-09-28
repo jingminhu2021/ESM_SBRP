@@ -6,6 +6,7 @@ import ViewSkills from './pages/viewSkills.jsx'
 import ViewSkill from './pages/viewSingleSkill.jsx'
 import CreateSkill from './pages/createSkill.jsx'
 import UpdateSkill from './pages/updateSkill.jsx'
+import DeleteSkill from './pages/deleteSkills.jsx'
 import Logout from './components/logout.jsx'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />
           <Route path="/updateSkill/:skillId" element={<UpdateSkill />} />
+          <Route path="/deleteSkills" element={<DeleteSkill />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
