@@ -1,117 +1,64 @@
-import * as React from 'react';
-// import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
-// import { ReactSession } from 'react-client-session';
-import login from '../components/login.jsx'
-// import logout from '../components/logout.jsx'
+import * as React from 'react'
+import login from './login.jsx'
+import { Container, Nav,  Navbar, NavDropdown } from 'react-bootstrap'
 
 function navbar(){
-    
+    var status = sessionStorage.getItem('status')
+    var fname = sessionStorage.getItem('fname')
+    var lname = sessionStorage.getItem('lname')
+   function checkUser(){
 
-    var user = sessionStorage.getItem('status')
-
-    // const handleLogout = () => {
-    //     {logout()}
-    // }
-
-    function checkUser(){
-        if(sessionStorage.getItem('status')!='true'){
+        if(status!='true'){
             return (
-                <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
-                    <div className="ml-auto">
-                    {/* <Link className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link> */}
-                    {login("lg")}
-                    </div> 
-                    <Link to="#" className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span className="icon-menu h3 m-0 p-0 mt-2"></span></Link>
-                </div>
+                <Nav>
+                    {login()}
+                </Nav>
             )
-        } else {
-        return (
-            <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
-                <div className="ml-auto dropdown account">
-                    <button className="btn btn-outline-white border-width-2 d-none d-lg-inline-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">
-                        <span className="mr-2 icon-user"></span>My Account  
-                    </button>
-                    <div className="mt-0 dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <Link to="/profile" className="dropdown-item">Profile</Link>
-                        <Link to="/logout" className="dropdown-item">Log Out</Link>   
-                    </div>
-                </div>               
-            </div>
-        )}
-    }
-
-    // Display if HR is logged in
-    function checkHr() {
+        }else{
+            return (
+                <Nav>
+                    <NavDropdown title={fname+ " " + lname} id="collasible-nav-dropdown">
+                        <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                        <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
+                    </NavDropdown>
+                </Nav>
+            )
+        }
+   }
+   // Display if HR is logged in
+   function checkHr() {
         if(sessionStorage.getItem('sys_role') == 'hr'){
             return (
-                <li><Link to="/ViewSkills">Skills</Link></li>
+                <Nav.Link href="/viewSkills">Skills</Nav.Link>
             )
         }
     }
-
-    return (
+    return(
         <>
-        {/* Mobile Menu */}
-        <div className="site-mobile-menu site-navbar-target">
-            <div className="site-mobile-menu-header">
-                <div className="site-mobile-menu-close mt-3">
-                    <span className="icon-close2 js-menu-toggle"></span>
-                </div>
-            </div>
-            <div className="site-mobile-menu-body"></div>
-        </div>
-       
-        {/* Navbar */}
-        <header className="site-navbar mt-3">
-            <div className="container-fluid">
-                <div className="row align-items-center">
-                <div className="site-logo col-6"><Link to="/">Job Board</Link></div>
-
-                <nav className="mx-auto site-navigation">
-                    <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                        <li><Link className="nav-link active" to="/">Home</Link></li>
-                        <li><Link to="about.html">About</Link></li>
-                        <li className="has-children">
-                            <Link to="job-listings.html">Job Listings</Link>
-                            <ul className="dropdown">
-                                <li><Link to="job-single.html">Job Single</Link></li>
-                                <li><Link to="post-job.html">Post a Job</Link></li>
-                            </ul>
-                        </li>
-                        <li className="has-children">
-                            <Link to="services.html">Pages</Link>
-                            <ul className="dropdown">
-                            <li><Link to="services.html">Services</Link></li>
-                            <li><Link to="service-single.html">Service Single</Link></li>
-                            <li><Link to="blog-single.html">Blog Single</Link></li>
-                            <li><Link to="portfolio.html">Portfolio</Link></li>
-                            <li><Link to="portfolio-single.html">Portfolio Single</Link></li>
-                            <li><Link to="testimonials.html">Testimonials</Link></li>
-                            <li><Link to="faq.html">Frequently Ask Questions</Link></li>
-                            <li><Link to="gallery.html">Gallery</Link></li>
-                            </ul>
-                        </li>
-                        <li><Link to="blog.html">Blog</Link></li>
+        <Navbar collapseOnSelect expand ="lg" className='bg-body-tertiary'>
+            <Container>
+                <Navbar.Brand href="/">Skill Based Role Portal</Navbar.Brand>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className='mr-auto'>
+                        <Nav.Link href="/about">About</Nav.Link>
+                        <Nav.Link href="/contact">Contact</Nav.Link>
+                        <Nav.Link href="/faq">FAQ</Nav.Link>
+                        <Nav.Link href="/help">Help</Nav.Link>
+                        <Nav.Link href="/resources">Resources</Nav.Link>
+                        <Nav.Link href="/terms">Terms</Nav.Link>
+                        <Nav.Link href="/privacy">Privacy</Nav.Link>
                         {checkHr()}
-                        <li className="d-lg-none"><Link to="post-job.html"><span className="m-2">+</span> Post a Job</Link></li>
-                        <li className="d-lg-none">{login("sm")}</li>
-                    </ul>
-                    
-                </nav>
-                    {/* <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
-                        <div className="ml-auto">
-                        <Link to="post-job.html" className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-add"></span>Post a Job</Link>
-                        <Link to="login.html" className="m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"><span className="mr-2 icon-lock_outline"></span>Log In</Link>
-                        </div>
-                        <Link to="#" className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span className="icon-menu h3 m-0 p-0 mt-2"></span></Link>
-                    </div> */}
-                    {checkUser()}
-                </div>
-            </div>
-        </header>
+                    </Nav>
+                    <Nav className='m-auto'>
+                        {checkUser()}
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
         </>
     )
+
 }
 
 export default navbar

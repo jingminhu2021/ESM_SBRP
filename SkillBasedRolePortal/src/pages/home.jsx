@@ -58,10 +58,10 @@ function home(){
                         <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
+                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={handleDropdownChange} />
+                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={handleDropdownChange} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
