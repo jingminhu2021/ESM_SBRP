@@ -24,9 +24,15 @@ function navbar(){
                 </Nav>
             )
         }
-
    }
- 
+   // Display if HR is logged in
+   function checkHr() {
+        if(sessionStorage.getItem('sys_role') == 'hr'){
+            return (
+                <Nav.Link href="/viewSkills">Skills</Nav.Link>
+            )
+        }
+    }
     return(
         <>
         <Navbar collapseOnSelect expand ="lg" className='bg-body-tertiary'>
@@ -42,6 +48,7 @@ function navbar(){
                         <Nav.Link href="/resources">Resources</Nav.Link>
                         <Nav.Link href="/terms">Terms</Nav.Link>
                         <Nav.Link href="/privacy">Privacy</Nav.Link>
+                        {checkHr()}
                     </Nav>
                     <Nav className='m-auto'>
                         {checkUser()}
