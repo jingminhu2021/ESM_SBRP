@@ -40,6 +40,7 @@ else {
   const [allSkills, setAllSkills] = useState([]);
   const [errors, setErrors] = useState({skillname: '', skillDescription: ''});
   const [duplicate, setDuplicate] = useState('');
+  const [duplicateSkillId, setDuplicateSkillID] = useState(null);
   const navigate = useNavigate();
   
   // Handle dropdown - status
@@ -74,6 +75,7 @@ else {
     //Check duplicate skill name
     for (const s of allSkills){
       if (s.skill_name.toLowerCase() === skillName.toLowerCase()){
+        setDuplicateSkillID(s.skill_id);
         setDuplicate('Skill name already existed');
         return;
       }
@@ -177,7 +179,12 @@ else {
                     <label className="text-black" htmlFor="skillName">Name</label>
                     <input type="text" id="skillName"  className="form-control" value={skillName} onChange={handleSkillNameChange} />
                     {(errors.skillName || duplicate !== '') && (
-                      <div className="alert alert-danger" role="alert">{errors.skillName}{duplicate}</div>
+                      <div className="alert alert-danger" role="alert">
+                        {errors.skillName}{duplicate} &nbsp;
+                        {(duplicate !== '') && (
+                          <a className="text-secondary" href={`http://localhost:5173/ViewSkill/${duplicateSkillId}`}>Click here to view</a>
+                        )}
+                        </div>
                     )}
                     </div>
                 </div>
