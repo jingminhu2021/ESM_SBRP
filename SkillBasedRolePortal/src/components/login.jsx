@@ -1,21 +1,16 @@
 import React from 'react';
-import { useState} from "react";
+import { useState } from "react";
 import {Form, Button, Modal, Alert} from 'react-bootstrap'
 import axios from 'axios';
 
-function login(size){
+function login(){
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    var btn_className = "d-lg-none"
-    var span_className = ""
+    var btn_className = "m-2 btn btn-primary"
+    var span_className = "mr-2 icon-lock_outline"
     const [incorrect, setIncorrect] = useState("d-none")
     const [variant, setVariant] = useState("danger")
-
-    if (size == "lg"){
-        btn_className = "m-2 btn btn-primary border-width-2 d-none d-lg-inline-block"
-        span_className = "mr-2 icon-lock_outline"
-    }
 
     const [formData, setFormData] = useState({
         email: '',
@@ -38,7 +33,7 @@ function login(size){
       };
     
     const send_onsubmit = (email, password) => {
-        let api_endpoint_url = 'http://10.124.3.199:5000/login' //Placeholder
+        let api_endpoint_url = 'http://localhost:5000/login' //Placeholder
         var bodyFormData = new FormData();
         bodyFormData.append('email', email);
         bodyFormData.append('password', password);
@@ -89,6 +84,7 @@ function login(size){
                             autoFocus
                             value={formData.email}
                             onChange={handleInputChange}
+                            autoComplete="off"
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="password"
@@ -100,6 +96,7 @@ function login(size){
                             placeholder="Password"
                             value={formData.password}
                             onChange={handleInputChange}
+                            autoComplete="off"
                         />
                     </Form.Group>
 
