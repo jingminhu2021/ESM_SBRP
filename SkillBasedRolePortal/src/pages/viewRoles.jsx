@@ -3,43 +3,56 @@ import { useState } from "react";
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
 
-function rolelisting(){
-    const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
-    
-    const region = [
-        { value: '', label: 'Anywhere' },
-        { value: 'San Francisco', label: 'San Francisco' },
-        { value: 'Palo Alto', label: 'Palo Alto' },
-        { value: 'New York', label: 'New York' },
-        { value: 'Mahattan', label: 'Mahattan' },
-        { value: 'Ontario', label: 'Ontario' },
-        { value: 'Toronto', label: 'Toronto' },
-        { value: 'Kansas', label: 'Kansas' },
-        { value: 'Mountain View', label: 'Mountain View' }
-    ]
+function viewRoles(){
+    // Check if HR is logged in
+    if (sessionStorage.getItem('sys_role') != 'hr') {
+      return (
+          <div>
+              {navbar()}
+              <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
+                  <div className="container">
+                      <div className="row">
+                          <div className="col-md-7">
+                              <h1 className="text-white font-weight-bold">Role Listings</h1>
+                              <div className="custom-breadcrumbs">
+                                  <a href="/">Home</a><span className="mx-2 slash">/</span>
+                                  <span className="text-white"><strong>Role Listings</strong></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+              <section className="site-section services-section" id="next-section">
+                  <div className="container text-center">
+                      <p className="font-weight-bold" style={{ fontSize: '24px' }}>You are not authorized to view this page!</p>
+                  </div>
+              </section>
+          </div>
+      )
+  }
+  else {
+      const [rolelistings, setRoleListings] = useState([]);
+      const location = useLocation();
 
-    const Job_Type = [
-      { value: 'Full Time', label: 'Full Time' },
-      { value: 'Part Time', label: 'Part Time' },
-      { value: 'Freelance', label: 'Freelance' },
-      { value: 'Internship', label: 'Internship' },
-      { value: 'Temporary', label: 'Temporary' }
-    ]
+      useEffect(() => {
+          axios.get('http://localhost:5001/view_rolelistings')
+              .then(response => {
+                  setSkills(response.data.data);
+              })
+              .catch(error => {
+                  console.error('Error fetching role listings:', error);
+              });
+      }, []);
 
-
-    const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: ""});
-    const handleChange = (event) => {
-      const { name, value } = event.target;
-      setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    };
-    const  handleDropdownChange = (event) => {
-      setSelectedOption(event.target);
-    };
-    const handleSubmit = (event) => {
-      jobTitle: {FormData.jobTitle};
-      jobRegion: {FormData.jobRegion.value};
-      jobType: {FormData.jobTpe}
-    }
+      // Check if the 'created=true' parameter is present in the URL
+      useEffect(() => {
+          const searchParams = new URLSearchParams(location.search);
+          const created = searchParams.get('created');
+          if (created === 'true') {
+              toast.success("Role Listing created successfully");
+          }
+      }, [location.search]);
+  }
 
     return(
         <div>
@@ -299,4 +312,4 @@ function rolelisting(){
     )
 }
 
-export default rolelisting
+export default viewRoles

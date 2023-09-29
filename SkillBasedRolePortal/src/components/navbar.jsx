@@ -35,6 +35,11 @@ function navbar(){
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className='mr-auto'>
+                        <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
+                        <NavDropdown title="More" id="collasible-nav-dropdown">
+                            <NavDropdown.Item href="/viewSingleRole">Single Role</NavDropdown.Item>
+                            <NavDropdown.Item href="/createRole">Post Role</NavDropdown.Item>
+                        </NavDropdown>
                         <Nav.Link href="/about">About</Nav.Link>
                         <Nav.Link href="/contact">Contact</Nav.Link>
                         <Nav.Link href="/faq">FAQ</Nav.Link>
