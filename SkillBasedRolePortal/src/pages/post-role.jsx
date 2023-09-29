@@ -1,11 +1,63 @@
 import * as React from 'react'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
 import SelectDate from '../components/select-date.jsx'
 import RoleDescriptionEditor from '../components/role-description.jsx'
 
 function postrole(){
+
+  const [roleData, setRoleData] = useState({
+    id: '', // Initialize with empty values
+    title: '',
+    createDate: '',
+    endDate: '',
+    description: '',
+  });
+
+  useEffect(() => {
+    // Make a GET request to your Node.js server to fetch role data
+    fetch('/api/roles') // Replace with your actual API endpoint
+      .then((response) => response.json())
+      .then((data) => {
+        setRoles(data); // Update the state with the fetched data
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  // Function to fetch existing role data when editing
+  const fetchRoleData = async () => {
+    // Replace with your API call to fetch role data
+    const response = await fetch('/api/roles/123'); // Use the correct API endpoint
+    const data = await response.json();
+    setRoleData(data);
+  };
+
+  useEffect(() => {
+    // Check if you are editing an existing role by examining the URL or a flag
+    const isEditing = true; // Set this based on your logic
+    if (isEditing) {
+      fetchRoleData(); // Fetch existing role data
+    }
+  }, []);
+
+  // Function to handle form submission
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    
+    // Replace with your API call to update role data
+    await fetch('/api/updateRole/123', {
+      method: 'PUT', // Use the correct HTTP method
+      body: JSON.stringify(roleData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    // Handle success or error here
+  };
 
     return(
         <div>
@@ -49,7 +101,7 @@ function postrole(){
                 </div>
                 <div className="row mb-5">
                   <div className="col-lg-12">
-                    <form className="p-4 p-md-5 border rounded" method="post">
+                    <form className="p-4 p-md-5 border rounded" onSubmit={handleFormSubmit}>
                       <h3 className="text-black mb-5 border-bottom pb-2">Role Details</h3>
                       
                       <div className="form-group">
@@ -83,6 +135,23 @@ function postrole(){
                         <label htmlFor="job-description">Role Description</label>
                         {RoleDescriptionEditor()} 
                       </div>
+
+                      <div className="form-group">
+                        <label htmlFor="job-description">Role Description</label>
+                        <RoleDescriptionEditor
+                          value={roleData.description}
+                          onChange={(newDescription) =>
+                            setRoleData({ ...roleData, description: newDescription })
+                          }
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <button type="submit" className="btn btn-block btn-primary btn-md">
+                          {isEditing ? 'Update Role' : 'Save Role'}
+                        </button>
+                    </div>
+
                     </form>
                   </div>
 
