@@ -27,33 +27,29 @@ class Account(db.Model):
     staff_id = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(140), nullable=False)
-    fname = db.Column(db.String(50), nullable=False)
-    lname = db.Column(db.String(50), nullable=False)
-    phone=db.Column(db.String(20), nullable=False)
-    sys_role = db.Column(db.Enum("staff","hr","manager","inactive"), nullable=False)
-    dept = db.Column(db.String(50), nullable=False)
-    biz_address = db.Column(db.String(255), nullable=True)
-    profile_picture = db.Column(db.String(255), nullable=False)
 
     def json(self):
         item = {
             'accounts_id': self.accounts_id,
             'staff_id': self.staff_id,
             'email': self.email,
-            'password': self.password,
-            'fname': self.fname,
-            'lname': self.lname,
-            'phone': self.phone,
-            'sys_role': self.sys_role,
-            'dept': self.dept,
-            'biz_address': self.biz_address,
-            'profile_picture': self.profile_picture,
+            'password': self.password
         }
         return item
     
-    def get_profile(self):
+class Staff(db.Model):
+    __tablename__ = 'STAFF_DETAILS'
+    staff_id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(50), nullable=False)
+    lname = db.Column(db.String(50), nullable=False)
+    dept = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    biz_address = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    sys_role = db.Column(db.Enum("staff","hr","manager"), nullable=False)
+
+    def json(self):
         item = {
-            'accounts_id': self.accounts_id,
             'staff_id': self.staff_id,
             'email': self.email,
             'fname': self.fname,
@@ -62,7 +58,6 @@ class Account(db.Model):
             'sys_role': self.sys_role,
             'dept': self.dept,
             'biz_address': self.biz_address,
-            'profile_picture': self.profile_picture,
         }
         return item
 
@@ -75,8 +70,8 @@ def login():
 
         if account is None:
             return jsonify({'message': 'No account found!', 'status': 'fail'})
-
-        response = jsonify({'message': 'Login successful!','status': 'success', 'data': account.json()})
+        staff = Staff.query.filter_by(staff_id=account.staff_id).first()
+        response = jsonify({'message': 'Login successful!','status': 'success', 'data': staff.json()})
         return response
 
     except Exception as e:
