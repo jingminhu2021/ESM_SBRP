@@ -6,9 +6,9 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 
 
-DB_USERNAME = "sbrp_admin"
-DB_PASSWORD = "30e?lLIy^,248fX9T"
-ENDPOINT = "myrdsinstance.ctvrxbrt1hnb.ap-southeast-1.rds.amazonaws.com"
+ENDPOINT = os.environ.get("DB_HOST")
+DB_USERNAME = os.environ.get("DB_USERNAME")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 app = Flask(__name__)
 
