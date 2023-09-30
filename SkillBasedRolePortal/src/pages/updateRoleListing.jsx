@@ -34,16 +34,14 @@ function updateRoleListing() {
       </div>
     )
   } else {
+    
     const [formData, setFormData] = useState({
-      role_id: '', // This field will be disabled
-      role_name: '',
-      role_listing_desc: '',
-      role_listing_source: '', // This field will be disabled
+      role_listing_id: '',
       role_listing_open: '',
       role_listing_close: '',
-      role_listing_creator: '',
+      role_listing_desc: '',
       role_listing_updater: '',
-    });
+    });    
 
     const [roleListingOptions, setRoleListingOptions] = useState([]);
     const [selectedRoleListing, setSelectedRoleListing] = useState(null);
@@ -72,14 +70,14 @@ function updateRoleListing() {
 
     const handleRoleListingSelect = (selectedOption) => {
       setSelectedRoleListing(selectedOption);
-
+    
       if (selectedOption) {
         // Fetch corresponding role listing details here
         axios.get(`http://localhost:5002/role_listing_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const roleListingData = response.data;
-
+    
               // Extract role details and populate the form fields
               const {
                 role_id,
@@ -88,22 +86,29 @@ function updateRoleListing() {
                 role_listing_open,
                 role_listing_close,
               } = roleListingData;
-
+    
+              // Format the date for display
+              const formattedOpenDate = formatDateForDisplay(role_listing_open);
+              const formattedCloseDate = formatDateForDisplay(role_listing_close);
+              setRoleListingOpen(formattedOpenDate);
+              setRoleListingClose(formattedCloseDate);
+              setRoleListingDesc(roleListingData.role_listing_desc);
+    
               setFormData({
                 role_id,
                 role_listing_desc,
                 role_listing_source,
-                role_listing_open: formatDateForDisplay(role_listing_open),
-                role_listing_close: formatDateForDisplay(role_listing_close),
+                role_listing_open: formattedOpenDate,
+                role_listing_close: formattedCloseDate,
                 role_listing_updater: staff_id,
               });
-
+    
               // Now, fetch the role name from the role_details table
               axios.get(`http://localhost:5002/role_details/${role_id}`)
                 .then((roleResponse) => {
                   if (roleResponse.status === 200) {
                     const roleData = roleResponse.data;
-
+    
                     // Update the role name in the state
                     setRoleDetails({
                       role_name: roleData.role_name,
@@ -124,52 +129,92 @@ function updateRoleListing() {
             console.error('Error fetching Role Listing details:', error);
           });
       }
-    };
+    };    
 
     const handleChange = (e) => {
       // Condition to determine if the fields should be read-only
       const readOnlyFields = !!selectedRoleListing;
-
+    
       if (!readOnlyFields) {
         const { name, value } = e.target;
-
+    
         // If the input is a date field, format the value as "yyyy-MM-dd"
         const formattedValue =
           e.target.type === 'date' ? formatDateForServer(value) : value;
-
+    
         // Check if the field being changed is "Close Date"
         if (name === 'role_listing_close') {
           // Convert the date strings to Date objects for comparison
           const openDate = new Date(formData.role_listing_open);
           const closeDate = new Date(formattedValue);
-
+    
           // Compare "Close Date" with "Open Date" and show an error if it's before or equal to
           if (closeDate <= openDate) {
             alert('Close Date must be after Open Date');
             return; // Prevent setting the value
           }
         }
-
-        setFormData({
-          ...formData,
+    
+        // Use the functional update form of setFormData to access the current state
+        setFormData((prevData) => ({
+          ...prevData,
           [name]: formattedValue,
-          role_listing_source: selectedManagerId,
-          role_listing_creator: parseInt(staff_id),
           role_listing_updater: parseInt(staff_id),
-        });
+        }));
       }
     };
+
+    // Separate state for fields that can be edited
+    const [roleListingOpen, setRoleListingOpen] = useState('');
+    const [roleListingClose, setRoleListingClose] = useState('');
+    const [roleListingDesc, setRoleListingDesc] = useState('');
+
+    // Handle changes to editable fields
+    const handleRoleListingOpenChange = (e) => {
+      const value = e.target.value;
+      setRoleListingOpen(value);
+
+      // Update the formData state
+      setFormData((prevData) => ({
+        ...prevData,
+        role_listing_open: value,
+      }));
+    };
+
+    const handleRoleListingCloseChange = (e) => {
+      const value = e.target.value;
+      setRoleListingClose(value);
+
+      // Update the formData state
+      setFormData((prevData) => ({
+        ...prevData,
+        role_listing_close: value,
+      }));
+    };
+
+    const handleRoleListingDescChange = (e) => {
+      const value = e.target.value;
+      setRoleListingDesc(value);
+
+      // Update the formData state
+      setFormData((prevData) => ({
+        ...prevData,
+        role_listing_desc: value,
+      }));
+    };
+
+    
 
     // Function to format a date for display (from "Sat, 30 Sep 2023 00:00:00 GMT" to "dd-MM-yyyy")
     const formatDateForDisplay = (dateString) => {
       if (!dateString) return ''; // Handle empty date
       const dateObj = new Date(dateString);
-      const day = dateObj.getDate();
-      const month = dateObj.getMonth() + 1; // Months are zero-indexed, so add 1
       const year = dateObj.getFullYear();
-
-      // Format it as dd-MM-yyyy
-      return `${day}-${month < 10 ? '0' : ''}${month}-${year}`;
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Ensure two digits for month
+      const day = dateObj.getDate().toString().padStart(2, '0'); // Ensure two digits for day
+    
+      // Format it as yyyy-MM-dd
+      return `${year}-${month}-${day}`;
     };
 
     // Function to format a date for server (from dd-MM-yyyy to yyyy-MM-dd)
@@ -210,12 +255,6 @@ function updateRoleListing() {
         return;
       }
 
-      // Rename the key from 'role_description' to 'role_listing_desc' if it exists
-      if ('role_description' in formData) {
-        formData.role_listing_desc = formData.role_description;
-        delete formData.role_description;
-      }
-
       console.log('Form Data:', formData);
 
       // Ensure you send the role_listing_id along with the other data to the server
@@ -227,19 +266,22 @@ function updateRoleListing() {
       console.log('Updated Form Data:', updatedData);
 
       // Make the PUT request to update the role listing
-      axios
-        .put(`http://localhost:5002/update_rolelisting/${updatedData.role_listing_id}`, updatedData)
-        .then((response) => {
-          if (response.status === 200) {
-            console.log('Role updated successfully:', response.data);
-            navigate('/viewRoles?updated=true');
-          } else {
-            console.error('Error updating role:', response.data);
-          }
-        })
-        .catch((error) => {
-          console.error('Error updating data:', error);
-        });
+      // Send the updated data to the server
+    axios
+      .put('http://localhost:5002/update_rolelisting', updatedData) // Adjust the API endpoint
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Role Listing updated successfully:', response.data);
+          // You can handle success actions here, such as showing a success message
+        } else {
+          console.error('Error updating Role Listing:', response.data);
+          // Handle errors here, such as showing an error message
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating data:', error);
+        // Handle errors here, such as showing an error message
+      });
     };
 
     return (
@@ -284,7 +326,6 @@ function updateRoleListing() {
                       options={roleListingOptions}
                       value={selectedRoleListing} // Use selectedRoleListing here
                       onChange={(selectedOption) => handleRoleListingSelect(selectedOption)}
-                      placeholder="Select a Role Listing ID"
                     />
                   </div>
 
@@ -317,12 +358,12 @@ function updateRoleListing() {
                   <div className="form-group">
                     <label htmlFor="role_listing_open">Role Application Start Date</label>
                     <input
-                      type="date" // Use type "date" for calendar selection
+                      type="date"
                       className="form-control"
                       id="role_listing_open"
                       name="role_listing_open"
-                      value={formatDateForDisplay(formData.role_listing_open)} // Format for display
-                      onChange={handleChange}
+                      value={roleListingOpen}
+                      onChange={handleRoleListingOpenChange}
                     />
                   </div>
 
@@ -333,8 +374,8 @@ function updateRoleListing() {
                       className="form-control"
                       id="role_listing_close"
                       name="role_listing_close"
-                      value={formatDateForDisplay(formData.role_listing_close)}
-                      onChange={handleChange}
+                      value={roleListingClose}
+                      onChange={handleRoleListingCloseChange}
                     />
                   </div>
 
@@ -344,8 +385,8 @@ function updateRoleListing() {
                       className="form-control"
                       id="role_listing_desc"
                       name="role_listing_desc"
-                      value={formData.role_listing_desc}
-                      onChange={handleChange}
+                      value={roleListingDesc}
+                      onChange={handleRoleListingDescChange}
                       style={{ height: '200px', width: '100%', overflowY: 'auto' }}
                     />
                   </div>
@@ -359,11 +400,12 @@ function updateRoleListing() {
                       name="role_listing_source"
                       value={formData.role_listing_source}
                       readOnly={!!selectedRoleListing} // Set to read-only if a role listing ID is selected
+                      onChange={handleChange}
                     />
                   </div>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-block btn-primary btn-md">Update Role</button>
+                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Update Role</button>
                   </div>
                 </form>
               </div>

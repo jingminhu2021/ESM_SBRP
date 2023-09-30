@@ -341,7 +341,7 @@ function createRoleListing(){
                         </div>
 
                         <div className="form-group">
-                          <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleSubmit}>Save Role</button>
+                          <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleSubmit}>Create Role</button>
                         </div>
                     </form>
                   </div>

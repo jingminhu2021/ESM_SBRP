@@ -298,7 +298,9 @@ def update_rolelisting():
         
         # Update role listing info
         rolelisting.role_listing_desc = data['role_listing_desc']
+        rolelisting.role_listing_open = data['role_listing_open']
         rolelisting.role_listing_close = data['role_listing_close']
+        rolelisting.role_listing_updater = data['role_listing_updater']
         
         # Commit changes to database
         db.session.commit()
