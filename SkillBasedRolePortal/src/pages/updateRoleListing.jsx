@@ -100,7 +100,26 @@ function updateRoleListing() {
                 role_listing_source,
                 role_listing_open: formattedOpenDate,
                 role_listing_close: formattedCloseDate,
-                role_listing_updater: staff_id,
+                role_listing_updater: parseInt(staff_id),
+              });
+
+              // Now, fetch the manager details from the manager_options table
+              axios.get(`http://localhost:5002/manager_details/${role_listing_source}`)
+              .then((managerResponse) => {
+                if (managerResponse.status === 200) {
+                  const managerData = managerResponse.data;
+
+                  // Update the selected manager in the state
+                  setSelectedManager({
+                    value: managerData.staff_id,
+                    label: `${managerData.fname} ${managerData.lname}`,
+                  });
+                } else {
+                  console.error('Error fetching Manager details:', managerResponse.data);
+                }
+              })
+              .catch((managerError) => {
+                console.error('Error fetching Manager details:', managerError);
               });
     
               // Now, fetch the role name from the role_details table
@@ -130,6 +149,60 @@ function updateRoleListing() {
           });
       }
     };    
+
+    const [managerOptions, setManagerOptions] = useState([]);
+    const [selectedManager, setSelectedManager] = useState(null);
+
+    useEffect(() => {
+      // Fetch manager options from your Flask API
+      axios.get('http://localhost:5002/manager_options')
+        .then((response) => {
+          if (response.status === 200) {
+            const options = response.data.map((manager) => ({
+              value: manager.staff_id,
+              label: `${manager.fname} ${manager.lname}`,
+            }));
+            console.log('Manager Options:', options); // Add this line to debug
+            setManagerOptions(options);
+          } else {
+            console.error('Error fetching Manager Options:', response.data);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching Manager Options:', error);
+        });
+    }, []);
+
+    const handleManagerSelect = (selectedOption) => {
+      setSelectedManager(selectedOption);
+    
+      if (selectedOption) {
+        // Fetch corresponding manager details here
+        axios.get(`http://localhost:5002/manager_details/${selectedOption.value}`)
+          .then((response) => {
+            if (response.status === 200) {
+              const managerData = response.data;
+    
+              // Update the form fields with manager details
+              setFormData((prevData) => ({
+                ...prevData,
+                role_listing_source: managerData.staff_id, // Update the manager ID
+              }));
+    
+              // Update the selected manager in the state
+              setSelectedManager({
+                value: managerData.staff_id,
+                label: `${managerData.fname} ${managerData.lname}`,
+              });
+            } else {
+              console.error('Error fetching Manager details:', response.data);
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching Manager details:', error);
+          });
+      }
+    };
 
     const handleChange = (e) => {
       // Condition to determine if the fields should be read-only
@@ -169,27 +242,58 @@ function updateRoleListing() {
     const [roleListingClose, setRoleListingClose] = useState('');
     const [roleListingDesc, setRoleListingDesc] = useState('');
 
-    // Handle changes to editable fields
     const handleRoleListingOpenChange = (e) => {
       const value = e.target.value;
       setRoleListingOpen(value);
-
+    
       // Update the formData state
       setFormData((prevData) => ({
         ...prevData,
         role_listing_open: value,
       }));
+    
+      // Validate "Open Date" against "Close Date"
+      if (value && roleListingClose) {
+        const openDate = new Date(value);
+        const closeDate = new Date(roleListingClose);
+        if (openDate >= closeDate) {
+          alert('Role Application Start Date must be before Role Application End Date');
+          // Reset the "Close Date" field
+          setRoleListingClose('');
+          // Update the formData state for "Close Date"
+          setFormData((prevData) => ({
+            ...prevData,
+            role_listing_close: '',
+          }));
+        }
+      }
     };
 
     const handleRoleListingCloseChange = (e) => {
       const value = e.target.value;
       setRoleListingClose(value);
-
+    
       // Update the formData state
       setFormData((prevData) => ({
         ...prevData,
         role_listing_close: value,
       }));
+    
+      // Validate "Close Date" against "Open Date"
+      if (value && roleListingOpen) {
+        const openDate = new Date(roleListingOpen);
+        const closeDate = new Date(value);
+        if (closeDate <= openDate) {
+          alert('Role Application End Date must be after Role Application Start Date');
+          // Reset the "Close Date" field
+          setRoleListingClose('');
+          // Update the formData state for "Close Date"
+          setFormData((prevData) => ({
+            ...prevData,
+            role_listing_close: '',
+          }));
+        }
+      }
     };
 
     const handleRoleListingDescChange = (e) => {
@@ -248,41 +352,52 @@ function updateRoleListing() {
 
     const handleUpdate = async (event) => {
       event.preventDefault();
-
+    
       const errors = checkEmpty();
       if (Object.keys(errors).length > 0) {
         console.error('Validation errors:', errors);
         return;
       }
-
+    
+      // Check if selectedManager is null and show an alert
+      if (!selectedManager) {
+        alert('Please select a manager before updating.');
+        return;
+      }
+    
+      // Continue with the update process
+    
       console.log('Form Data:', formData);
-
+    
       // Ensure you send the role_listing_id along with the other data to the server
       const updatedData = {
         ...formData,
-        role_listing_id: selectedRoleListing.value, // Pass the selected role_listing_id
+        role_listing_id: parseInt(selectedRoleListing.value), // Pass the selected role_listing_id
       };
-
+    
       console.log('Updated Form Data:', updatedData);
-
+    
       // Make the PUT request to update the role listing
       // Send the updated data to the server
-    axios
-      .put('http://localhost:5002/update_rolelisting', updatedData) // Adjust the API endpoint
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('Role Listing updated successfully:', response.data);
-          // You can handle success actions here, such as showing a success message
-        } else {
-          console.error('Error updating Role Listing:', response.data);
+      axios
+        .put('http://localhost:5002/update_rolelisting', updatedData) // Adjust the API endpoint
+        .then((response) => {
+          if (response.status === 200) {
+            console.log('Role Listing updated successfully:', response.data);
+            // You can handle success actions here, such as showing a success message
+          } else if (response.status === 404) {
+            console.error('Role Listing not found:', response.data);
+            // Handle the case where the specified role listing was not found
+          } else {
+            console.error('Error updating Role Listing:', response.data);
+            // Handle other errors here, such as showing an error message
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating data:', error);
           // Handle errors here, such as showing an error message
-        }
-      })
-      .catch((error) => {
-        console.error('Error updating data:', error);
-        // Handle errors here, such as showing an error message
-      });
-    };
+        });
+    };    
 
     return (
       <div>
@@ -393,14 +508,11 @@ function updateRoleListing() {
 
                   <div className="form-group">
                     <label htmlFor="manager-id">Manager</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="role_listing_source"
-                      name="role_listing_source"
-                      value={formData.role_listing_source}
-                      readOnly={!!selectedRoleListing} // Set to read-only if a role listing ID is selected
-                      onChange={handleChange}
+                    <Select
+                      options={managerOptions}
+                      value={selectedManager}
+                      onChange={handleManagerSelect}
+                      isClearable={true}
                     />
                   </div>
 

@@ -243,6 +243,27 @@ def get_manager_options():
         return jsonify(manager_info), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/manager_details/<int:staff_id>', methods=['GET'])
+def get_manager_details(staff_id):
+    try:
+        # Query the ManagerDetails table for the specified staff_id
+        manager = StaffDetails.query.filter_by(staff_id=staff_id).first()
+
+        if manager:
+            # Create a dictionary to store manager details
+            manager_data = {
+                'staff_id': manager.staff_id,
+                'fname': manager.fname,
+                'lname': manager.lname,
+                # Add other manager-related fields here
+            }
+            return jsonify(manager_data), 200
+        else:
+            return jsonify({'error': 'Manager not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 # Create a new role listing
 @app.route("/create_rolelisting", methods=['POST'])
@@ -304,7 +325,7 @@ def update_rolelisting():
             return jsonify(
                 {
                     "code": 404,
-                    "message": "Role listing not found!"
+                    "message": "Role listing not updated!"
                 }
             ), 404
         
@@ -313,6 +334,7 @@ def update_rolelisting():
         rolelisting.role_listing_open = data['role_listing_open']
         rolelisting.role_listing_close = data['role_listing_close']
         rolelisting.role_listing_updater = data['role_listing_updater']
+        rolelisting.role_listing_source = data['role_listing_source']
         
         # Commit changes to database
         db.session.commit()
