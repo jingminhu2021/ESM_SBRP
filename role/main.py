@@ -71,6 +71,8 @@ class StaffDetails(db.Model):
     __tablename__ = 'STAFF_DETAILS'
 
     staff_id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(50))
+    lname = db.Column(db.String(50))
     sys_role = db.Column(Enum('staff', 'hr', 'manager', 'inactive'))
     
 class RoleDetails(db.Model):
@@ -226,9 +228,19 @@ def get_manager_options():
     try:
         # Fetch all managers under a specific sys_role (adjust as needed)
         sys_role = 'manager'
-        managers = [staff.staff_id for staff in StaffDetails.query.filter_by(sys_role=sys_role).all()]
+        managers = StaffDetails.query.filter_by(sys_role=sys_role).all()
 
-        return jsonify(managers), 200
+        # Create a list of dictionaries with staff_id, fname, and lname
+        manager_info = [
+            {
+                "staff_id": manager.staff_id,
+                "fname": manager.fname,
+                "lname": manager.lname
+            }
+            for manager in managers
+        ]
+
+        return jsonify(manager_info), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
