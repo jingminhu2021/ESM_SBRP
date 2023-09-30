@@ -38,7 +38,7 @@ function navbar(){
                         <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
                         <NavDropdown title="More" id="collasible-nav-dropdown">
                             <NavDropdown.Item href="/viewSingleRole">Single Role</NavDropdown.Item>
-                            <NavDropdown.Item href="/createRole">Post Role</NavDropdown.Item>
+                            <NavDropdown.Item href="/createRoleListing">Post Role</NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link href="/about">About</Nav.Link>
                         <Nav.Link href="/contact">Contact</Nav.Link>

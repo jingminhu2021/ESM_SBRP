@@ -47,6 +47,7 @@ function login(){
                 console.log(response)
                 sessionStorage.setItem('status', true)
                 sessionStorage.setItem('account_id', response.data.data.accounts_id)
+                sessionStorage.setItem('staff_id', response.data.data.staff_id)
                 sessionStorage.setItem('email', response.data.data.email)
                 sessionStorage.setItem('sys_role', response.data.data.sys_role)
                 sessionStorage.setItem('fname', response.data.data.fname)

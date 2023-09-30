@@ -3,12 +3,14 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Enum
 from datetime import datetime, timedelta
+import random
 
 
-DB_USERNAME = "sbrp_admin"
-DB_PASSWORD = "30e?lLIy^,248fX9T"
-ENDPOINT = "myrdsinstance.ctvrxbrt1hnb.ap-southeast-1.rds.amazonaws.com"
+ENDPOINT = os.environ.get("DB_HOST")
+DB_USERNAME = os.environ.get("DB_USERNAME")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 app = Flask(__name__)
 
@@ -22,38 +24,46 @@ CORS(app)
 class RoleListing(db.Model):
     __tablename__ = 'ROLE_LISTINGS'
 
-    role_listing_id = db.Column(db.Integer, primary_key=True)
+    role_listing_id = db.Column(db.Integer, primary_key=True, unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('ROLE_DETAILS.role_id'), nullable=False)
     role_listing_desc = db.Column(db.String(255), nullable=True)
-    role_listing_source = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=True)
-    role_listing_open = db.Column(db.String(10), nullable=False)  # Store as string 'DD-MM-YYYY'
-    role_listing_close = db.Column(db.String(10))  # Store as string 'DD-MM-YYYY'
+    role_listing_source = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'))
+    role_listing_open = db.Column(db.String(20), nullable=False)  # Store as string 'DD-MM-YYYY'
+    role_listing_close = db.Column(db.String(20))  # Store as string 'DD-MM-YYYY'
     role_listing_creator = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_listing_ts_create = db.Column(db.DateTime, default=db.func.now())
     role_listing_updater = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_listing_ts_update = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
-    def __init__(self, role_id, role_listing_desc, role_listing_open, role_listing_close=None):
+    def __init__(self, role_id, role_listing_creator, role_listing_updater, role_listing_open, role_listing_close=None, role_listing_desc=None, role_listing_source=None):
+        self.role_listing_id = self.generate_unique_random_id()  # Generate a unique random ID
         self.role_id = role_id
-        self.role_listing_desc = role_listing_desc
         self.role_listing_open = role_listing_open
-        if role_listing_close is None:
-            self.role_listing_close = role_listing_open + timedelta(weeks=2)
-        else:
-            self.role_listing_close = role_listing_close
-    
+        self.role_listing_close = role_listing_close
+        self.role_listing_desc = role_listing_desc
+        self.role_listing_source = role_listing_source
+        self.role_listing_creator = role_listing_creator
+        self.role_listing_updater = role_listing_updater
+
+    def generate_unique_random_id(self):
+        while True:
+            random_id = random.randint(1, 1000000)  # Adjust the range as needed
+            existing_ids = [row[0] for row in db.session.query(RoleListing.role_listing_id).all()]  # Fetch existing IDs
+            if random_id not in existing_ids:
+                return random_id
+            
     def json(self):
         item = {
             'role_listing_id': self.role_listing_id,
             'role_id': self.role_id,
             'role_listing_desc': self.role_listing_desc,
             'role_listing_source': self.role_listing_source,
-            'role_listing_open': self.role_listing_open.strftime('%d-%m-%Y'),  # Format as DD-MM-YYYY
-            'role_listing_close': self.role_listing_close.strftime('%d-%m-%Y'),  # Format as DD-MM-YYYY
+            'role_listing_open': self.role_listing_open.strftime('%Y-%m-%d'),  # Format as DD-MM-YYYY
+            'role_listing_close': self.role_listing_close.strftime('%Y-%m-%d'),  # Format as DD-MM-YYYY
             'role_listing_creator': self.role_listing_creator,
-            'role_listing_ts_create': self.role_listing_ts_create.strftime('%d-%m-%Y %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
+            'role_listing_ts_create': self.role_listing_ts_create.strftime('%Y-%m-%d %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
             'role_listing_updater': self.role_listing_updater,
-            'role_listing_ts_update': self.role_listing_ts_update.strftime('%d-%m-%Y %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
+            'role_listing_ts_update': self.role_listing_ts_update.strftime('%Y-%m-%d %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
         }
         return item
     
@@ -61,6 +71,7 @@ class StaffDetails(db.Model):
     __tablename__ = 'STAFF_DETAILS'
 
     staff_id = db.Column(db.Integer, primary_key=True)
+    sys_role = db.Column(Enum('staff', 'hr', 'manager', 'inactive'))
     
 class RoleDetails(db.Model):
     __tablename__ = 'ROLE_DETAILS'
@@ -90,7 +101,7 @@ class RoleDetails(db.Model):
 def view_rolelistings():
     try:
         # Get all role listings in descending order (Latest created role listing first)
-        rolelistings = RoleListing.query.order_by(RoleListing.role_listing_id.desc()).all()
+        rolelistings = RoleListing.query(RoleListing).order_by(RoleListing.role_listing_ts_update.desc()).all()
         
         # If no role listing
         if len(rolelistings) == 0:
@@ -139,6 +150,43 @@ def view_rolelisting(role_listing_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+# Display all available role listing IDs
+@app.route("/role_listing_id_option", methods=["GET"])
+def get_all_role_listings():
+    try:
+        # Fetch all role_listing_id values from the RoleListing table
+        role_listing_ids = [str(role.role_listing_id) for role in RoleListing.query.all()]
+        
+        return jsonify(role_listing_ids), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Display information for a specific role listing ID
+@app.route("/role_listing_details/<role_listing_id>", methods=["GET"])
+def get_role_listing_details(role_listing_id):
+    try:
+        # Fetch role listing details for the specified role_listing_id
+        role_listing = RoleListing.query.filter_by(role_listing_id=role_listing_id).first()
+
+        if role_listing:
+            # Create a dictionary with the role listing details
+            role_listing_details = {
+                "role_listing_id": role_listing.role_listing_id,
+                "role_id": role_listing.role_id,
+                "role_listing_desc": role_listing.role_listing_desc,
+                "role_listing_open": role_listing.role_listing_open,
+                "role_listing_close": role_listing.role_listing_close,
+                "role_listing_source":role_listing.role_listing_source
+                # Add other fields as needed
+            }
+
+            return jsonify(role_listing_details), 200
+        else:
+            return jsonify({"error": "Role Listing ID not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    
 # Display all available role IDs   
 @app.route("/role_id_options", methods=["GET"])
 def get_role_id_options():
@@ -171,6 +219,18 @@ def get_role_details(role_id):
             return jsonify({"error": "Role ID not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# Get all managers under sys_role
+@app.route("/manager_options", methods=["GET"])
+def get_manager_options():
+    try:
+        # Fetch all managers under a specific sys_role (adjust as needed)
+        sys_role = 'manager'
+        managers = [staff.staff_id for staff in StaffDetails.query.filter_by(sys_role=sys_role).all()]
+
+        return jsonify(managers), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Create a new role listing
 @app.route("/create_rolelisting", methods=['POST'])
@@ -178,17 +238,40 @@ def create_rolelisting():
     try:
         role_id = request.json['role_id']
         role_listing_desc = request.json['role_listing_desc']
-        # role_listing_source = request.json['role_listing_source']
-        role_listing_open = datetime.strptime(request.json['role_listing_open'], '%d-%m-%Y').date()
-        role_listing_close = datetime.strptime(request.json['role_listing_close'], '%d-%m-%Y').date()
+        role_listing_source = request.json['role_listing_source']
+        role_listing_open_str = request.json['role_listing_open']  # Get the date as a string
+
+        # Convert role_listing_open_str to a datetime object
+        role_listing_open = datetime.strptime(role_listing_open_str, '%d-%m-%Y')
+
+        # Check if 'role_listing_close' is provided in the JSON request
+        if 'role_listing_close' in request.json and request.json['role_listing_close']:
+            # Use the provided 'role_listing_close' value if it exists
+            role_listing_close_str = request.json['role_listing_close']
+            role_listing_close = datetime.strptime(role_listing_close_str, '%d-%m-%Y')
+        else:
+            # Calculate role_listing_close as 2 weeks (14 days) from role_listing_open
+            role_listing_close = role_listing_open + timedelta(weeks=2)
+
+        # Check if 'role_listing_source' is provided in the JSON request
+        if 'role_listing_source' in request.json:
+            role_listing_source = request.json['role_listing_source']
+        else:
+            role_listing_source = None  # Set to None if not provided
+
+        # Get the staff ID of the currently logged-in user
+        role_listing_creator = request.json['role_listing_creator']
+        role_listing_updater = request.json['role_listing_updater']
 
         # Assuming you have a RoleListing model defined
         role_listing = RoleListing(
             role_id=role_id,
             role_listing_desc=role_listing_desc,
-            # role_listing_source=role_listing_source,
-            role_listing_open=role_listing_open,
-            role_listing_close=role_listing_close,
+            role_listing_source=role_listing_source,
+            role_listing_open=role_listing_open.strftime('%Y-%m-%d %H:%M:%S'),  # Format as 'YYYY-MM-DD HH:MM:SS'
+            role_listing_close=role_listing_close.strftime('%Y-%m-%d %H:%M:%S'),  # Format as 'YYYY-MM-DD HH:MM:SS'
+            role_listing_creator=role_listing_creator,
+            role_listing_updater=role_listing_updater,
         )
         db.session.add(role_listing)
         db.session.commit()

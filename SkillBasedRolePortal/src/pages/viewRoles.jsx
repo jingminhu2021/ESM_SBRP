@@ -2,6 +2,8 @@ import * as React from 'react'
 import { useState } from "react";
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function viewRoles(){
     // Check if HR is logged in
@@ -35,7 +37,7 @@ function viewRoles(){
       const location = useLocation();
 
       useEffect(() => {
-          axios.get('http://localhost:5001/view_rolelistings')
+          axios.get('http://localhost:5002/view_rolelistings')
               .then(response => {
                   setSkills(response.data.data);
               })
