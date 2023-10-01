@@ -268,6 +268,19 @@ function profile(){
                             </Modal> 
 
                         </div>
+                        <row><div className="col-sm-12 col-md-6 mb-4 col-lg-6">
+                            <small>* When you have completed learning a new skill, please change the status from&nbsp; 
+                            <Badge text="light" bg="secondary" >in-progress</Badge>&nbsp; to&nbsp;
+                            <Badge text="light" bg="primary" >completed</Badge>.
+                            </small>
+                        </div></row>
+                        <row><div className="col-sm-12 col-md-6 mb-4 col-lg-6">
+                            <small>The status will change from &nbsp; 
+                            <Badge text="light" bg="secondary" >unverified</Badge>&nbsp; pending HR verification and will change to&nbsp;
+                            <Badge text="light" bg="primary" >verified</Badge>&nbsp; after passing all checks.
+                            </small>
+                        </div></row>
+
                     </div> 
                 </div>
             </div>
