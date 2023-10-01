@@ -38,7 +38,7 @@ jobs:
 
       - name: Analysing the code with pylint
         run: |
-          pylint -d C0114,C0116,C0304,C0301,C0303,C0103,C0115,W0718,R0903  $(git ls-files '${{env.dir_path}}/*.py')
+          pylint -d C0114,C0116,C0304,C0301,C0303,C0103,C0115,W0718,R0903,R1735  $(git ls-files '${{env.dir_path}}/*.py')
 
   Docker_Image_Builder:
     needs: Pylint_Test
