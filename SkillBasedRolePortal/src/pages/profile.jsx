@@ -12,8 +12,8 @@ function profile(){
     const [allSkill, setAllSkill] = useState([])
 
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleAddSkillClose = () => setShow(false);
+    const handleAddSkillShow = () => setShow(true);
     const [select_skill, set_select_skill] = useState({})
     const [select_status, set_select_status] = useState({})
     const [selectedskills, setSelectedSkills] = useState({
@@ -49,18 +49,21 @@ function profile(){
 
         axios.post(api_endpoint_url, bodyFormData, {withCredentials: true})
         .then(function (response) {
-            console.log(response)
+           
             if (response.data.data != null){
                 for (let i = 0; i < response.data.data.length; i++){
-                    setSkill(skill => [...skill, response.data.data[i]])
+                    console.log(response.data.data[i])
+                    setSkill(skill => [...skill, {skill_id: response.data.data[i].skill_id, skill_status: response.data.data[i].ss_status, skill_name: response.data.data[i].skill_name}])
+                    
                 }
             }
+            
         })
     }
     const handleCheckSkills = (event) => {
         
         // check if skill is already in allSkill
-        
+
         for (let i = 0; i < allSkill.length; i++){
             for (let j = 0; j < skill.length; j++){
                 
@@ -71,7 +74,7 @@ function profile(){
         }
     }
 
-    const handleDropdownChange = (event) => {
+    const handleAddSkillDropdownChange = (event) => {
         // Manage dropdown selection
         if(event.value == 'In-progress' || event.value == 'Completed'){
             
@@ -91,7 +94,7 @@ function profile(){
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleAddSkillSubmit = (e) => {
         //Add skill to database
         e.preventDefault();
         let api_endpoint_url = 'http://localhost:5002/add_skills' //Placeholder
@@ -104,11 +107,12 @@ function profile(){
         .then(function (response) {
             console.log(response)
             if (response.data.status == "success"){
-                setSkill(skill => [...skill, {skill_status: response.data.data.skill_status, skill_name: response.data.data.skill_name}])
+                
+                setSkill(skill => [...skill, {skill_status: response.data.data.ss_status, skill_name: response.data.data.skill_name}])
                 setSelectedSkills([])
             }
         })
-        handleClose()
+        handleAddSkillClose()
 
     }
 
@@ -164,30 +168,34 @@ function profile(){
                             <strong className="d-block text-black mb-3">My Skills</strong>
                             <ul>
                                 {skill.map((s, index) => (
+                                    
                                     <li key={index}>{s.skill_name} <Badge text="light" bg={s.skill_status == 'active'?"primary":"secondary"} >{s.skill_status}</Badge></li>
+                                  
                                 ))}
+                                
                             </ul>
-                            <Button variant="outline-primary" className='border-width-2' onClick={handleShow}>Add Skill</Button>
+                            <Button variant="outline-primary" className='border-width-2 mr-2' onClick={handleAddSkillShow}>Add Skill</Button>
+                            <Button variant="outline-primary" className='border-width-2'>Update Skill Status</Button>
 
-                            <Modal show = {show} onHide = {handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <Modal show = {show} onHide = {handleAddSkillClose} aria-labelledby="contained-modal-title-vcenter" centered>
                             <Modal.Header closeButton>
                                 <Modal.Title>Add a new skill</Modal.Title>
                             </Modal.Header>
-                                <Form onSubmit={handleSubmit}>
+                                <Form onSubmit={handleAddSkillSubmit}>
                                     <Modal.Body>
 
                                         <Form.Group className="mb-3" controlId="skill_name">
                                             <Form.Label>Please select the skill you would like to add to your profile</Form.Label> 
-                                            <Select required={true} styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="skill_name" select_skill={select_skill} placeholder="Select Skill(s)" isMulti={false} options={allSkill} onChange={handleDropdownChange} onMenuOpen={handleCheckSkills}/>
+                                            <Select required={true} styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="skill_name" select_skill={select_skill} placeholder="Select Skill(s)" isMulti={false} options={allSkill} onChange={handleAddSkillDropdownChange} onMenuOpen={handleCheckSkills}/>
                                         </Form.Group>
 
                                         <Form.Group className="mb-3" controlId="skill_status">
                                             <Form.Label>Status</Form.Label>
-                                            <Select required={true} styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="skill_status" select_status={select_status} placeholder="Select Status" isMulti={false} options={[{value: "Completed", label: "Completed"}, {value: "In-progress", label: "In-progress"}]} onChange={handleDropdownChange}/>
+                                            <Select required={true} styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="skill_status" select_status={select_status} placeholder="Select Status" isMulti={false} options={[{value: "Completed", label: "Completed"}, {value: "In-progress", label: "In-progress"}]} onChange={handleAddSkillDropdownChange}/>
                                         </Form.Group>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button variant = "secondary" onClick = {handleClose}>
+                                        <Button variant = "secondary" onClick = {handleAddSkillClose}>
                                             Close
                                         </Button>
                                         <Button className="ml-2" variant = "primary" type="submit">

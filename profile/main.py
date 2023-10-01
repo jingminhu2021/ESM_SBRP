@@ -73,8 +73,12 @@ def get_skills():
             
             skill_details = Skill_Details.query.filter_by(skill_id=skill.skill_id).first()
             
+            full_skill = {}
+            full_skill= skill.json()
+            full_skill['skill_name']=skill_details.skill_name
+            
             if skill_details.skill_status == 'active':
-                skills_list.append(skill_details.json())
+                skills_list.append(full_skill)
         
         return jsonify(
             {
@@ -126,12 +130,14 @@ def add_skills():
         db.session.add(staff_skill)
         db.session.commit()
         skill_details = Skill_Details.query.filter_by(skill_id=staff_skill.skill_id).first()
-
+        full_skill = {}
+        full_skill= staff_skill.json()
+        full_skill['skill_name']=skill_details.skill_name
         return jsonify(
             {
                 'message': 'add_skills: Skill added',
                 'status': 'success', 
-                'data': skill_details.json()
+                'data': full_skill
             }
         ), 200
 
