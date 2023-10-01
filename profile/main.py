@@ -73,8 +73,12 @@ def get_skills():
             
             skill_details = Skill_Details.query.filter_by(skill_id=skill.skill_id).first()
             
+            full_skill = {}
+            full_skill= skill.json()
+            full_skill['skill_name']=skill_details.skill_name
+            
             if skill_details.skill_status == 'active':
-                skills_list.append(skill_details.json())
+                skills_list.append(full_skill)
         
         return jsonify(
             {
@@ -121,20 +125,47 @@ def add_skills():
         skill_name = request.form['skill_name']
         skill_status = request.form['skill_status']
         found_skill = Skill_Details.query.filter_by(skill_name=skill_name).filter_by(skill_status='active').first()
-        
+        print(found_skill)
         staff_skill = Staff_Skills(staff_id=staff_id, skill_id=found_skill.skill_id, ss_status=skill_status)
         db.session.add(staff_skill)
         db.session.commit()
         skill_details = Skill_Details.query.filter_by(skill_id=staff_skill.skill_id).first()
-
+        full_skill = {}
+        full_skill= staff_skill.json()
+        full_skill['skill_name']=skill_details.skill_name
         return jsonify(
             {
                 'message': 'add_skills: Skill added',
                 'status': 'success', 
-                'data': skill_details.json()
+                'data': full_skill
             }
         ), 200
 
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
+@app.route("/update_skills", methods=['POST'])
+def update_skills():
+    try:
+        staff_id = request.form['staff_id']
+        skill_name = request.form['skill_name']
+        skill_status = request.form['skill_status'] 
+
+        #find skill id
+        found_skill = Skill_Details.query.filter_by(skill_name=skill_name).filter_by(skill_status='active').first()
+
+        #update skill status
+        rows_changed =Staff_Skills.query.filter_by(staff_id=staff_id).filter_by(skill_id=found_skill.skill_id).update(dict(ss_status=skill_status))
+        print(rows_changed)
+        db.session.commit()
+        
+        return jsonify(
+            {
+                'message': 'update_skills: Skill updated',
+                'status': 'success'
+            }
+        ), 200
+    
     except Exception as e:
         return jsonify({'error': str(e)})
 if __name__ == '__main__':
