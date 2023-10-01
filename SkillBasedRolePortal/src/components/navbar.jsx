@@ -6,24 +6,24 @@ function navbar(){
     var status = sessionStorage.getItem('status')
     var fname = sessionStorage.getItem('fname')
     var lname = sessionStorage.getItem('lname')
-   function checkUser(){
-
-        if(status!='true'){
-            return (
-                <Nav>
-                    {login()}
-                </Nav>
-            )
-        }else{
-            return (
-                <Nav>
-                    <NavDropdown title={fname+ " " + lname} id="collasible-nav-dropdown">
-                        <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
-                    </NavDropdown>
-                </Nav>
-            )
+    function checkUser() {
+        if (status !== 'true') {
+          return (
+            <Nav>
+              {login()}
+            </Nav>
+          );
+        } else {
+          return (
+            <Nav>
+              <NavDropdown title={`${fname} ${lname}`} id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          );
         }
+<<<<<<< Updated upstream
    }
    // Display if HR is logged in
    function checkHr() {
@@ -33,6 +33,10 @@ function navbar(){
             )
         }
     }
+=======
+      }
+ 
+>>>>>>> Stashed changes
     return(
         <>
         <Navbar collapseOnSelect expand ="lg" className='bg-body-tertiary'>
