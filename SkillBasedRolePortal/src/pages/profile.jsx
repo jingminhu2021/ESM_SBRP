@@ -11,16 +11,22 @@ function profile(){
     const [skill, setSkill] = useState([])
     const [allSkill, setAllSkill] = useState([])
 
-    const [show, setShow] = useState(false);
-    const handleAddSkillClose = () => setShow(false);
-    const handleAddSkillShow = () => setShow(true);
+    const [showUpdateSkill, setShowUpdateSkill] = useState(false)
+    const [showAddSkill, setShowAddSkill] = useState(false)
+
+    const handleAddSkillClose = () => setShowAddSkill(false)
+    const handleAddSkillShow = () => setShowAddSkill(true)
+    const handleUpdateskillClose = () => setShowUpdateSkill(false)
+    const handleUpdateSkillShow = () => setShowUpdateSkill(true)
+
     const [select_skill, set_select_skill] = useState({})
     const [select_status, set_select_status] = useState({})
     const [selectedskills, setSelectedSkills] = useState({
         skill_name: "",
         skill_status: ""
     });
-    
+
+
     if(sessionStorage.getItem('status') == 'true'){
         var staff_id = sessionStorage.getItem('staff_id')
         var fname = sessionStorage.getItem('fname')
@@ -116,6 +122,33 @@ function profile(){
 
     }
 
+    const handleUpdateSkillSubmit = (e) => {
+        //Add skill to database
+        e.preventDefault();
+        let api_endpoint_url = 'http://localhost:5002/update_skills' //Placeholder
+        var bodyFormData = new FormData();
+        bodyFormData.append('skill_name', selectedskills.skill_name)
+        bodyFormData.append('skill_status', selectedskills.skill_status=="In-progress"?"in-progress":"unverified")
+        bodyFormData.append('staff_id', staff_id)
+
+        axios.post(api_endpoint_url, bodyFormData)
+        .then(function (response) {
+            console.log(response)
+            if (response.data.status == "success"){
+                
+                setSkill(skill => skill.map(s => {
+                    if (s.skill_name === selectedskills.skill_name) {
+                      return { skill_status: selectedskills.skill_status=="In-progress"?"in-progress":"unverified", skill_name: selectedskills.skill_name };
+                    } else {
+                      return s;
+                    }
+                }))
+                setSelectedSkills([])
+            }
+        })
+        handleUpdateskillClose()
+    }
+
     const allSkillList = (staff_id) =>{
         // Retrieve all Skills
         let api_endpoint_url = 'http://localhost:5002/get_all_skills' //Placeholder
@@ -175,9 +208,9 @@ function profile(){
                                 
                             </ul>
                             <Button variant="outline-primary" className='border-width-2 mr-2' onClick={handleAddSkillShow}>Add Skill</Button>
-                            <Button variant="outline-primary" className='border-width-2'>Update Skill Status</Button>
-
-                            <Modal show = {show} onHide = {handleAddSkillClose} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <Button variant="outline-primary" className='border-width-2' onClick={handleUpdateSkillShow}>Update Skill Status</Button>
+                            {/* Add Skill Modal */}
+                            <Modal show = {showAddSkill} onHide = {handleAddSkillClose} aria-labelledby="contained-modal-title-vcenter" centered>
                             <Modal.Header closeButton>
                                 <Modal.Title>Add a new skill</Modal.Title>
                             </Modal.Header>
@@ -203,7 +236,37 @@ function profile(){
                                         </Button>
                                     </Modal.Footer>
                                 </Form>
-                            </Modal>                    
+                            </Modal> 
+
+                            {/* Update Skill Modal */}
+                            <Modal show = {showUpdateSkill} onHide = {handleUpdateskillClose} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Update Skill Status</Modal.Title>
+                            </Modal.Header>
+                                <Form onSubmit={handleUpdateSkillSubmit}>
+                                    <Modal.Body>
+
+                                        <Form.Group className="mb-3" controlId="skill_name">
+                                            <Form.Label>Please select the skill you would like to update</Form.Label> 
+                                            <Select required={true} styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="skill_name" select_skill={select_skill} placeholder="Select Skill(s)" isMulti={false} options={skill.map((s, index) => ({ value: s.skill_name, label: s.skill_name }))} onChange={handleAddSkillDropdownChange} />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" controlId="skill_status">
+                                            <Form.Label>Status</Form.Label>
+                                            <Select required={true} styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="skill_status" select_status={select_status} placeholder="Select Status" isMulti={false} options={[{value: "Completed", label: "Completed"}, {value: "In-progress", label: "In-progress"}]} onChange={handleAddSkillDropdownChange}/>
+                                        </Form.Group>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant = "secondary" onClick = {handleUpdateskillClose}>
+                                            Close
+                                        </Button>
+                                        <Button className="ml-2" variant = "primary" type="submit">
+                                            Save Changes
+                                        </Button>
+                                    </Modal.Footer>
+                                </Form>
+                            </Modal> 
+
                         </div>
                     </div> 
                 </div>

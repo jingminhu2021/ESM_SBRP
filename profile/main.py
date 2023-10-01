@@ -143,5 +143,30 @@ def add_skills():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+@app.route("/update_skills", methods=['POST'])
+def update_skills():
+    try:
+        staff_id = request.form['staff_id']
+        skill_name = request.form['skill_name']
+        skill_status = request.form['skill_status'] 
+
+        #find skill id
+        found_skill = Skill_Details.query.filter_by(skill_name=skill_name).filter_by(skill_status='active').first()
+
+        #update skill status
+        rows_changed =Staff_Skills.query.filter_by(staff_id=staff_id).filter_by(skill_id=found_skill.skill_id).update(dict(ss_status=skill_status))
+        print(rows_changed)
+        db.session.commit()
+        
+        return jsonify(
+            {
+                'message': 'update_skills: Skill updated',
+                'status': 'success'
+            }
+        ), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True) #testing purpose
