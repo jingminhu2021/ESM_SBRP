@@ -38,24 +38,6 @@ class Account(db.Model):
         }
         return item
     
-class Staff(db.Model):
-    __tablename__ = 'STAFF_DETAILS'
-    staff_id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(50), nullable=False)
-    lname = db.Column(db.String(50), nullable=False)
-    dept = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    biz_address = db.Column(db.String(255), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
-    sys_role = db.Column(db.Enum("staff","hr","manager"), nullable=False)
-
-    def json(self):
-        item = {
-            'staff_id': self.staff_id,
-            'email': self.email,
-        }
-        return item
-    
 class StaffDetails(db.Model):
     __tablename__ = 'STAFF_DETAILS'
 
