@@ -23,20 +23,8 @@ function navbar(){
             </Nav>
           );
         }
-<<<<<<< Updated upstream
-   }
-   // Display if HR is logged in
-   function checkHr() {
-        if(sessionStorage.getItem('sys_role') == 'hr'){
-            return (
-                <Nav.Link href="/viewSkills">Skills</Nav.Link>
-            )
-        }
-    }
-=======
       }
  
->>>>>>> Stashed changes
     return(
         <>
         <Navbar collapseOnSelect expand ="lg" className='bg-body-tertiary'>

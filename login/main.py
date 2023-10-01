@@ -34,11 +34,7 @@ class Account(db.Model):
             'accounts_id': self.accounts_id,
             'staff_id': self.staff_id,
             'email': self.email,
-<<<<<<< Updated upstream
-            'password': self.password
-=======
             'password': self.password,
->>>>>>> Stashed changes
         }
         return item
     
@@ -57,15 +53,6 @@ class Staff(db.Model):
         item = {
             'staff_id': self.staff_id,
             'email': self.email,
-<<<<<<< Updated upstream
-            'fname': self.fname,
-            'lname': self.lname,
-            'phone': self.phone,
-            'sys_role': self.sys_role,
-            'dept': self.dept,
-            'biz_address': self.biz_address,
-=======
->>>>>>> Stashed changes
         }
         return item
     
@@ -86,10 +73,6 @@ def login():
 
         if account is None:
             return jsonify({'message': 'No account found!', 'status': 'fail'})
-<<<<<<< Updated upstream
-        staff = Staff.query.filter_by(staff_id=account.staff_id).first()
-        response = jsonify({'message': 'Login successful!','status': 'success', 'data': staff.json()})
-=======
 
         # Fetch staff details for the logged-in user
         staff_details = StaffDetails.query.filter_by(staff_id=account.staff_id).first()
@@ -112,7 +95,6 @@ def login():
         }
 
         response = jsonify(response_data)
->>>>>>> Stashed changes
         return response
 
     except Exception as e:
