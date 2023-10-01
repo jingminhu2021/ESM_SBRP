@@ -34,6 +34,7 @@ class RoleListing(db.Model):
     role_listing_ts_create = db.Column(db.DateTime, default=db.func.now())
     role_listing_updater = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_listing_ts_update = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    role_listing_status = db.Column(Enum('active', 'inactive'), default='active', nullable=False)
 
     def __init__(self, role_id, role_listing_creator, role_listing_updater, role_listing_open, role_listing_close=None, role_listing_desc=None, role_listing_source=None):
         self.role_listing_id = self.generate_unique_random_id()  # Generate a unique random ID
@@ -126,7 +127,7 @@ def view_rolelistings():
         return jsonify({'error': str(e)}), 500
 
 # View a single role listing
-@app.route("/view_rolelisting/<int:role_listing_id>", methods=['GET'])
+@app.route("/view_rolelisting/<role_listing_id>", methods=['GET'])
 def view_rolelisting(role_listing_id):
     try:
         # Get role listing to view
@@ -244,7 +245,7 @@ def get_manager_options():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@app.route('/manager_details/<int:staff_id>', methods=['GET'])
+@app.route('/manager_details/<staff_id>', methods=['GET'])
 def get_manager_details(staff_id):
     try:
         # Query the ManagerDetails table for the specified staff_id
@@ -350,13 +351,14 @@ def update_rolelisting():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+
     
 @app.route("/delete_rolelisting/<role_listing_id>", methods=['DELETE'])
 def delete_rolelisting(role_listing_id):
     try:
         # Get role listing to delete
         rolelisting = RoleListing.query.get(role_listing_id)
-        # If skill does not exist
+        # If role listing does not exist
         if rolelisting is None:
             return jsonify(
                 {
@@ -364,8 +366,8 @@ def delete_rolelisting(role_listing_id):
                     "message": "Role listing not found!"
                 }
             ), 404
-        # Delete the role listing
-        db.session.delete(rolelisting)
+        # Update the status to "inactive" and commit the change
+        rolelisting.role_listing_status = 'inactive'
         db.session.commit()
         
         # Return success response

@@ -3,6 +3,9 @@ import axios from 'axios';
 import Select from 'react-select';
 import navbar from '../components/navbar.jsx';
 import { useNavigate } from 'react-router-dom';
+// import showErrorToast from '../components/ErrorToast'; // Import the error popup component
+// import showSuccessToast from './SuccessToast'; // Import the success popup component
+
 
 var staff_id = sessionStorage.getItem('staff_id')
 console.log("staff_id: " + staff_id)
@@ -127,9 +130,6 @@ function createRoleListing(){
       });
     };
 
-    
-    
-
     // Function to format a date for display (from yyyy-MM-dd to dd-MM-yyyy)
     const formatDateForDisplay = (dateString) => {
       if (!dateString) return ''; // Handle empty date
@@ -212,6 +212,15 @@ function createRoleListing(){
       const errors = checkEmpty();
       if (Object.keys(errors).length > 0) {
         console.error('Validation errors:', errors);
+
+        // Prompt the user for missing fields
+        const errorMessage = Object.values(errors).join('\n');
+        alert(`Please be reminded that:\n\n${errorMessage}`);
+
+        // // Display validation errors as popups
+        // for (const errorKey in errors) {
+        //   showErrorToast(errors[errorKey]);
+        // }
         return;
       }
       
@@ -228,7 +237,7 @@ function createRoleListing(){
         .then((response) => {
           if (response.status === 200) {
             console.log('Role created successfully:', response.data);
-            navigate('/viewRoles?created=true');
+            // navigate('/viewRoles?created=true');
           } else {
             console.error('Error creating role:', response.data);
           }
@@ -343,7 +352,7 @@ function createRoleListing(){
                         </div>
 
                         <div className="form-group">
-                          <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleSubmit}>Create Role</button>
+                          <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleSubmit}>Create Role Listing</button>
                         </div>
                     </form>
                   </div>

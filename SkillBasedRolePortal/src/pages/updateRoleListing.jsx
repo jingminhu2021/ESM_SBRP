@@ -354,10 +354,20 @@ function updateRoleListing() {
 
     const handleUpdate = async (event) => {
       event.preventDefault();
+      if (!selectedRoleListing) {
+        // If role listing is not selected, show an alert and return
+        alert('Please select a role listing to update.');
+        return;
+      }
     
       const errors = checkEmpty();
       if (Object.keys(errors).length > 0) {
         console.error('Validation errors:', errors);
+
+        // Prompt the user for missing fields
+        const errorMessage = Object.values(errors).join('\n');
+        alert(`Please be reminded that:\n\n${errorMessage}`);
+
         return;
       }
     
@@ -387,6 +397,9 @@ function updateRoleListing() {
           if (response.status === 200) {
             console.log('Role Listing updated successfully:', response.data);
             // You can handle success actions here, such as showing a success message
+
+            // Reload the page after a successful update
+            window.location.reload();
           } else if (response.status === 404) {
             console.error('Role Listing not found:', response.data);
             // Handle the case where the specified role listing was not found
@@ -400,6 +413,43 @@ function updateRoleListing() {
           // Handle errors here, such as showing an error message
         });
     };    
+
+    const handleDelete = () => {
+      if (!selectedRoleListing) {
+        // If role listing is not selected, show an alert and return
+        alert('Please select a role listing to delete.');
+        return;
+      }
+
+      // Display a confirmation prompt to confirm the deletion
+      const confirmDeletion = window.confirm('Are you sure you want to delete this role listing?');
+    
+      if (confirmDeletion) {
+        // Send a DELETE request to delete the selected role listing
+        axios
+          .delete(`http://localhost:5002/delete_rolelisting/${selectedRoleListing.value}`)
+          .then((response) => {
+            if (response.status === 200) {
+              console.log('Role Listing deleted successfully:', response.data);
+              // Handle success actions, e.g., show a success message and navigate to another page
+              // You can use the navigate function from react-router-dom for navigation
+
+              // Reload the page after a successful update
+              window.location.reload();
+            } else if (response.status === 404) {
+              console.error('Role Listing not found:', response.data);
+              // Handle the case where the specified role listing was not found
+            } else {
+              console.error('Error deleting Role Listing:', response.data);
+              // Handle other errors here, such as showing an error message
+            }
+          })
+          .catch((error) => {
+            console.error('Error deleting data:', error);
+            // Handle errors here, such as showing an error message
+          });
+      }
+    };
 
     return (
       <div>
@@ -519,8 +569,13 @@ function updateRoleListing() {
                   </div>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Update Role</button>
+                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Update Role Listing</button>
                   </div>
+
+                  <div className="form-group">
+                    <button type="button" className="btn btn-block btn-danger btn-md" onClick={handleDelete}>Delete Role Listing</button>
+                  </div>
+
                 </form>
               </div>
             </div>
