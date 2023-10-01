@@ -74,7 +74,7 @@ else {
     setSkillName(skillName);
     //Check duplicate skill name
     for (const s of allSkills){
-      if (s.skill_name.toLowerCase() === skillName.toLowerCase()){
+      if (s.skill_name.toLowerCase().trim() === skillName.toLowerCase().trim()){
         setDuplicateSkillID(s.skill_id);
         setDuplicate('Skill name already existed');
         return;

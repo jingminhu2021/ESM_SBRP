@@ -80,7 +80,7 @@ function skill() {
       setSkillName(skillName);
       //Check duplicate skill name + ignore if current name remains unchanged
       for (const s of allSkills) {
-        if (s.skill_name.toLowerCase() === skillName.toLowerCase() && s.skill_name != skillNameTitle) {
+        if (s.skill_name.toLowerCase().trim() === skillName.toLowerCase().trim() && s.skill_name != skillNameTitle) {
           setDuplicate('Skill name already exists');
           return;
         }
