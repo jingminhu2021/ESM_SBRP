@@ -6,26 +6,24 @@ function navbar(){
     var status = sessionStorage.getItem('status')
     var fname = sessionStorage.getItem('fname')
     var lname = sessionStorage.getItem('lname')
-   function checkUser(){
-
-        if(status!='true'){
-            return (
-                <Nav>
-                    {login()}
-                </Nav>
-            )
-        }else{
-            return (
-                <Nav>
-                    <NavDropdown title={fname+ " " + lname} id="collasible-nav-dropdown">
-                        <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
-                    </NavDropdown>
-                </Nav>
-            )
+    function checkUser() {
+        if (status !== 'true') {
+          return (
+            <Nav>
+              {login()}
+            </Nav>
+          );
+        } else {
+          return (
+            <Nav>
+              <NavDropdown title={`${fname} ${lname}`} id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          );
         }
-
-   }
+      }
  
     return(
         <>
@@ -35,11 +33,6 @@ function navbar(){
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className='mr-auto'>
-                        <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
-                        <NavDropdown title="More" id="collasible-nav-dropdown">
-                            <NavDropdown.Item href="/viewSingleRole">Single Role</NavDropdown.Item>
-                            <NavDropdown.Item href="/createRoleListing">Post Role</NavDropdown.Item>
-                        </NavDropdown>
                         <Nav.Link href="/about">About</Nav.Link>
                         <Nav.Link href="/contact">Contact</Nav.Link>
                         <Nav.Link href="/faq">FAQ</Nav.Link>
@@ -47,6 +40,7 @@ function navbar(){
                         <Nav.Link href="/resources">Resources</Nav.Link>
                         <Nav.Link href="/terms">Terms</Nav.Link>
                         <Nav.Link href="/privacy">Privacy</Nav.Link>
+                        {checkHr()}
                     </Nav>
                     <Nav className='m-auto'>
                         {checkUser()}
