@@ -89,7 +89,7 @@ def view_skill(skill_id):
 @app.route("/create_skill", methods=['POST'])
 def create_skill():
     try:
-        skill_name = request.json['skill_name']
+        skill_name = request.json['skill_name'].strip()
         skill_status = request.json['skill_status']
         skill_description = request.json['skill_description']
 
@@ -118,7 +118,7 @@ def update_skill():
             ), 404
         
         # Update skill info
-        skill.skill_name = data['skill_name']
+        skill.skill_name = data['skill_name'].strip()
         skill.skill_description = data['skill_description']
         
         # Commit changes to database
