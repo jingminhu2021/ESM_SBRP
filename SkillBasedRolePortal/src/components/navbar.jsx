@@ -24,6 +24,14 @@ function navbar(){
           );
         }
       }
+    // Display if HR is logged in
+    function checkHr() {
+        if(sessionStorage.getItem('sys_role') == 'hr'){
+            return (
+                <Nav.Link href="/viewSkills">Skills</Nav.Link>
+            )
+        }
+    }
  
     return(
         <>
