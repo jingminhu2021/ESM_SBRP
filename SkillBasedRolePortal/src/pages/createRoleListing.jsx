@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 
 var staff_id = sessionStorage.getItem('staff_id')
 console.log("staff_id: " + staff_id)
+var sys_role = sessionStorage.getItem('sys_role')
+console.log("sys_role: " + sys_role)
 
 function createRoleListing(){
   // Check if HR is logged in
-  if (sessionStorage.getItem('sys_role') != 'hr') {
+  if (sys_role != 'hr') {
     return (
         <div>
             {navbar()}
@@ -98,16 +100,15 @@ function createRoleListing(){
     const [selectedManager, setSelectedManager] = useState(null);
     const [selectedManagerId, setSelectedManagerId] = useState('');
 
-
     useEffect(() => {
       // Fetch the manager options from your Flask API endpoint
       fetch('http://localhost:5002/manager_options')
         .then((response) => response.json())
         .then((data) => {
           // Convert the data to the format expected by react-select
-          const options = data.map((managerId) => ({
-            value: managerId,
-            label: managerId, // Customize the label as needed
+          const options = data.map((manager) => ({
+            value: manager.staff_id, // Set the staff_id as the value
+            label: `${manager.fname} ${manager.lname}`, // Display the full name as the label
           }));
           setManagerOptions(options);
         })
@@ -125,6 +126,7 @@ function createRoleListing(){
         role_listing_source: parseInt(selectedOption.value),
       });
     };
+
     
     
 
