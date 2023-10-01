@@ -121,7 +121,7 @@ def add_skills():
         skill_name = request.form['skill_name']
         skill_status = request.form['skill_status']
         found_skill = Skill_Details.query.filter_by(skill_name=skill_name).filter_by(skill_status='active').first()
-        
+        print(found_skill)
         staff_skill = Staff_Skills(staff_id=staff_id, skill_id=found_skill.skill_id, ss_status=skill_status)
         db.session.add(staff_skill)
         db.session.commit()

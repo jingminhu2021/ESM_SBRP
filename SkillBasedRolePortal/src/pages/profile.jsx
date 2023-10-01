@@ -3,15 +3,14 @@ import { useNavigate } from "react-router-dom"
 import navbar from '../components/navbar.jsx'
 import axios from 'axios'
 import Select from 'react-select'
-import {Form, Button, Modal, Alert, Badge} from 'react-bootstrap'
-// import bootstrap
+import {Form, Button, Modal, Badge} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function profile(){
     
     const [skill, setSkill] = useState([])
     const [allSkill, setAllSkill] = useState([])
-    // const [skillToAdd, setSkillToAdd] = useState("")
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -61,6 +60,7 @@ function profile(){
     const handleCheckSkills = (event) => {
         
         // check if skill is already in allSkill
+        
         for (let i = 0; i < allSkill.length; i++){
             for (let j = 0; j < skill.length; j++){
                 
@@ -71,17 +71,8 @@ function profile(){
         }
     }
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setSelectedSkills({
-            ...selectedskills,
-            [name]: value,
-        })
-    
-    }
-
     const handleDropdownChange = (event) => {
-        
+        // Manage dropdown selection
         if(event.value == 'In-progress' || event.value == 'Completed'){
             
             set_select_status(event.value)
@@ -100,8 +91,8 @@ function profile(){
         }
     }
 
-
     const handleSubmit = (e) => {
+        //Add skill to database
         e.preventDefault();
         let api_endpoint_url = 'http://localhost:5002/add_skills' //Placeholder
         var bodyFormData = new FormData();
@@ -113,16 +104,16 @@ function profile(){
         .then(function (response) {
             console.log(response)
             if (response.data.status == "success"){
-                setSkill(skill => [...skill, {skill_status: response.data.data.ss_status, skill_name: response.data.data.ss_skill_name}])
+                setSkill(skill => [...skill, {skill_status: response.data.data.skill_status, skill_name: response.data.data.skill_name}])
                 setSelectedSkills([])
             }
         })
         handleClose()
-    // skill: {FormData.jobTitle}
+
     }
 
     const allSkillList = (staff_id) =>{
-        
+        // Retrieve all Skills
         let api_endpoint_url = 'http://localhost:5002/get_all_skills' //Placeholder
         var bodyFormData = new FormData();
         console.log("--getting full skill list--")
