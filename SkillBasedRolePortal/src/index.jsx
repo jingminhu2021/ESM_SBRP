@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
+import RoleListings from './pages/role-listings.jsx'
+import SingleRole from './pages/single-role.jsx'
+//import PostRole from './pages/post-role.jsx'
 import Profile from './pages/profile.jsx'
 import ViewSkills from './pages/viewSkills.jsx'
 import ViewSkill from './pages/viewSingleSkill.jsx'
@@ -26,6 +29,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/role-listings" element={<RoleListings />} />
+          <Route path="/single-role/:role_listing_id" element={<SingleRole />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/viewSkills" element={<ViewSkills />} />  
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
