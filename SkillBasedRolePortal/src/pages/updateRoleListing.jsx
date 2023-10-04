@@ -6,12 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 var staff_id = sessionStorage.getItem('staff_id')
 console.log("staff_id: " + staff_id)
-var sys_role = sessionStorage.getItem('sys_role')
-console.log("sys_role: " + sys_role)
 
 function updateRoleListing() {
   // Check if HR is logged in
-  if (sys_role !== 'hr') {
+  if (sessionStorage.getItem('sys_role') !== 'hr') {
     return (
       <div>
         {navbar()}

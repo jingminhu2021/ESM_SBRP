@@ -82,7 +82,7 @@ class RoleDetails(db.Model):
     role_id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(50))
     role_description = db.Column(db.String(50000))
-    role_status = db.Column(db.Enum('active', 'inactive', name='role_status_enum'))
+    role_status = db.Column(db.Enum('active', 'inactive'))
 
     def __init__(self, role_id, role_name, role_description, role_status):
         self.role_id = role_id
@@ -100,41 +100,39 @@ class RoleDetails(db.Model):
         return item
     
 # View all role listings
-@app.route("/role_listings", methods=['GET'])
-def view_rolelistings():
+@app.route("/view_role_listings", methods=['GET'])
+def view_role_listings():
     try:
-        # Get all role listings in descending order (Latest created role listing first)
-        rolelistings = RoleListing.query(RoleListing).order_by(RoleListing.role_listing_ts_update.desc()).all()
+        # Perform the join
+        results = db.session.query(RoleDetails, RoleListing).join(RoleListing, RoleDetails.role_id == RoleListing.role_id).all()
         
-        # If no role listing
-        if len(rolelistings) == 0:
-            return jsonify(
-                {
-                    "code": 404,
-                    "message": "No role listings found!"
-                }
-            ), 404
+        # Extract data from the results
+        combined_data = []
+        for role_detail, role_listing in results:
+            combined_data.append({
+                "role_name": role_detail.role_name,
+                "role_listing_id": role_listing.role_listing_id,
+                "role_listing_desc": role_listing.role_listing_desc,
+                "role_listing_status": role_listing.role_listing_status,
+                "role_listing_open": role_listing.role_listing_open,
+                "role_listing_close": role_listing.role_listing_close
+            })
         
-        # Return success response
-        return jsonify(
-            {
-                "code": 200,
-                "data": [rolelisting.json() for rolelisting in rolelistings]
-            }
-        ), 200
+        # Return the combined data
+        return jsonify({"code": 200, "data": combined_data}), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 # View a single role listing
-@app.route("/view_rolelisting/<role_listing_id>", methods=['GET'])
-def view_rolelisting(role_listing_id):
+@app.route("/view_single_role_listing/<role_listing_id>", methods=['GET'])
+def view_role_single_listing(role_listing_id):
     try:
-        # Get role listing to view
-        rolelisting = RoleListing.query.filter_by(skill_id=role_listing_id).first()
-        
-        # If role listing does not exist
-        if rolelisting is None:
+        # Perform the join to get role details and role listing based on role_listing_id
+        result = db.session.query(RoleDetails, RoleListing).join(RoleListing, RoleDetails.role_id == RoleListing.role_id).filter(RoleListing.role_listing_id == role_listing_id).first()
+
+        # If no matching result
+        if not result:
             return jsonify(
                 {
                     "code": 404,
@@ -142,11 +140,22 @@ def view_rolelisting(role_listing_id):
                 }
             ), 404
         
+        # Extracting the combined data
+        role_detail, role_listing = result
+        combined_data = {
+            "role_name": role_detail.role_name,
+            "role_listing_id": role_listing.role_listing_id,
+            "role_listing_desc": role_listing.role_listing_desc,
+            "role_listing_status": role_listing.role_listing_status,
+            "role_listing_open": role_listing.role_listing_open,
+            "role_listing_close": role_listing.role_listing_close
+        }
+        
         # Return success response
         return jsonify(
             {
                 "code": 200,
-                "data": rolelisting.json()
+                "data": combined_data
             }
         ), 200
 
