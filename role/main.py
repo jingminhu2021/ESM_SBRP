@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 CORS(app)
 
-class RoleDetails(db.Model):
+class ROLE_DETAILS(db.Model):
     __tablename__ = 'ROLE_DETAILS'
 
     role_id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +30,35 @@ class RoleDetails(db.Model):
             'role_name': self.role_name,
             'role_description': self.role_description,
             'role_status': self.role_status,
+        }
+        return item
+class SKILL_DETAILS(db.Model):
+    __tablename__ = 'SKILL_DETAILS'
+
+    skill_id = db.Column(db.Integer, primary_key=True)
+    skill_name = db.Column(db.String(50), nullable=False)
+    skill_status = db.Column(db.Enum("active","inactive"), nullable=False)
+    skill_description = db.Column(db.String(255), nullable=True)
+
+    def json(self):
+        item = {
+            'skill_id': self.skill_id,
+            'skill_name': self.skill_name,
+            'skill_status': self.skill_status,
+            'skill_description': self.skill_description,
+        }
+        return item
+
+class ROLE_SKILLS(db.Model):
+    __tablename__ = 'ROLE_SKILLS'
+
+    role_id = db.Column(db.Integer, db.ForeignKey('ROLE_DETAILS.role_id'), primary_key=True)
+    skill_id = db.Column(db.Integer, db.ForeignKey('SKILL_DETAILS.skill_id'), primary_key=True)
+    
+    def json(self):
+        item = {
+            'role_id': self.role_id,
+            'skill_id': self.skill_id,
         }
         return item
 
@@ -71,13 +100,14 @@ class ROLE_LISTINGS(db.Model):
 def view_role_listings():
     try:
         # Perform the join
-        results = db.session.query(RoleDetails, ROLE_LISTINGS).join(ROLE_LISTINGS, RoleDetails.role_id == ROLE_LISTINGS.role_id).all()
+        results = db.session.query(ROLE_DETAILS, ROLE_LISTINGS, SKILL_DETAILS).join(ROLE_LISTINGS, ROLE_DETAILS.role_id == ROLE_LISTINGS.role_id).join(ROLE_SKILLS, ROLE_DETAILS.role_id == ROLE_SKILLS.role_id).join(SKILL_DETAILS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id).all()
         
         # Extract data from the results
         combined_data = []
-        for role_detail, role_listing in results:
+        for role_detail, role_listing, skill_details in results:
             combined_data.append({
                 "role_name": role_detail.role_name,
+                "skill_name": skill_details.skill_name, # "skill_name" is the column name in the table "SKILL_DETAILS
                 "role_listing_id": role_listing.role_listing_id,
                 "role_listing_desc": role_listing.role_listing_desc,
                 "role_listing_status": role_listing.role_listing_status,
@@ -96,10 +126,10 @@ def view_role_listings():
 def view_role_single_listing(role_listing_id):
     try:
         # Perform the join to get role details and role listing based on role_listing_id
-        result = db.session.query(RoleDetails, ROLE_LISTINGS).join(ROLE_LISTINGS, RoleDetails.role_id == ROLE_LISTINGS.role_id).filter(ROLE_LISTINGS.role_listing_id == role_listing_id).first()
+        results = db.session.query(ROLE_DETAILS, ROLE_LISTINGS, SKILL_DETAILS).join(ROLE_LISTINGS, ROLE_DETAILS.role_id == ROLE_LISTINGS.role_id).join(ROLE_SKILLS, ROLE_DETAILS.role_id == ROLE_SKILLS.role_id).join(SKILL_DETAILS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id).filter(ROLE_LISTINGS.role_listing_id == role_listing_id).first()
 
         # If no matching result
-        if not result:
+        if not results:
             return jsonify(
                 {
                     "code": 404,
@@ -108,14 +138,15 @@ def view_role_single_listing(role_listing_id):
             ), 404
         
         # Extracting the combined data
-        role_detail, role_listing = result
+        role_detail, role_listing, skill_details = results
         combined_data = {
-            "role_name": role_detail.role_name,
-            "role_listing_id": role_listing.role_listing_id,
-            "role_listing_desc": role_listing.role_listing_desc,
-            "role_listing_status": role_listing.role_listing_status,
-            "role_listing_open": role_listing.role_listing_open,
-            "role_listing_close": role_listing.role_listing_close
+                "role_name": role_detail.role_name,
+                "skill_name": skill_details.skill_name, # "skill_name" is the column name in the table "SKILL_DETAILS
+                "role_listing_id": role_listing.role_listing_id,
+                "role_listing_desc": role_listing.role_listing_desc,
+                "role_listing_status": role_listing.role_listing_status,
+                "role_listing_open": role_listing.role_listing_open,
+                "role_listing_close": role_listing.role_listing_close
         }
         
         # Return success response
