@@ -55,21 +55,6 @@ class Skill_Details(db.Model):
 @app.route("/get_skills", methods=['POST'])
 def get_skills():
     try:
-        staff_id = request.form['account_id']
-        print(staff_id)
-        skills = Staff_Skills.query.all()
-        if not skills:
-            return jsonify({'message': 'No skills found','status': 'success', 'data': None})
-        
-        skills_list = []
-        print(len(skills))
-        for skill in skills:
-            skill_details = Skill_Details.query.filter_by(skill_id=skill.skill_id).first()
-            if skill_details.skill_status == 'active':
-                skills_list.append(skill_details.json())
-        
-        response = jsonify({'message': 'Skills retrieved','status': 'success', 'data': skills_list})
-        return response
         staff_id = request.form['staff_id']
         
         skills = Staff_Skills.query.filter_by(staff_id=staff_id).all()
@@ -102,6 +87,7 @@ def get_skills():
                 'data': skills_list
             }
         ), 200
+        
 
     except Exception as e:
         return jsonify({'error': str(e)})
@@ -109,22 +95,6 @@ def get_skills():
 @app.route("/get_all_skills", methods=['POST'])
 def get_all_skills():
     try:
-        staff_id = request.form['account_id']
-        skills = Staff_Skills.query.all()
-        staff_skill = []
-        for skill in skills:
-            skill_details = Skill_Details.query.filter_by(skill_id=skill.skill_id).first()
-            staff_skill.append(skill_details.skill_id)
-        all_skills_list = []
-        all_skills =  Skill_Details.query.all()
-        print(all_skills)
-        for skill in all_skills:
-            skill_details = Skill_Details.query.filter_by(skill_id=skill.skill_id).first()
-            if skill_details.skill_status == 'active' and (skill_details.skill_id not in staff_skill):
-                all_skills_list.append(skill.json())
-
-        response = jsonify({'message': 'All skills retrieved','status': 'success', 'data': all_skills_list})
-=======
         
         all_skills =  Skill_Details.query.all()
         
@@ -146,6 +116,7 @@ def get_all_skills():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+
 
 @app.route("/add_skills", methods=['POST'])
 def add_skills():
@@ -197,6 +168,5 @@ def update_skills():
     
     except Exception as e:
         return jsonify({'error': str(e)})
-      
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001, debug=True) #testing purpose
+    app.run(host="0.0.0.0", port=5002, debug=True) #testing purpose
