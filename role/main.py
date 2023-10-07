@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from datetime import datetime, timedelta
-import random
+import random, sys
 
 
 ENDPOINT = os.environ.get("DB_HOST")
@@ -48,7 +48,7 @@ class RoleListing(db.Model):
 
     def generate_unique_random_id(self):
         while True:
-            random_id = random.randint(1, 1000000)  # Adjust the range as needed
+            random_id = random.randint(1, sys.maxsize)
             existing_ids = [row[0] for row in db.session.query(RoleListing.role_listing_id).all()]  # Fetch existing IDs
             if random_id not in existing_ids:
                 return random_id
