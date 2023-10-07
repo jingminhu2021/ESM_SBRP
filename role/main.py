@@ -15,8 +15,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)
 CORS(app)
+<<<<<<< Updated upstream
 
 class RoleDetails(db.Model):
+=======
+#pushing to role-staging
+class ROLE_DETAILS(db.Model):
+>>>>>>> Stashed changes
     __tablename__ = 'ROLE_DETAILS'
 
     role_id = db.Column(db.Integer, primary_key=True)
@@ -64,8 +69,6 @@ class ROLE_LISTINGS(db.Model):
             
         }
         return item
-
-
 # View all role listings
 @app.route("/view_role_listings", methods=['GET'])
 def view_role_listings():
