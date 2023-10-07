@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import os
+import sys
 from datetime import datetime, timedelta
-import random, sys
+import random
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
