@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import Profile from './pages/profile.jsx'
+import SearchRole from './pages/searchRole.jsx'
 import ViewSkills from './pages/viewSkills.jsx'
 import ViewSkill from './pages/viewSingleSkill.jsx'
 import CreateSkill from './pages/createSkill.jsx'
@@ -27,6 +28,7 @@ export default function App() {
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/searchRole" element={<SearchRole />} />
           <Route path="/viewSkills" element={<ViewSkills />} />  
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />

@@ -1,11 +1,13 @@
 import * as React from 'react'
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
 
 function home(){
+    const navigate = useNavigate();
     const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
-    
+
     const region = [
         { value: '', label: 'Anywhere' },
         { value: 'San Francisco', label: 'San Francisco' },
@@ -27,19 +29,29 @@ function home(){
     ]
 
 
-    const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: ""});
+    const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: []});
     const handleChange = (event) => {
       const { name, value } = event.target;
       setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+      console.log(name, value)
     };
-    const  handleDropdownChange = (event) => {
-      console.log(selectedType)
-      setSelectedOption(event.target);
+
+    const skillSelect = []
+    const handleDropdownChange = (event, selected) => {
+      console.log(selected.option.value)
+      console.log(skillSelect)
+      skillSelect.push({skillName: selected.option.value})
     };
+
     const handleSubmit = (event) => {
-      jobTitle: {FormData.jobTitle};
-      jobRegion: {FormData.jobRegion.value};
-      jobType: {FormData.jobTpe}
+      event.preventDefault()
+      // jobTitle: {formData.jobTitle};
+      // jobRegion: {formData.jobRegion.value};
+      // jobType: {formData.jobType}
+      navigate(
+        "/searchRole",
+        {state: {data:{roleName: formData.jobTitle, skill: skillSelect}}}
+      )
     }
 
     return(
@@ -58,9 +70,9 @@ function home(){
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
                     </div>
-                    <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                    {/* <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
-                    </div>
+                    </div> */}
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={handleDropdownChange} />
                     </div>
