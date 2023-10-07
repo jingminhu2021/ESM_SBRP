@@ -24,6 +24,7 @@ function navbar(){
           );
         }
       }
+
     // Display if HR is logged in
     function checkHr() {
         if(sessionStorage.getItem('sys_role') == 'hr'){
@@ -32,6 +33,7 @@ function navbar(){
             )
         }
     }
+
  
     return(
         <>
@@ -41,6 +43,10 @@ function navbar(){
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className='mr-auto'>
+                        <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
+                        <Nav.Link href="/viewSingleRole">Single Role Listing</Nav.Link>
+                        <Nav.Link href="/createRoleListing">Create Role Listing</Nav.Link>
+                        <Nav.Link href="/updateRoleListing">Update Role Listing</Nav.Link>
                         <Nav.Link href="/about">About</Nav.Link>
                         <Nav.Link href="/contact">Contact</Nav.Link>
                         <Nav.Link href="/faq">FAQ</Nav.Link>
