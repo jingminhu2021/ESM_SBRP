@@ -99,21 +99,34 @@ class ROLE_LISTINGS(db.Model):
 @app.route("/view_role_listings", methods=['GET'])
 def view_role_listings():
     try:
+        skills = request.args.getlist('skills')  # Get skills from query parameters
         # Perform the join
-        results = db.session.query(ROLE_DETAILS, ROLE_LISTINGS, SKILL_DETAILS).join(ROLE_LISTINGS, ROLE_DETAILS.role_id == ROLE_LISTINGS.role_id).join(ROLE_SKILLS, ROLE_DETAILS.role_id == ROLE_SKILLS.role_id).join(SKILL_DETAILS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id).all()
+        results = db.session.query(ROLE_DETAILS, ROLE_LISTINGS, SKILL_DETAILS)\
+                            .join(ROLE_LISTINGS, ROLE_DETAILS.role_id == ROLE_LISTINGS.role_id)\
+                            .join(ROLE_SKILLS, ROLE_DETAILS.role_id == ROLE_SKILLS.role_id)\
+                            .join(SKILL_DETAILS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id)\
+                            .all()
         
-        # Extract data from the results
-        combined_data = []
-        for role_detail, role_listing, skill_details in results:
-            combined_data.append({
-                "role_name": role_detail.role_name,
-                "skill_name": skill_details.skill_name, # "skill_name" is the column name in the table "SKILL_DETAILS
-                "role_listing_id": role_listing.role_listing_id,
-                "role_listing_desc": role_listing.role_listing_desc,
-                "role_listing_status": role_listing.role_listing_status,
-                "role_listing_open": role_listing.role_listing_open,
-                "role_listing_close": role_listing.role_listing_close
-            })
+        # Dictionary to hold combined data with role_id as key
+        roles_dict = {}
+        
+        for role_detail, role_listing, skill_detail in results:
+            role_id = role_detail.role_id
+            if role_id not in roles_dict:
+                roles_dict[role_id] = {
+                    "role_name": role_detail.role_name,
+                    "role_id": role_id,
+                    "skills_list": [],
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_listing_desc": role_listing.role_listing_desc,
+                    "role_listing_status": role_listing.role_listing_status,
+                    "role_listing_open": role_listing.role_listing_open,
+                    "role_listing_close": role_listing.role_listing_close
+                }
+            roles_dict[role_id]["skills_list"].append(skill_detail.skill_name)
+        
+        # Convert the roles dictionary into a list for output
+        combined_data = list(roles_dict.values())
         
         # Return the combined data
         return jsonify({"code": 200, "data": combined_data}), 200
@@ -125,35 +138,60 @@ def view_role_listings():
 @app.route("/view_role_single_listings/<int:role_listing_id>", methods=['GET'])
 def view_role_single_listing(role_listing_id):
     try:
-        # Perform the join to get role details and role listing based on role_listing_id
-        results = db.session.query(ROLE_DETAILS, ROLE_LISTINGS, SKILL_DETAILS).join(ROLE_LISTINGS, ROLE_DETAILS.role_id == ROLE_LISTINGS.role_id).join(ROLE_SKILLS, ROLE_DETAILS.role_id == ROLE_SKILLS.role_id).join(SKILL_DETAILS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id).filter(ROLE_LISTINGS.role_listing_id == role_listing_id).first()
+        # Query to fetch the role listing and associated skills based on role_listing_id
+        results = db.session.query(ROLE_DETAILS, ROLE_LISTINGS, SKILL_DETAILS)\
+                            .join(ROLE_LISTINGS, ROLE_DETAILS.role_id == ROLE_LISTINGS.role_id)\
+                            .join(ROLE_SKILLS, ROLE_DETAILS.role_id == ROLE_SKILLS.role_id)\
+                            .join(SKILL_DETAILS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id)\
+                            .filter(ROLE_LISTINGS.role_listing_id == role_listing_id)\
+                            .all()
+        
+        # Dictionary to hold combined data with role_id as key
+        role_data = {}
+        
+        for role_detail, role_listing, skill_detail in results:
+            role_id = role_detail.role_id
+            if role_id not in role_data:
+                role_data[role_id] = {
+                    "role_name": role_detail.role_name,
+                    "role_id": role_id,
+                    "skills_list": [],
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_listing_desc": role_listing.role_listing_desc,
+                    "role_listing_status": role_listing.role_listing_status,
+                    "role_listing_open": role_listing.role_listing_open,
+                    "role_listing_close": role_listing.role_listing_close
+                }
+            role_data[role_id]["skills_list"].append(skill_detail.skill_name)
+        
+        # Convert the role dictionary into the desired output format
+        combined_data = role_data.get(role_id, {})
+        
+        # Return the combined data
+        return jsonify({"code": 200, "data": combined_data}), 200
 
-        # If no matching result
-        if not results:
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+@app.route("/view_skills", methods=['GET'])
+def view_skills():
+    try:
+        # Get all skills in descending order (Latest created skill first)
+        skills = SKILL_DETAILS.query.order_by(SKILL_DETAILS.skill_id.desc()).all()
+        
+        # If no skill
+        if len(skills) == 0:
             return jsonify(
                 {
                     "code": 404,
-                    "message": "Role Listing not found!"
+                    "message": "No skills found!"
                 }
             ), 404
-        
-        # Extracting the combined data
-        role_detail, role_listing, skill_details = results
-        combined_data = {
-                "role_name": role_detail.role_name,
-                "skill_name": skill_details.skill_name, # "skill_name" is the column name in the table "SKILL_DETAILS
-                "role_listing_id": role_listing.role_listing_id,
-                "role_listing_desc": role_listing.role_listing_desc,
-                "role_listing_status": role_listing.role_listing_status,
-                "role_listing_open": role_listing.role_listing_open,
-                "role_listing_close": role_listing.role_listing_close
-        }
         
         # Return success response
         return jsonify(
             {
                 "code": 200,
-                "data": combined_data
+                "data": [skill.json() for skill in skills]
             }
         ), 200
 

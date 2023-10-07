@@ -34,7 +34,7 @@ function RoleListings() {
         setRolelistingStatus(response.data.data.role_listing_status);
         setRolelistingOpen(response.data.data.role_listing_open);
         setRolelistingClose(response.data.data.role_listing_close);
-        setSkillName(response.data.data.skill_name)
+        setSkillName(response.data.data.skills_list)
     })
     .catch(error => {
         console.error('Error fetching Role Listings:', error);
