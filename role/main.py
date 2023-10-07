@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import os
+from datetime import datetime, timedelta
+import random, sys
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
-from datetime import datetime, timedelta
-import random, sys
+
 
 
 ENDPOINT = os.environ.get("DB_HOST")
@@ -193,8 +194,8 @@ def get_role_listing_details(role_listing_id):
             }
 
             return jsonify(role_listing_details), 200
-        else:
-            return jsonify({"error": "Role Listing ID not found"}), 404
+        
+        return jsonify({"error": "Role Listing ID not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -227,8 +228,8 @@ def get_role_details(role_id):
             }
 
             return jsonify(role_details), 200
-        else:
-            return jsonify({"error": "Role ID not found"}), 404
+        
+        return jsonify({"error": "Role ID not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -269,8 +270,8 @@ def get_manager_details(staff_id):
                 # Add other manager-related fields here
             }
             return jsonify(manager_data), 200
-        else:
-            return jsonify({'error': 'Manager not found'}), 404
+        
+        return jsonify({'error': 'Manager not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
