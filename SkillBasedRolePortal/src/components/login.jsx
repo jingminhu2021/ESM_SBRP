@@ -55,7 +55,6 @@ function login(){
                 sessionStorage.setItem('phone', response.data.data.phone)
                 sessionStorage.setItem('biz_address', response.data.data.biz_address)
                 sessionStorage.setItem('dept', response.data.data.dept)
-                sessionStorage.setItem('profile_picture', response.data.data.profile_picture)
                 window.location.reload(false)
             }
         })

@@ -24,6 +24,16 @@ function navbar(){
           );
         }
       }
+
+    // Display if HR is logged in
+    function checkHr() {
+        if(sessionStorage.getItem('sys_role') == 'hr'){
+            return (
+                <Nav.Link href="/viewSkills">Skills</Nav.Link>
+            )
+        }
+    }
+
  
     return(
         <>
@@ -37,6 +47,14 @@ function navbar(){
                         <Nav.Link href="/viewSingleRole">Single Role Listing</Nav.Link>
                         <Nav.Link href="/createRoleListing">Create Role Listing</Nav.Link>
                         <Nav.Link href="/updateRoleListing">Update Role Listing</Nav.Link>
+                        <Nav.Link href="/about">About</Nav.Link>
+                        <Nav.Link href="/contact">Contact</Nav.Link>
+                        <Nav.Link href="/faq">FAQ</Nav.Link>
+                        <Nav.Link href="/help">Help</Nav.Link>
+                        <Nav.Link href="/resources">Resources</Nav.Link>
+                        <Nav.Link href="/terms">Terms</Nav.Link>
+                        <Nav.Link href="/privacy">Privacy</Nav.Link>
+                        {checkHr()}
                     </Nav>
                     <Nav className='m-auto'>
                         {checkUser()}

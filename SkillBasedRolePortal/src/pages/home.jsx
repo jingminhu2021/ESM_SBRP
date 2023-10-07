@@ -33,6 +33,7 @@ function home(){
       setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
     const  handleDropdownChange = (event) => {
+      console.log(selectedType)
       setSelectedOption(event.target);
     };
     const handleSubmit = (event) => {

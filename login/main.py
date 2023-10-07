@@ -45,6 +45,10 @@ class StaffDetails(db.Model):
     fname = db.Column(db.String(50))
     lname = db.Column(db.String(50))
     sys_role = db.Column(Enum('staff', 'hr', 'manager', 'inactive'))
+=======
+            'password': self.password
+        }
+        return item
 
 @app.route("/login", methods=['POST'])
 def login():
