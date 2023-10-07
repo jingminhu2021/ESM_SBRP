@@ -3,7 +3,6 @@ import { useState } from "react";
 import {Form, Button, Modal, Alert} from 'react-bootstrap'
 import axios from 'axios';
 
-
 function login(){
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -47,6 +46,7 @@ function login(){
             }else{
                 console.log(response)
                 sessionStorage.setItem('status', true)
+                sessionStorage.setItem('account_id', response.data.data.accounts_id)
                 sessionStorage.setItem('staff_id', response.data.data.staff_id)
                 sessionStorage.setItem('email', response.data.data.email)
                 sessionStorage.setItem('sys_role', response.data.data.sys_role)
