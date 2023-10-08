@@ -41,13 +41,10 @@ function home(){
     const handleChange = (event) => {
       const { name, value } = event.target;
       setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-      console.log(name, value)
     };
 
     const skillSelect = []
     const handleDropdownChange = (event, selected) => {
-      console.log(selected.option.value)
-      console.log(skillSelect)
       skillSelect.push({skillName: selected.option.value})
     };
 
@@ -77,13 +74,10 @@ function home(){
                 <form className="search-jobs-form" onSubmit={handleSubmit}>
                     <div className="row mb-5">
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title, Company..."></input>
+                        <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title..."></input>
                     </div>
-                    {/* <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
-                    </div> */}
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={skillList} onChange={handleDropdownChange} />
+                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
