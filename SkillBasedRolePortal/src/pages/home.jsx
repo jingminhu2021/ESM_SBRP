@@ -1,12 +1,14 @@
 import * as React from 'react'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 import Select from 'react-select'
 import navbar from '../components/navbar.jsx'
 
 function home(){
     const navigate = useNavigate();
     const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
+    const [skillList, setSkillList] = useState([])
 
     const region = [
         { value: '', label: 'Anywhere' },
@@ -20,14 +22,20 @@ function home(){
         { value: 'Mountain View', label: 'Mountain View' }
     ]
 
-    const Job_Type = [
-      { value: 'Full Time', label: 'Full Time' },
-      { value: 'Part Time', label: 'Part Time' },
-      { value: 'Freelance', label: 'Freelance' },
-      { value: 'Internship', label: 'Internship' },
-      { value: 'Temporary', label: 'Temporary' }
-    ]
+    const getAllSkills = () =>{
+        let api_endpoint_url = "http://localhost:5100/view_skills"
 
+        axios.get(api_endpoint_url)
+        .then(function (response) {
+            if (response.data.data != null){
+                for (let i = 0; i < response.data.data.length; i++){
+                  if (response.data.data[i].skill_status == "active"){
+                    setSkillList(skillList => [...skillList, {label: response.data.data[i].skill_name, value: response.data.data[i].skill_name}])
+                  }
+                }
+            }
+        })
+    }
 
     const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: []});
     const handleChange = (event) => {
@@ -45,14 +53,15 @@ function home(){
 
     const handleSubmit = (event) => {
       event.preventDefault()
-      // jobTitle: {formData.jobTitle};
-      // jobRegion: {formData.jobRegion.value};
-      // jobType: {formData.jobType}
       navigate(
         "/searchRole",
         {state: {data:{roleName: formData.jobTitle, skill: skillSelect}}}
       )
     }
+
+    useEffect(() => {
+      getAllSkills()
+  }, [])
 
     return(
         <div>
@@ -74,7 +83,7 @@ function home(){
                         <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobRegion" value={selectedRegion} placeholder="Select Region" options={region} onChange={handleDropdownChange} />
                     </div> */}
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={Job_Type} onChange={handleDropdownChange} />
+                        <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select Job Type" isMulti={true} options={skillList} onChange={handleDropdownChange} />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                         <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
