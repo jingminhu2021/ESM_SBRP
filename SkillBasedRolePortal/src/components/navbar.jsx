@@ -44,7 +44,6 @@ function navbar(){
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className='mr-auto'>
                         <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
-                        <Nav.Link href="/viewSingleRole">Single Role Listing</Nav.Link>
                         <Nav.Link href="/createRoleListing">Create Role Listing</Nav.Link>
                         <Nav.Link href="/updateRoleListing">Update Role Listing</Nav.Link>
                         <Nav.Link href="/about">About</Nav.Link>
