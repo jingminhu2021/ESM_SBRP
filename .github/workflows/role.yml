@@ -1,19 +1,19 @@
-name: Build Images for profile #change title
+name: Build Images for role #change title
 
 on:
   pull_request:
     branches: ["*"]
     paths:
-      - "profile/**" #change new_file to your dir path
+      - "role/**" #change new_file to your dir path
 
   push:
     branches: [main, "**_staging"]
     paths:
-      - "profile/**" #change new_file to your dir path
+      - "role/**" #change new_file to your dir path
 
 env:
-  dir_path: "profile" #change new_file to your dir path
-  repo_name: "is212_profile"
+  dir_path: "role" #change new_file to your dir path
+  repo_name: "is212_role"
 
 jobs:
   Pylint_Test:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Analysing the code with pylint
         run: |
-          pylint -d C0114,C0116,C0304,C0301,C0303,C0103,C0115,W0718,R0903,R1735,R0902,R0913 --fail-under=7  $(git ls-files '${{env.dir_path}}/*.py')
+          pylint -d C0114,C0116,C0304,C0301,C0303,C0103,C0115,W0718,R0903,R1735,R0902,R0913 --fail-under=7 $(git ls-files '${{env.dir_path}}/*.py')
 
   Docker_Image_Builder:
     needs: Pylint_Test
