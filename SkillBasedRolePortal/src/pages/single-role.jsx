@@ -21,7 +21,7 @@ function RoleListings() {
     const message = location.state?.message;
     
     useEffect(() => {
-        axios.get('http://localhost:5100/view_role_single_listings/' + role_listing_id, {
+        axios.get('http://localhost:5003/view_role_single_listings/' + role_listing_id, {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -52,7 +52,7 @@ return (
     <h1 className="text-white font-weight-bold">{role_name}</h1>
     <div className="custom-breadcrumbs">
     <a href="/">Home</a><span className="mx-2 slash">/</span>
-    <Link to="/role-listings">Role Listings</Link><span className="mx-2 slash">/</span>
+    <Link to="/ViewRoles">Role Listings</Link><span className="mx-2 slash">/</span>
     <span className="text-white"><strong>{role_name}</strong></span>
     </div>
     </div>
@@ -77,8 +77,8 @@ return (
                 <p><b>Opening Date:</b> {role_listing_open}</p>
                 <p><b>Closing Date:</b> {role_listing_close}</p>
                 <p><b>Status :</b> {role_listing_status}</p>
-                {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/updateRole'}>Update Role Listings</button>}
-                <button className="btn btn-secondary btn-lg" onClick={() => window.location.href = '/role-listings'}>Return to Role Listings</button>
+                {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/updateRoleListing'}>Update Role Listings</button>}
+                <button className="btn btn-secondary btn-lg" onClick={() => window.location.href = '/ViewRoles'}>Return to Role Listings</button>
                 </div>
                 </div>
                 </div>

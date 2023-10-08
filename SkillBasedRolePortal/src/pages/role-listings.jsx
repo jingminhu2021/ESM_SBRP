@@ -13,7 +13,7 @@ function RoleListings() {
     const [selectedSkills, setSelectedSkills] = useState([]);  // Selected skills
     
     useEffect(() => {
-        axios.get('http://localhost:5100/view_role_listings', {
+        axios.get('http://localhost:5003/view_role_listings', {
         params: {
             skills: selectedSkills
         }
@@ -25,7 +25,7 @@ function RoleListings() {
     .catch(error => {
         console.error('Error fetching Role Listings:', error);
     });
-    axios.get('http://localhost:5100/view_skills')
+    axios.get('http://localhost:5003/view_skills')
     .then(response => {
         setSkills(response.data.data);
         console.log(response.data.data);
@@ -68,7 +68,7 @@ return (
     
     <div className="text-right mb-5 mt-3" style={{ padding: '0' }}>
     <span className="mr-3">
-    {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/createRole'}>+ Create</button>}
+    {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/createRoleListing'}>+ Create</button>}
     </span>
     {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteRole'}>- Delete</button>}
     </div>
@@ -98,7 +98,7 @@ return (
         <div className="row">
         {rolelistings ? rolelistings.map(rolelisting => (
             <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={rolelisting.role_listing_id}>
-            <Link to={`/single-role/${rolelisting.role_listing_id}`} className="block__16443 text-center d-block">
+            <Link to={`/ViewSingleRole/${rolelisting.role_listing_id}`} className="block__16443 text-center d-block">
             <h3>{rolelisting.role_id}</h3>
             <h3>{rolelisting.role_name}</h3>
             {rolelisting.role_listing_desc !== null ? (
@@ -110,7 +110,7 @@ return (
                     ) : (
                         <p>No description available</p>
                         )}
-                        <p><strong>Skill Required:</strong> {rolelisting.skills_list.join(", ")}</p>
+                        <p><strong>Skill Required:</strong> {rolelisting.skills_list}</p>
                         <p><strong>Status:</strong> {rolelisting.role_listing_status}</p>
                         <p><strong>Open :</strong> {rolelisting.role_listing_open}</p>
                         <p><strong>Close :</strong> {rolelisting.role_listing_close}</p>
