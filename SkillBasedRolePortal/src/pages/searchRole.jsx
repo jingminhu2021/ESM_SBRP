@@ -35,6 +35,7 @@ function searchRole(){
                             skill_list: response.data.data[i].skills_list,
                             role_listing_id: response.data.data[i].role_listing_id,
                             role_listing_desc: response.data.data[i].role_listing_desc,
+                            role_listing_status: response.data.data[i].role_listing_status,
                             role_listing_open: response.data.data[i].role_listing_open,
                             role_listing_close: response.data.data[i].role_listing_close
                         }])
@@ -106,7 +107,7 @@ function searchRole(){
         for (let i = 0; i < displayMatchingRoles.length; i++){
             array.push(
                 <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={displayMatchingRoles[i].role_listing_id}>
-                    <Link to={`/single-role/${displayMatchingRoles[i].role_listing_id}`} className="block__16443 text-center d-block">
+                    <Link to={`/ViewSingleRole/${displayMatchingRoles[i].role_listing_id}`} className="block__16443 text-center d-block">
                     <h3>{displayMatchingRoles[i].role_id}</h3>
                     <h3>{displayMatchingRoles[i].role_name}</h3>
                     {displayMatchingRoles[i].role_listing_desc !== null ? (
@@ -170,7 +171,11 @@ function searchRole(){
 
             <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{ padding: '0' }}>
                 <div className="container">
+                <h2>Search Results</h2>
+                        <p>Search by Role Title: {roleTitle}</p>
+                        <p>Search by Skill: {skill.map((skill) => skill.skillName).join(", ")}</p>
                     <div className="row">
+
                         {renderMatchingRoles()}
                     </div>
                 </div>
