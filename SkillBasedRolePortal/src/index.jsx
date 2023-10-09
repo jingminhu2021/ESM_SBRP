@@ -37,7 +37,7 @@ export default function App() {
           <Route path="/searchRole" element={<SearchRole />} />
           <Route path="/updateRoleListing" element={<UpdateRoleListing />} />
           {/* <Route path="/contact" element={<Contact />} /> */}
-          <Route path="/updateRoleListing" element={<UpdateRoleListing />} />
+          <Route path="/CreateRoleListing" element={<CreateRoleListing />} />
           <Route path="/viewSkills" element={<ViewSkills />} />  
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />
