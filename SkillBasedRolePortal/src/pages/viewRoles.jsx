@@ -9,14 +9,11 @@ function RoleListings() {
     
     const [rolelistings, setRoles] = useState([]);
     const location = useLocation();
-    const [skills, setSkills] = useState([]);  // All available skills
-    const [selectedSkills, setSelectedSkills] = useState([]);  // Selected skills
+
     
     useEffect(() => {
         axios.get('http://localhost:5003/view_role_listings', {
-        params: {
-            skills: selectedSkills
-        }
+       
     })
     .then(response => {
         setRoles(response.data.data);
@@ -25,21 +22,9 @@ function RoleListings() {
     .catch(error => {
         console.error('Error fetching Role Listings:', error);
     });
-    axios.get('http://localhost:5003/view_skills')
-    .then(response => {
-        setSkills(response.data.data);
-        console.log(response.data.data);
-    })
-    .catch(error => {
-        console.error('Error fetching skills:', error);
-    });
+   
 }, []);
-useEffect(() => {
-    console.log("Selected Skills:", selectedSkills);
-}, [selectedSkills]);
 
-// Before making the axios request, log the request URL and parameters
-console.log("Fetching role listings with skills:", selectedSkills);
 // Check if the 'created=true' parameter is present in the URL
 useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -72,25 +57,7 @@ return (
     </span>
     {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteRole'}>- Delete</button>}
     </div>
-    <div>
-    {skills.map(skill => (
-        <div key={skill.skill_id}>
-        <input
-        type="checkbox"
-        value={skill.skill_name}
-        checked={selectedSkills.includes(skill.skill_name)}
-        onChange={(e) => {
-            if (e.target.checked) {
-                setSelectedSkills(prevSkills => [...prevSkills, skill.skill_name]);
-            } else {
-                setSelectedSkills(prevSkills => prevSkills.filter(s => s !== skill.skill_name));
-            }
-        }}
-        />
-        {skill.skill_name}
-        </div>
-        ))}
-        </div>
+    
         
         <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{ padding: '0' }}>
         <div className="container">
