@@ -23,7 +23,7 @@ function home(){
     ]
 
     const getAllSkills = () =>{
-        let api_endpoint_url = "http://localhost:5100/view_skills"
+        let api_endpoint_url = "http://localhost:5003/view_skills"
 
         axios.get(api_endpoint_url)
         .then(function (response) {
