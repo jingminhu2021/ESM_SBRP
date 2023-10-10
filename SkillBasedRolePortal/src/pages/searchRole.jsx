@@ -14,8 +14,9 @@ function searchRole(){
 
     const location = useLocation()
     const data = location.state.data
-    const roleTitle = data.roleName
+    const roleTitle = data.roleName.toLowerCase()
     const skill = data.skill
+    const [fuseSearch, setFuseSearch] = useState(true)
     const [roleSearchSuccess, setRoleSearchSuccess] = useState(null)
     const [titleResultSuccess, setTitleResultSuccess] = useState(null)
     const [skillResultSuccess, setSkillResultSuccess] = useState(null)
@@ -47,26 +48,29 @@ function searchRole(){
     };
 
     const searchTitleResult = () =>{
-        setTitleResultSuccess(true)
         if (roleTitle == ""){
+            setTitleResultSuccess(true)
             return
         }
         for (let i = 0; i < roleList.length; i++){
-            if (roleList[i].role_name.includes(roleTitle)){
+            if (roleList[i].role_name.toLowerCase().includes(roleTitle)){
                 setRoleTitleSearch(roleTitleSearch => [...roleTitleSearch, roleList[i]])
+                setFuseSearch(false)
             }
         }
-        if (roleTitleSearch.length == 0 && roleTitle != ""){
+        if (fuseSearch){
             
             const fuseOptions = {
                 isCaseSensitive: false,
+                minMatchCharLength: 2,
                 keys: [
                     "role_name"
                 ]
             }
             const fuse = new Fuse(roleList, fuseOptions)
+            console.log(fuse.search(roleTitle))
             for (let i = 0; i < fuse.search(roleTitle).length; i++){
-                setRoleTitleSearch(roleTitleSearch => [...roleTitleSearch, roleList[i]])
+                setRoleTitleSearch(roleTitleSearch => [...roleTitleSearch, fuse.search(roleTitle)[i].item])
             }
         }
         setTitleResultSuccess(true)
@@ -129,6 +133,7 @@ function searchRole(){
         }
         return array
     }
+    console.log("1:", roleTitleSearch, "2:",   roleSkillSearch, displayMatchingRoles)
 
     useEffect(() => {
         getAllRoles()
@@ -137,20 +142,21 @@ function searchRole(){
     useEffect(() => {
         if (roleSearchSuccess){
             searchTitleResult()
-        }
-    }, [roleList])
-
-    useEffect(() => {
-        if (roleSearchSuccess){
             searchSkillResult()
         }
-    }, [roleList])
+    }, [roleSearchSuccess])
+
+    // useEffect(() => {
+    //     if (roleSearchSuccess){
+    //         searchSkillResult()
+    //     }
+    // }, [roleSearchSuccess])
 
     useEffect(() => {
         if (titleResultSuccess && skillResultSuccess){
             allMatchingRoles()
         }
-    }, [roleTitleSearch, roleSkillSearch])
+    }, [skillResultSuccess])
 
     return(
         <div>
