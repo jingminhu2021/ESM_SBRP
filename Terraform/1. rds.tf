@@ -17,18 +17,18 @@ resource "aws_security_group" "rds_sg" {
 
 #create a RDS Database Instance
 resource "aws_db_instance" "myinstance" {
-  engine                 = "mysql"
-  identifier             = "myrdsinstance"
-  allocated_storage      = 10
-  max_allocated_storage = 20
-  engine_version         = "8.0.34"
-  instance_class         = "db.t2.micro"
-  username               = var.DB_USER
-  password               = var.DB_PASS
-  parameter_group_name   = "default.mysql8.0"
-  vpc_security_group_ids = ["${aws_security_group.rds_sg.id}"]
-  skip_final_snapshot    = true
-  publicly_accessible    = true
+  engine                     = "mysql"
+  identifier                 = "myrdsinstance"
+  allocated_storage          = 10
+  max_allocated_storage      = 20
+  engine_version             = "8.0.34"
+  instance_class             = "db.t2.micro"
+  username                   = var.DB_USER
+  password                   = var.DB_PASS
+  parameter_group_name       = "default.mysql8.0"
+  vpc_security_group_ids     = ["${aws_security_group.rds_sg.id}"]
+  skip_final_snapshot        = true
+  publicly_accessible        = true
   auto_minor_version_upgrade = false
-  ca_cert_identifier = "rds-ca-rsa2048-g1"
+  ca_cert_identifier         = "rds-ca-rsa2048-g1"
 }
