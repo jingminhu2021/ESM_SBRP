@@ -50,7 +50,7 @@ function updateRoleListing() {
 
     useEffect(() => {
       // Fetch all role listing IDs from your database
-      axios.get('http://localhost:5002/role_listing_id_option')
+      axios.get('http://localhost:5003/role_listing_id_option')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((roleListing) => ({
@@ -73,7 +73,7 @@ function updateRoleListing() {
     
       if (selectedOption) {
         // Fetch corresponding role listing details here
-        axios.get(`http://localhost:5002/role_listing_details/${selectedOption.value}`)
+        axios.get(`http://localhost:5003/role_listing_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const roleListingData = response.data;
@@ -104,7 +104,7 @@ function updateRoleListing() {
               });
 
               // Now, fetch the manager details from the manager_options table
-              axios.get(`http://localhost:5002/manager_details/${role_listing_source}`)
+              axios.get(`http://localhost:5003/manager_details/${role_listing_source}`)
               .then((managerResponse) => {
                 if (managerResponse.status === 200) {
                   const managerData = managerResponse.data;
@@ -123,7 +123,7 @@ function updateRoleListing() {
               });
     
               // Now, fetch the role name from the role_details table
-              axios.get(`http://localhost:5002/role_details/${role_id}`)
+              axios.get(`http://localhost:5003/role_details/${role_id}`)
                 .then((roleResponse) => {
                   if (roleResponse.status === 200) {
                     const roleData = roleResponse.data;
@@ -155,7 +155,7 @@ function updateRoleListing() {
 
     useEffect(() => {
       // Fetch manager options from your Flask API
-      axios.get('http://localhost:5002/manager_options')
+      axios.get('http://localhost:5003/manager_options')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((manager) => ({
@@ -178,7 +178,7 @@ function updateRoleListing() {
     
       if (selectedOption) {
         // Fetch corresponding manager details here
-        axios.get(`http://localhost:5002/manager_details/${selectedOption.value}`)
+        axios.get(`http://localhost:5003/manager_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const managerData = response.data;
@@ -390,7 +390,7 @@ function updateRoleListing() {
       // Make the PUT request to update the role listing
       // Send the updated data to the server
       axios
-        .put('http://localhost:5002/update_rolelisting', updatedData) // Adjust the API endpoint
+        .put('http://localhost:5003/update_rolelisting', updatedData) // Adjust the API endpoint
         .then((response) => {
           if (response.status === 200) {
             console.log('Role Listing updated successfully:', response.data);
@@ -425,7 +425,7 @@ function updateRoleListing() {
       if (confirmDeletion) {
         // Send a DELETE request to delete the selected role listing
         axios
-          .delete(`http://localhost:5002/delete_rolelisting/${selectedRoleListing.value}`)
+          .delete(`http://localhost:5003/delete_rolelisting/${selectedRoleListing.value}`)
           .then((response) => {
             if (response.status === 200) {
               console.log('Role Listing deleted successfully:', response.data);

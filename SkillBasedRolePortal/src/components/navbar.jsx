@@ -44,15 +44,11 @@ function navbar(){
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className='mr-auto'>
                         <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
-                        <Nav.Link href="/createRoleListing">Create Role Listing</Nav.Link>
+                        <Nav.Link href="/createRoleListing">Create Role Listing</Nav.Link>,
                         <Nav.Link href="/updateRoleListing">Update Role Listing</Nav.Link>
                         <Nav.Link href="/about">About</Nav.Link>
                         <Nav.Link href="/contact">Contact</Nav.Link>
-                        <Nav.Link href="/faq">FAQ</Nav.Link>
-                        <Nav.Link href="/help">Help</Nav.Link>
-                        <Nav.Link href="/resources">Resources</Nav.Link>
-                        <Nav.Link href="/terms">Terms</Nav.Link>
-                        <Nav.Link href="/privacy">Privacy</Nav.Link>
+                        
                         {checkHr()}
                     </Nav>
                     <Nav className='m-auto'>

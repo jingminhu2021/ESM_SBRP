@@ -47,6 +47,7 @@ function createRoleListing(){
       role_listing_close: '',
       role_listing_creator: '',
       role_listing_updater: '',
+      skill_id: [],
     });
 
     const [roleIDOptions, setRoleIDOptions] = useState([]); // Define roleIDOptions state
@@ -56,7 +57,7 @@ function createRoleListing(){
 
     useEffect(() => {
       // Fetch all Role IDs from your database
-      axios.get('http://localhost:5002/role_id_options')
+      axios.get('http://localhost:5003/role_id_options')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((role) => ({
@@ -78,7 +79,7 @@ function createRoleListing(){
 
       // Fetch corresponding role details here
       if (selectedOption) {
-        axios.get(`http://localhost:5002/role_details/${selectedOption.value}`)
+        axios.get(`http://localhost:5003/role_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const roleData = response.data;
@@ -103,7 +104,7 @@ function createRoleListing(){
 
     useEffect(() => {
       // Fetch the manager options from your Flask API endpoint
-      fetch('http://localhost:5002/manager_options')
+      fetch('http://localhost:5003/manager_options')
         .then((response) => response.json())
         .then((data) => {
           // Convert the data to the format expected by react-select
@@ -182,7 +183,7 @@ function createRoleListing(){
           role_listing_updater: parseInt(staff_id),
         });
       }
-    };    
+    };
 
     function checkEmpty() {
       const errors = {};
@@ -214,11 +215,6 @@ function createRoleListing(){
         // Prompt the user for missing fields
         const errorMessage = Object.values(errors).join('\n');
         alert(`Please be reminded that:\n\n${errorMessage}`);
-
-        // // Display validation errors as popups
-        // for (const errorKey in errors) {
-        //   showErrorToast(errors[errorKey]);
-        // }
         return;
       }
       
@@ -231,7 +227,7 @@ function createRoleListing(){
       console.log('Form Data:', formData);
 
       axios
-        .post('http://localhost:5002/create_rolelisting', formData) // Replace with your Flask API endpoint
+        .post('http://localhost:5003/create_rolelisting', formData) // Replace with your Flask API endpoint
         .then((response) => {
           if (response.status === 200) {
             console.log('Role created successfully:', response.data);
@@ -244,6 +240,7 @@ function createRoleListing(){
           console.error('Error saving data:', error);
         });
     }
+    
   
     return(
         <div>

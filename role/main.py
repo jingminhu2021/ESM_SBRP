@@ -9,12 +9,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 
 
-
 ENDPOINT = os.environ.get("DB_HOST")
 DB_USERNAME = os.environ.get("DB_USERNAME")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 app = Flask(__name__)
+
+# Set up CORS
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -50,7 +52,7 @@ class RoleListing(db.Model):
 
     def generate_unique_random_id(self):
         while True:
-            random_id = random.randint(1, sys.maxsize)
+            random_id = random.randint(1, 1000000)
             existing_ids = [row[0] for row in db.session.query(RoleListing.role_listing_id).all()]  # Fetch existing IDs
             if random_id not in existing_ids:
                 return random_id
@@ -100,6 +102,7 @@ class RoleDetails(db.Model):
             'role_status': self.role_status,
         }
         return item
+    
 class SKILL_DETAILS(db.Model):
     __tablename__ = 'SKILL_DETAILS'
 
@@ -233,16 +236,17 @@ def view_skills():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-# Display all available role listing IDs
+# Display all active role listing IDs
 @app.route("/role_listing_id_option", methods=["GET"])
 def get_all_role_listings():
     try:
-        # Fetch all role_listing_id values from the RoleListing table
-        role_listing_ids = [str(role.role_listing_id) for role in RoleListing.query.all()]
+        # Fetch all active role_listing_id values from the RoleListing table
+        active_role_listing_ids = [str(role.role_listing_id) for role in RoleListing.query.filter_by(role_listing_status='active').all()]
         
-        return jsonify(role_listing_ids), 200
+        return jsonify(active_role_listing_ids), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
     
 # Display information for a specific role listing ID
 @app.route("/role_listing_details/<role_listing_id>", methods=["GET"])
@@ -259,7 +263,8 @@ def get_role_listing_details(role_listing_id):
                 "role_listing_desc": role_listing.role_listing_desc,
                 "role_listing_open": role_listing.role_listing_open,
                 "role_listing_close": role_listing.role_listing_close,
-                "role_listing_source":role_listing.role_listing_source
+                "role_listing_source":role_listing.role_listing_source,
+                "role_listing_status":role_listing.role_listing_status
                 # Add other fields as needed
             }
 
@@ -342,6 +347,43 @@ def get_manager_details(staff_id):
             return jsonify(manager_data), 200
         
         return jsonify({'error': 'Manager not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/skill_options', methods=['GET'])
+def get_skill_options():
+    # Query your database to retrieve a list of skill options
+    # This example assumes you have a Skill model
+    skill_options = SKILL_DETAILS.query.all()
+
+    # Format the skill options as needed
+    formatted_options = [{'skill_id': skill.skill_id, 'skill_name': skill.skill_name} for skill in skill_options]
+
+    return jsonify(formatted_options)
+
+@app.route('/associate_skills', methods=['POST'])
+def associate_skills():
+    try:
+        data = request.get_json()  # Assuming data is sent as JSON in the request body
+
+        # Extract data from the request
+        role_id = data.get('role_id')
+        selected_skills = data.get('skills')
+
+        # Validate data if needed
+        if not role_id or not selected_skills:
+            return jsonify({'error': 'Invalid data'}), 400
+
+        # Create associations between the role and selected skills
+        for skill_id in selected_skills:
+            # This example assumes you have a RoleSkills model to represent the many-to-many relationship
+            role_skill = ROLE_SKILLS(role_id=role_id, skill_id=skill_id)
+            db.session.add(role_skill)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        return jsonify({'message': 'Skills associated successfully'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
