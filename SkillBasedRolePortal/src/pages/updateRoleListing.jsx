@@ -17,10 +17,10 @@ function updateRoleListing() {
           <div className="container">
             <div className="row">
               <div className="col-md-7">
-                <h1 className="text-white font-weight-bold">Create Role Listing</h1>
+                <h1 className="text-white font-weight-bold">Edit Role Listings</h1>
                 <div className="custom-breadcrumbs">
                   <a href="/">Home</a><span className="mx-2 slash">/</span>
-                  <span className="text-white"><strong>Create Role Listings</strong></span>
+                  <span className="text-white"><strong>Edit Role Listings</strong></span>
                 </div>
               </div>
             </div>
@@ -456,11 +456,11 @@ function updateRoleListing() {
           <div className="container">
             <div className="row">
               <div className="col-md-7">
-                <h1 className="text-white font-weight-bold">Update Role</h1>
+                <h1 className="text-white font-weight-bold">Edit Role</h1>
                 <div className="custom-breadcrumbs">
                   <a href="#">Role Listings</a> <span className="mx-2 slash">/</span>
                   <a href="#">Role</a> <span className="mx-2 slash">/</span>
-                  <span className="text-white"><strong>Update Role</strong></span>
+                  <span className="text-white"><strong>Edit Role</strong></span>
                 </div>
               </div>
             </div>
@@ -474,7 +474,7 @@ function updateRoleListing() {
               <div className="col-lg-8 mb-4 mb-lg-0">
                 <div className="d-flex align-items-center">
                   <div>
-                    <h2>Update Role</h2>
+                    <h2>Edit Role</h2>
                   </div>
                 </div>
               </div>
@@ -567,7 +567,7 @@ function updateRoleListing() {
                   </div>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Update Role Listing</button>
+                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Edit Role Listing</button>
                   </div>
 
                   <div className="form-group">
