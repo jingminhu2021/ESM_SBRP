@@ -94,7 +94,6 @@ return (
             <h3>Staff ID: {roleapplicant.staff_id}</h3>
             <h3>Staff Name: {roleapplicant.staff_name}</h3>
             <p><strong>Role Applied: </strong>{roleapplicant.role_name}</p> 
-            <p ><strong>Application Status:<span className="text-success">{roleapplicant.role_app_status}</span></strong></p>
             <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
             <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
             </Link>
