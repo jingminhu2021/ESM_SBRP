@@ -649,7 +649,8 @@ def view_role_applications():
                     "staff_id": staff_details.staff_id,
                     "staff_dept": staff_details.dept,
                     "role_app_status": role_applications.role_app_status,
-                    "staff_name": staff_details.fname + " " + staff_details.lname
+                    "staff_name": staff_details.fname + " " + staff_details.lname,
+                    "manager_staff_id": role_listing.role_listing_source
                    
                 }
             

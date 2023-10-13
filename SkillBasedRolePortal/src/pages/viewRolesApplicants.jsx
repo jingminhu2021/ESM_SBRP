@@ -93,8 +93,9 @@ return (
             <h3>Role Listing ID: {roleapplicant.role_listing_id}</h3>
             <h3>Staff ID: {roleapplicant.staff_id}</h3>
             <h3>Staff Name: {roleapplicant.staff_name}</h3>
-            <h3>Role Applied:{roleapplicant.role_name}</h3> 
-            <p><strong>Current Department :</strong> {roleapplicant.staff_dept}</p>
+            <p><strong>Role Applied: </strong>{roleapplicant.role_name}</p> 
+            <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
+            <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
             </Link>
                         </div>
                         )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Role Listing found!</p>)}
