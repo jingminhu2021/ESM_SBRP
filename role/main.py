@@ -177,7 +177,8 @@ class ROLE_APPLICATIONS(db.Model):
             'role_app_ts_create': self.role_app_ts_create.strftime('%Y-%m-%d %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
         }
         return item
-    
+
+ 
 # Define a route to update role listing status
 @app.route("/update_role_listing_status", methods=['POST'])
 def update_role_listing_status():

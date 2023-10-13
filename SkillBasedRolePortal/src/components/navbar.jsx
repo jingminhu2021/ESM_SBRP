@@ -27,11 +27,14 @@ function navbar(){
 
     // Display if HR is logged in
     function checkHr() {
-        if(sessionStorage.getItem('sys_role') == 'hr'){
-            return (
-                <Nav.Link href="/viewSkills">Skills</Nav.Link>
-            )
-        }
+      if (sessionStorage.getItem('sys_role') === 'hr') {
+        return (
+          <>
+            <Nav.Link href="/viewSkills">Skills</Nav.Link>
+            <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
+          </>
+        );
+      }
     }
 
  

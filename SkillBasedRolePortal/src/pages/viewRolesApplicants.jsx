@@ -9,7 +9,7 @@ function roleapplicants() {
     
     const [roleapplicants, setRolesApplicants] = useState([]);
     const location = useLocation();
-    
+
 
     
     useEffect(() => {
@@ -42,10 +42,10 @@ if (sessionStorage.getItem('sys_role') !== 'hr') {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-7">
-                            <h1 className="text-white font-weight-bold">Skills</h1>
+                            <h1 className="text-white font-weight-bold">Role Applicants Listings</h1>
                             <div className="custom-breadcrumbs">
                                 <a href="/">Home</a><span className="mx-2 slash">/</span>
-                                <span className="text-white"><strong>Skills</strong></span>
+                                <span className="text-white"><strong>Role Applicants Listings</strong></span>
                             </div>
                         </div>
                     </div>
