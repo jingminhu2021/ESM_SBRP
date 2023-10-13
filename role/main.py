@@ -634,6 +634,7 @@ def view_role_applications():
                             .join(RoleListing, RoleDetails.role_id == RoleListing.role_id)\
                             .join(ROLE_APPLICATIONS, RoleListing.role_listing_id == ROLE_APPLICATIONS.role_listing_id)\
                             .join(StaffDetails, ROLE_APPLICATIONS.staff_id == StaffDetails.staff_id)\
+                            .filter(ROLE_APPLICATIONS.role_app_status == 'applied')\
                             .all()
         
         # Dictionary to hold combined data with role_id as key
