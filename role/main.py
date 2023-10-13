@@ -654,9 +654,6 @@ def view_role_applications():
                     "manager_staff_id": role_listing.role_listing_source
                    
                 }
-            
-            
-        
         # Convert the role dictionary into the desired output format
         combined_data = list(role_app_data.values())
         
