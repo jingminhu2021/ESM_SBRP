@@ -80,7 +80,23 @@ class StaffDetails(db.Model):
     staff_id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(50))
     lname = db.Column(db.String(50))
+    dept=db.Column(db.String(50))
+    email = db.Column(db.String(50))
+    phone = db.Column(db.String(50))
     sys_role = db.Column(Enum('staff', 'hr', 'manager', 'inactive'))
+
+    #define json(self)
+    def json(self):
+        item =  {
+            "staff_id": self.staff_id,
+            "fname": self.fname,
+            "lname": self.lname,
+            "dept":self.dept,
+            "email": self.email,
+            "phone": self.phone,
+            "sys_role": self.sys_role
+        }
+        return item
     
 class RoleDetails(db.Model):
     __tablename__ = 'ROLE_DETAILS'
@@ -143,6 +159,24 @@ class StaffSkills(db.Model):
     skill_id = db.Column(db.Integer)
     ss_status = db.Column(db.Enum("active","unverified", "in-progress"), nullable=False)
 
+class ROLE_APPLICATIONS(db.Model):
+    __tablename__ = 'ROLE_APPLICATIONS'
+
+    role_app_id=db.Column(db.Integer, primary_key=True)
+    role_listing_id=db.Column(db.Integer, db.ForeignKey('ROLE_LISTINGS.role_listing_id'), nullable=False)
+    staff_id=db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
+    role_app_status=db.Column(db.Enum("draft","applied","withdrawn"), nullable=False)
+    role_app_ts_create=db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+
+    def json(self):
+        item = {
+            'role_app_id': self.role_app_id,
+            'role_listing_id': self.role_listing_id,
+            'staff_id': self.staff_id,
+            'role_app_status': self.role_app_status,
+            'role_app_ts_create': self.role_app_ts_create.strftime('%Y-%m-%d %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
+        }
+        return item
     
 # Define a route to update role listing status
 @app.route("/update_role_listing_status", methods=['POST'])
@@ -590,6 +624,43 @@ def delete_rolelisting(role_listing_id):
 
     except Exception as e:
         return jsonify({'error': str(e)})
+    #view all role applications
+@app.route("/view_role_applications", methods=['GET'])
+def view_role_applications():
+    try:
+        # Query to fetch the role listing and associated skills based on role_listing_id
+        results = db.session.query(RoleListing, ROLE_APPLICATIONS, StaffDetails,RoleDetails)\
+                            .join(RoleListing, RoleDetails.role_id == RoleListing.role_id)\
+                            .join(ROLE_APPLICATIONS, RoleListing.role_listing_id == ROLE_APPLICATIONS.role_listing_id)\
+                            .join(StaffDetails, ROLE_APPLICATIONS.staff_id == StaffDetails.staff_id)\
+                            .all()
+        
+        # Dictionary to hold combined data with role_id as key
+        role_app_data = {}
+        
+        for role_listing, role_applications, staff_details, role_details in results:
+            role_app_id = role_applications.role_app_id
+            if role_app_id not in role_app_data:
+                role_app_data[role_app_id] = {
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_name": role_details.role_name,
+                    "role_app_id": role_applications.role_app_id,
+                    "staff_id": staff_details.staff_id,
+                    "staff_dept": staff_details.dept,
+                    "role_app_status": role_applications.role_app_status,
+                    "staff_name": staff_details.fname + " " + staff_details.lname
+                   
+                }
+            
+            
+        
+        # Convert the role dictionary into the desired output format
+        combined_data = list(role_app_data.values())
+        
+        # Return the combined data
+        return jsonify({"code": 200, "data": combined_data}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5003, debug=True) #testing purpose
