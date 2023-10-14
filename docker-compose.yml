@@ -154,3 +154,15 @@ services:
     restart: always
     env_file:
       - db.env
+
+  #######################################
+  # Web: The Web App service
+  #######################################
+
+  web:
+    image: spmg7t6/is212_web:rc-a81f4eaad251aeea9bee3ffa244775c94b7d93c8
+    networks:
+        - kong-net   
+    ports:
+      - "80:80"
+    restart: always
