@@ -56,40 +56,39 @@ resource "aws_route_table_association" "public_route_table_association" {
 }
 
 # Create an EIP for the NAT gateway
-resource "aws_eip" "nat_eip" {
-  #   vpc = true
-  domain = "vpc"
-}
+# resource "aws_eip" "nat_eip" {
+#   #   vpc = true
+#   domain = "vpc"
+# }
+
+# # Create a NAT gateway
+# resource "aws_nat_gateway" "nat_gateway" {
+#   allocation_id = aws_eip.nat_eip.id
+#   subnet_id     = aws_subnet.public_subnet.id
+
+#   tags = {
+#     Name = "ngw-${var.aws_region}"
+#   }
+# }
 
 
-# Create a NAT gateway
-resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_subnet.id
+# # Create a private route table and associate it with the private subnet
+# resource "aws_route_table" "private_route_table" {
+#   vpc_id = aws_vpc.vpc.id
 
-  tags = {
-    Name = "ngw-${var.aws_region}"
-  }
-}
+#   route {
+#     cidr_block     = "0.0.0.0/0"
+#     nat_gateway_id = aws_nat_gateway.nat_gateway.id
+#   }
+#   tags = {
+#     Name = "Private route table"
+#   }
+# }
 
-
-# Create a private route table and associate it with the private subnet
-resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.vpc.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gateway.id
-  }
-  tags = {
-    Name = "Private route table"
-  }
-}
-
-resource "aws_route_table_association" "private_route_table_association" {
-  subnet_id      = aws_subnet.private_subnet.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# resource "aws_route_table_association" "private_route_table_association" {
+#   subnet_id      = aws_subnet.private_subnet.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
 
 # Create a security group for the EC2 instance
 resource "aws_security_group" "instance_security_group" {
@@ -97,9 +96,9 @@ resource "aws_security_group" "instance_security_group" {
   vpc_id      = aws_vpc.vpc.id
   description = "security group for the EC2 instance"
 
-  # Allow outbound HTTPS traffic
+
   ingress {
-    description = "http"
+    description = "Konga"
     from_port   = 1337
     to_port     = 1337
     protocol    = "tcp"
@@ -122,7 +121,15 @@ resource "aws_security_group" "instance_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow inbound traffic on port 5000
+  ingress {
+    description = "micorservices"
+    from_port   = 5000
+    to_port     = 5003
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -239,7 +246,7 @@ data "aws_ami" "latest_amazon_linux_2023" {
 
 resource "aws_instance" "SBRP_instance" {
   ami           = data.aws_ami.latest_amazon_linux_2023.id
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
   subnet_id     = aws_subnet.public_subnet.id
   vpc_security_group_ids = [
     aws_security_group.instance_security_group.id
