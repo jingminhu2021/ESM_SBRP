@@ -111,3 +111,46 @@ services:
     restart: always
     env_file:
       - db.env
+
+  #######################################
+  # Skill: The Skill microservice
+  #######################################
+
+  skill:
+    image: spmg7t6/is212_skill:rc-7ee4ae4dac0116e28486a0d1f21723b0b47e3a14
+    networks:
+        - kong-net   
+    ports:
+      - "5001:5001"
+    restart: always
+    env_file:
+      - db.env
+
+  #######################################
+  # Profile: The Profile microservice
+  #######################################
+
+  profile:
+    image: spmg7t6/is212_profile:rc-c1c6a6e263405f3c3609d07d7e0ce0cb88c73402
+    networks:
+        - kong-net   
+    ports:
+      - "5002:5002"
+    restart: always
+    env_file:
+      - db.env
+    
+    
+  #######################################
+  # Role: The Role microservice
+  #######################################
+
+  role:
+    image: spmg7t6/is212_role:f2094fbd951c342cf6d576a318581451e4c05daf
+    networks:
+        - kong-net   
+    ports:
+      - "5003:5003"
+    restart: always
+    env_file:
+      - db.env
