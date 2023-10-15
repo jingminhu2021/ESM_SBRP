@@ -3,4 +3,4 @@ WORKDIR /usr/src/app
 COPY . .
 RUN ls -al
 RUN python -m pip install --no-cache-dir -r requirements.txt
-CMD [ "python", "./main.py" ]
+CMD [ "python", "./skill.py" ]
