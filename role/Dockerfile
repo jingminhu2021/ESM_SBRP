@@ -1,4 +1,4 @@
-FROM python:3.11.4-slim-bookworm
+FROM python:3.12.0-slim-bookworm
 WORKDIR /usr/src/app
 COPY . .
 RUN ls -al

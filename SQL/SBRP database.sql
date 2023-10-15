@@ -1,5 +1,6 @@
 -- Create the SBRP database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS SBRP;
+SET GLOBAL time_zone = 'Asia/Singapore';
 
 -- Switch to the SBRP database
 USE SBRP;

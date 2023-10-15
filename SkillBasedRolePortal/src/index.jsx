@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
-import ViewRoles from './pages/role-listings.jsx'
-import ViewSingleRole from './pages/single-role.jsx'
+import ViewRoles from './pages/viewRoles.jsx'
+import ViewSingleRole from './pages/viewSingleRole.jsx'
 import CreateRoleListing from './pages/createRoleListing.jsx'
 import UpdateRoleListing from './pages/updateRoleListing.jsx'
+import ViewRolesApplicants from './pages/viewRolesApplicants.jsx'
 import Profile from './pages/profile.jsx'
+import SearchRole from './pages/searchRole.jsx'
 import ViewSkills from './pages/viewSkills.jsx'
 import ViewSkill from './pages/viewSingleSkill.jsx'
 import CreateSkill from './pages/createSkill.jsx'
@@ -33,9 +35,11 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/ViewRoles" element={<ViewRoles />} />
           <Route path="/ViewSingleRole/:role_listing_id" element={<ViewSingleRole />} />
-          <Route path="/createRoleListing" element={<CreateRoleListing />} />
+          <Route path="/searchRole" element={<SearchRole />} />
           <Route path="/updateRoleListing" element={<UpdateRoleListing />} />
           {/* <Route path="/contact" element={<Contact />} /> */}
+          <Route path="/CreateRoleListing" element={<CreateRoleListing />} />
+          <Route path="/ViewRolesApplicants" element={<ViewRolesApplicants />} />
           <Route path="/viewSkills" element={<ViewSkills />} />  
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />

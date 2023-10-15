@@ -17,10 +17,10 @@ function updateRoleListing() {
           <div className="container">
             <div className="row">
               <div className="col-md-7">
-                <h1 className="text-white font-weight-bold">Create Role Listing</h1>
+                <h1 className="text-white font-weight-bold">Edit Role Listings</h1>
                 <div className="custom-breadcrumbs">
                   <a href="/">Home</a><span className="mx-2 slash">/</span>
-                  <span className="text-white"><strong>Create Role Listings</strong></span>
+                  <span className="text-white"><strong>Edit Role Listings</strong></span>
                 </div>
               </div>
             </div>
@@ -50,7 +50,7 @@ function updateRoleListing() {
 
     useEffect(() => {
       // Fetch all role listing IDs from your database
-      axios.get('http://localhost:5002/role_listing_id_option')
+      axios.get('http://localhost:5003/role_listing_id_option')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((roleListing) => ({
@@ -73,7 +73,7 @@ function updateRoleListing() {
     
       if (selectedOption) {
         // Fetch corresponding role listing details here
-        axios.get(`http://localhost:5002/role_listing_details/${selectedOption.value}`)
+        axios.get(`http://localhost:5003/role_listing_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const roleListingData = response.data;
@@ -104,7 +104,7 @@ function updateRoleListing() {
               });
 
               // Now, fetch the manager details from the manager_options table
-              axios.get(`http://localhost:5002/manager_details/${role_listing_source}`)
+              axios.get(`http://localhost:5003/manager_details/${role_listing_source}`)
               .then((managerResponse) => {
                 if (managerResponse.status === 200) {
                   const managerData = managerResponse.data;
@@ -123,7 +123,7 @@ function updateRoleListing() {
               });
     
               // Now, fetch the role name from the role_details table
-              axios.get(`http://localhost:5002/role_details/${role_id}`)
+              axios.get(`http://localhost:5003/role_details/${role_id}`)
                 .then((roleResponse) => {
                   if (roleResponse.status === 200) {
                     const roleData = roleResponse.data;
@@ -155,7 +155,7 @@ function updateRoleListing() {
 
     useEffect(() => {
       // Fetch manager options from your Flask API
-      axios.get('http://localhost:5002/manager_options')
+      axios.get('http://localhost:5003/manager_options')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((manager) => ({
@@ -178,7 +178,7 @@ function updateRoleListing() {
     
       if (selectedOption) {
         // Fetch corresponding manager details here
-        axios.get(`http://localhost:5002/manager_details/${selectedOption.value}`)
+        axios.get(`http://localhost:5003/manager_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const managerData = response.data;
@@ -390,7 +390,7 @@ function updateRoleListing() {
       // Make the PUT request to update the role listing
       // Send the updated data to the server
       axios
-        .put('http://localhost:5002/update_rolelisting', updatedData) // Adjust the API endpoint
+        .put('http://localhost:5003/update_rolelisting', updatedData) // Adjust the API endpoint
         .then((response) => {
           if (response.status === 200) {
             console.log('Role Listing updated successfully:', response.data);
@@ -425,7 +425,7 @@ function updateRoleListing() {
       if (confirmDeletion) {
         // Send a DELETE request to delete the selected role listing
         axios
-          .delete(`http://localhost:5002/delete_rolelisting/${selectedRoleListing.value}`)
+          .delete(`http://localhost:5003/delete_rolelisting/${selectedRoleListing.value}`)
           .then((response) => {
             if (response.status === 200) {
               console.log('Role Listing deleted successfully:', response.data);
@@ -456,11 +456,11 @@ function updateRoleListing() {
           <div className="container">
             <div className="row">
               <div className="col-md-7">
-                <h1 className="text-white font-weight-bold">Update Role</h1>
+                <h1 className="text-white font-weight-bold">Edit Role</h1>
                 <div className="custom-breadcrumbs">
                   <a href="#">Role Listings</a> <span className="mx-2 slash">/</span>
                   <a href="#">Role</a> <span className="mx-2 slash">/</span>
-                  <span className="text-white"><strong>Update Role</strong></span>
+                  <span className="text-white"><strong>Edit Role</strong></span>
                 </div>
               </div>
             </div>
@@ -474,7 +474,7 @@ function updateRoleListing() {
               <div className="col-lg-8 mb-4 mb-lg-0">
                 <div className="d-flex align-items-center">
                   <div>
-                    <h2>Update Role</h2>
+                    <h2>Edit Role</h2>
                   </div>
                 </div>
               </div>
@@ -567,7 +567,7 @@ function updateRoleListing() {
                   </div>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Update Role Listing</button>
+                    <button type="submit" className="btn btn-block btn-primary btn-md" onClick={handleUpdate}>Edit Role Listing</button>
                   </div>
 
                   <div className="form-group">
