@@ -675,7 +675,36 @@ def apply_role():
 
         db.session.add(role_application)
         db.session.commit()
-        return jsonify("Role application created successfully."), 200
+        return jsonify("Role application created successfully!"), 200
+    
+    except Exception as e:
+        return jsonify("Error: " + str(e)), 400
+    
+# withdraw from role  
+@app.route("/withdraw_role", methods=['PUT'])
+def withdraw_role():
+    try:
+        role_listing_id = request.json['role_listing_id']
+        staff_id = request.json['staff_id']
+        application = ROLE_APPLICATIONS.query.filter_by(role_listing_id = role_listing_id, staff_id = staff_id, role_app_status = "applied").first()
+
+        # If application does not exist
+        if application is None:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Application not found!"
+                }
+            ), 404
+        
+        # Update application status
+        application.role_app_status = "withdrawn"
+
+        # Commit changes to database
+        db.session.commit()
+
+        return jsonify("Role application withdrawn successfully."), 200
+    
     except Exception as e:
         return jsonify("Error: " + str(e)), 400
 

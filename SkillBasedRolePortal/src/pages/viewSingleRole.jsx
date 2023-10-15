@@ -80,6 +80,7 @@ function RoleListings() {
     const [applied, setApplied] = useState(false);
     const [appMsg, setAppMsg] = useState('')
     const [datePassed, setDatePassed] = useState(false);
+    const [reason, setReason] = useState('');
 
     // Check if today's date is pass closing date - do not display apply + withdraw role buttons
     function checkDate(endDate) {
@@ -110,6 +111,7 @@ function RoleListings() {
                     console.log("app", application);
                     if (application.staff_id == staff_id && application.role_listing_id == role_listing_id) {
                         setApplied(true);
+                        // setReason(application.reason);
                         break;
                     }
                 }
@@ -121,11 +123,20 @@ function RoleListings() {
 
     // Display modal options (apply role)
     const [showApply, setShowApply] = useState(false);
-    const [reason, setReason] = useState('');
     const handleCloseApply = () => setShowApply(false);
     const handleShowApply = () => setShowApply(true);
     const [errorClass, setErrorClass] = useState("d-none")
     const [errors, setErrors] = useState({ reason: '' });
+
+    //Display modal options (view role)
+    const [showView, setShowView] = useState(false);
+    const handleCloseView = () => setShowView(false);
+    const handleShowView = () => setShowView(true);
+
+    //Display modal options (withdraw role)
+    const [showWithdraw, setShowWithdraw] = useState(false);
+    const handleCloseWithdraw = () => setShowWithdraw(false);
+    const handleShowWithdraw = () => setShowWithdraw(true);
 
     const handleReasonChange = async (event) => {
         const reasonInterest = await event.target.value;
@@ -171,12 +182,38 @@ function RoleListings() {
         if (response.status === 200) {
             console.log(response)
             setApplied(true);
+            setShowWithdraw(false);
             setAppMsg("You have successfully applied for this role!");
         } else {
             console.log(response)
             setErrorClass("d-block")
         }
+    }
 
+    // When click confirm withdraw (withdraw role)
+    const handleWithdrawal = async (e) => {
+        e.preventDefault();
+
+        const withdrawData = {
+            role_listing_id: role_listing_id,
+            staff_id: staff_id,
+        };
+
+        const response = await axios.put('http://localhost:5003/withdraw_role', withdrawData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.status === 200) {
+            console.log(response)
+            setApplied(false);
+            setShowApply(false);
+            setAppMsg("You have successfully withdrawn from this role.");
+        } else {
+            console.log(response)
+            setErrorClass("d-block")
+        }
     }
 
     // Calculate the percentage of matched skills
@@ -262,18 +299,91 @@ function RoleListings() {
                             </button>
                         </div>
                         {datePassed && applied && (
-                            <Button className="btn btn-block btn-info btn-md" onClick={handleShowView}>
-                                View Application
-                            </Button>
+                            <div className="col-lg-4">
+                                <Button className="btn btn-block btn-info btn-md" onClick={handleShowView}>
+                                    View Application
+                                </Button>
+
+                                <Modal show={showView} onHide={handleCloseView} aria-labelledby="contained-modal-title-vcenter" centered>
+                                    <Modal.Header>
+                                        <Modal.Title>Application Form</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form.Group className="mb-3" controlId="reasonForInterest">
+                                            <Form.Label>Reason for Application</Form.Label>
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={4}
+                                                name="reason"
+                                                placeholder="Tell us why you are interested in applying for this role..."
+                                                value={reason}
+                                                readOnly
+                                                style={{
+                                                    maxHeight: '200px',
+                                                    resize: 'none',
+                                                    overflowY: 'auto'
+                                                }}
+                                            />
+                                        </Form.Group>
+                                        <Button variant="secondary" onClick={handleCloseView}>
+                                            Close
+                                        </Button>
+                                    </Modal.Body>
+                                </Modal>
+                            </div>
                         )}
                         {!datePassed && applied ? (
                             <div className="col-lg-4">
-                                <Button className="btn btn-block btn-info btn-md" > 
+                                <Button className="btn btn-block btn-info btn-md" onClick={handleShowView}>
                                     View Application
                                 </Button>
-                                <Button className="btn btn-block btn-danger btn-md" >
+
+                                <Modal show={showView} onHide={handleCloseView} aria-labelledby="contained-modal-title-vcenter" centered>
+                                    <Modal.Header>
+                                        <Modal.Title>Application Form</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form.Group className="mb-3" controlId="reasonForInterest">
+                                            <Form.Label>Reason for Application</Form.Label>
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={4}
+                                                name="reason"
+                                                placeholder="Tell us why you are interested in applying for this role..."
+                                                value={reason}
+                                                readOnly
+                                                style={{
+                                                    maxHeight: '200px',
+                                                    resize: 'none',
+                                                    overflowY: 'auto'
+                                                }}
+                                            />
+                                        </Form.Group>
+                                        <Button variant="secondary" onClick={handleCloseView}>
+                                            Close
+                                        </Button>
+                                    </Modal.Body>
+                                </Modal>
+
+                                <Button className="btn btn-block btn-danger btn-md" onClick={handleShowWithdraw}>
                                     Withdraw Application
                                 </Button>
+
+                                <Modal show={showWithdraw} onHide={handleCloseWithdraw} aria-labelledby="contained-modal-title-vcenter" centered>
+                                    <Modal.Header>
+                                        <Modal.Title>Withdraw Application</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Alert variant="danger" className={errorClass}>An error occurred while withdrawing from this role.</Alert>
+                                        <p>Are you sure you want to withdraw your application?</p>
+                                        <Button variant="secondary" onClick={handleCloseWithdraw}>
+                                            Cancel
+                                        </Button>
+                                        <Button variant="danger" className="ml-2" onClick={handleWithdrawal}>
+                                            Withdraw
+                                        </Button>
+                                    </Modal.Body>
+                                </Modal>
                             </div>
                         ) : (
                             <div className="col-lg-4">
