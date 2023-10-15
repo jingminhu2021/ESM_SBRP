@@ -4,7 +4,8 @@ volumes:
   kong_data: {}
 
 networks:
- kong-net:
+  kong-net:
+
 
 services:
   #######################################
@@ -27,7 +28,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
+      test: [ "CMD", "pg_isready", "-U", "kong" ]
       interval: 30s
       timeout: 30s
       retries: 3
@@ -63,7 +64,7 @@ services:
     depends_on:
       - kong-database
     healthcheck:
-      test: ["CMD", "kong", "health"]
+      test: [ "CMD", "kong", "health" ]
       interval: 10s
       timeout: 10s
       retries: 10
@@ -92,7 +93,7 @@ services:
     image: pantsel/konga:latest
     restart: always
     networks:
-        - kong-net   
+      - kong-net
     environment:
       DB_ADAPTER: postgres
       DB_URI: postgresql://kong:${KONG_PG_PASSWORD:-password}@kong-database:5432/konga
@@ -109,7 +110,7 @@ services:
   login:
     image: spmg7t6/is212_login:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
-        - kong-net   
+      - kong-net
     ports:
       - "5000:5000"
     restart: always
@@ -123,7 +124,7 @@ services:
   skill:
     image: spmg7t6/is212_skill:rc-9d414d668156dff7795f314785a44135b76e5d8d
     networks:
-        - kong-net   
+      - kong-net
     ports:
       - "5001:5001"
     restart: always
@@ -137,14 +138,13 @@ services:
   profile:
     image: spmg7t6/is212_profile:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
-        - kong-net   
+      - kong-net
     ports:
       - "5002:5002"
     restart: always
     env_file:
       - db.env
-    
-    
+
   #######################################
   # Role: The Role microservice
   #######################################
@@ -152,7 +152,7 @@ services:
   role:
     image: spmg7t6/is212_role:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
-        - kong-net   
+      - kong-net
     ports:
       - "5003:5003"
     restart: always
@@ -164,9 +164,9 @@ services:
   #######################################
 
   web:
-    image: spmg7t6/is212_web:rc-857f429eebbd1344340230d452fedea3d3e97600
+    image: spmg7t6/is212_web:rc-dd2fb6b9afd130edf2f92845a7daa7ebaffadb6d
     networks:
-        - kong-net   
+      - kong-net
     ports:
       - "80:80"
     restart: always
