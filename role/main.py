@@ -661,6 +661,23 @@ def view_role_applications():
         return jsonify({"code": 200, "data": combined_data}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# apply for role  
+@app.route("/apply_role", methods=['POST'])
+def apply_role():
+    try:
+        role_listing_id = request.json['role_listing_id']
+        staff_id = request.json['staff_id']
+        reason = request.json['reason']
+        print(reason)
+
+        role_application = ROLE_APPLICATIONS(role_listing_id=role_listing_id, staff_id=staff_id, role_app_status="applied") #reason=reason
+
+        db.session.add(role_application)
+        db.session.commit()
+        return jsonify("Role application created successfully."), 200
+    except Exception as e:
+        return jsonify("Error: " + str(e)), 400
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5003, debug=True) #testing purpose
