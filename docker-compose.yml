@@ -107,7 +107,7 @@ services:
   #######################################
 
   login:
-    image: spmg7t6/is212_login:rc-c2a5767143c5cac3234701f99f1567717907179b
+    image: spmg7t6/is212_login:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
         - kong-net   
     ports:
@@ -135,7 +135,7 @@ services:
   #######################################
 
   profile:
-    image: spmg7t6/is212_profile:rc-c1c6a6e263405f3c3609d07d7e0ce0cb88c73402
+    image: spmg7t6/is212_profile:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
         - kong-net   
     ports:
@@ -150,7 +150,7 @@ services:
   #######################################
 
   role:
-    image: spmg7t6/is212_role:6d7aec0f15e0d90cddd5fd4435b9073611ddfb91
+    image: spmg7t6/is212_role:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
         - kong-net   
     ports:
@@ -164,7 +164,7 @@ services:
   #######################################
 
   web:
-    image: spmg7t6/is212_web:rc-a81f4eaad251aeea9bee3ffa244775c94b7d93c8
+    image: spmg7t6/is212_web:rc-857f429eebbd1344340230d452fedea3d3e97600
     networks:
         - kong-net   
     ports:
