@@ -672,7 +672,6 @@ def apply_role():
         role_listing_id = request.json['role_listing_id']
         staff_id = request.json['staff_id']
         reason = request.json['reason']
-        print(reason)
 
         role_application = ROLE_APPLICATIONS(role_listing_id=role_listing_id, staff_id=staff_id, role_app_status="applied", app_reason=reason)
 
