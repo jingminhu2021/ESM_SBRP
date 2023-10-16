@@ -167,6 +167,7 @@ class ROLE_APPLICATIONS(db.Model):
     staff_id=db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_app_status=db.Column(db.Enum("draft","applied","withdrawn"), nullable=False)
     role_app_ts_create=db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    app_reason=db.Column(db.String(255), nullable=False)
 
     def json(self):
         item = {
@@ -175,6 +176,7 @@ class ROLE_APPLICATIONS(db.Model):
             'staff_id': self.staff_id,
             'role_app_status': self.role_app_status,
             'role_app_ts_create': self.role_app_ts_create.strftime('%Y-%m-%d %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
+            'app_reason': self.app_reason,
         }
         return item
 
@@ -650,6 +652,7 @@ def view_role_applications():
                     "staff_id": staff_details.staff_id,
                     "staff_dept": staff_details.dept,
                     "role_app_status": role_applications.role_app_status,
+                    "app_reason": role_applications.app_reason,
                     "staff_name": staff_details.fname + " " + staff_details.lname,
                     "manager_staff_id": role_listing.role_listing_source
                    
@@ -671,7 +674,7 @@ def apply_role():
         reason = request.json['reason']
         print(reason)
 
-        role_application = ROLE_APPLICATIONS(role_listing_id=role_listing_id, staff_id=staff_id, role_app_status="applied") #reason=reason
+        role_application = ROLE_APPLICATIONS(role_listing_id=role_listing_id, staff_id=staff_id, role_app_status="applied", app_reason=reason)
 
         db.session.add(role_application)
         db.session.commit()

@@ -111,7 +111,8 @@ function RoleListings() {
                     console.log("app", application);
                     if (application.staff_id == staff_id && application.role_listing_id == role_listing_id) {
                         setApplied(true);
-                        // setReason(application.reason);
+                        setReason(application.app_reason);
+                        console.log(application.app_reason);
                         break;
                     }
                 }
