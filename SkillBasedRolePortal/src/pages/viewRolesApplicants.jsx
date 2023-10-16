@@ -22,7 +22,7 @@ function roleapplicants() {
               const applicantSkills = await fetchApplicantSkills(staffId);
               const roleSkills = await fetchRoleSkills(roleListingId);
               const percentageMatch = applicantSkills.filter(skill => roleSkills.includes(skill.skill_name)).length / roleSkills.length * 100;
-              return { ...applicant, applicantSkills, percentageMatch};
+              return { ...applicant, applicantSkills, percentageMatch, roleSkills};
             }));
             setRolesApplicants(applicantsWithSkills);
           } catch (error) {
@@ -120,6 +120,20 @@ return (
             <p><strong>Role Applied: </strong>{roleapplicant.role_name}</p> 
             <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
             <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
+
+            {/* Display Role Skills */}
+            <div className="p-3 text-white" style={{ backgroundColor: "Silver" }}>
+                <strong>Role Skill Required: </strong>
+                {roleapplicant.roleSkills && roleapplicant.roleSkills.length > 0 ? (
+                    roleapplicant.roleSkills.map(skill => (
+                        <span key={skill}>{skill}, </span>
+                    ))
+                ) : (
+                    <span>No Role Skills</span>
+                )}
+            </div>
+
+            {/* Display Applicant Skills */}
             {roleapplicant.applicantSkills && roleapplicant.applicantSkills.length > 0 ? (
                 <div className="bg-light text-info p-3">
                     <strong>Applicant Skills: </strong>
