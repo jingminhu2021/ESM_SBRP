@@ -97,18 +97,14 @@ return (
     </section>
     
     <div className="text-right mb-5 mt-3" style={{ padding: '0' }}>
-    
     </div>
-       
-   
-
+    
         <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{ padding: '0' }}>
         <div className="container" >
-        
         <div className="row">
         {roleapplicants ? roleapplicants.map(roleapplicant => (
             <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={roleapplicants.role_listing_id}>
-            <Link to={`/ViewSingleRoleApplicant/${roleapplicant.role_listing_id}`} className="block__16443 text-center d-block">
+            <div className="block__16443 text-center d-block" style={{transition: 'none', position: 'static'}}>
             <h3>Role Listing ID: {roleapplicant.role_listing_id}</h3>
             <h3>Staff ID: {roleapplicant.staff_id}</h3>
             <h3>Staff Name: {roleapplicant.staff_name}</h3>
@@ -128,15 +124,15 @@ return (
                     No Skills
                 </div>
             )}
-            </Link>
-    </div>
-    )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Role Listing found!</p>)}
-    </div>
-    </div>
-    </section>
-    <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
-    </div>
-    );
+            </div>
+        </div>
+        )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Role Listing found!</p>)}
+        </div>
+        </div>
+        </section>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+        </div>
+        );
 }
 
 export default roleapplicants;
