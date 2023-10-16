@@ -22,7 +22,6 @@ function roleapplicants() {
               const applicantSkills = await fetchApplicantSkills(staffId);
               const roleSkills = await fetchRoleSkills(roleListingId);
               const percentageMatch = applicantSkills.filter(skill => roleSkills.includes(skill.skill_name)).length / roleSkills.length * 100;
-              console.log(percentageMatch);
               return { ...applicant, applicantSkills, percentageMatch};
             }));
             setRolesApplicants(applicantsWithSkills);
@@ -63,7 +62,7 @@ useEffect(() => {
         toast.success("Role created successfully");
     }
 }, [location.search]);
-if (sessionStorage.getItem('sys_role') !== 'hr') {
+if (sessionStorage.getItem('sys_role') !== 'hr' && sessionStorage.getItem('sys_role') !== 'manager') {
     return (
         <div>
             {navbar()}
@@ -122,7 +121,7 @@ return (
             <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
             <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
             {roleapplicant.applicantSkills && roleapplicant.applicantSkills.length > 0 ? (
-                <div className="bg-light p-3 text-info">
+                <div className="bg-light text-info p-3">
                     <strong>Applicant Skills: </strong>
                     {roleapplicant.applicantSkills.map(skill => (
                         <span key={skill.skill_id}>{skill.skill_name}, </span>
@@ -139,9 +138,10 @@ return (
                             {roleapplicant.percentageMatch}%
                         </div>
                     </div>
+                    <span className="text-secondary"><small>{roleapplicant.percentageMatch}% Skill Match to Role</small></span>
                 </div>
             ) : (
-                <div className="bg-light p-3 text-info">
+                <div className="bg-light p-3 text-info ">
                     <strong>Applicant Skills: </strong>
                     No Skills
                 </div>

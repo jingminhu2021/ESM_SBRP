@@ -37,6 +37,17 @@ function navbar(){
       }
     }
 
+    // Display if Manager is logged in
+    function checkHr() {
+      if (sessionStorage.getItem('sys_role') === 'manager') {
+        return (
+          <>
+            <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
+          </>
+        );
+      }
+    }
+
  
     return(
         <>
