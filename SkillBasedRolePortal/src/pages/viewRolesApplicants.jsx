@@ -16,29 +16,39 @@ function roleapplicants() {
         const fetchRoleApplicants = async () => {
           try {
             const response = await axios.get('http://localhost:5003/view_role_applications');
-            console.log(response.data.data);
             const applicantsWithSkills = await Promise.all(response.data.data.map(async applicant => {
               const staffId = applicant.staff_id;
-              const skills = await fetchSkills(staffId);
-              return { ...applicant, skills };
+              const roleListingId = applicant.role_listing_id;
+              const applicantSkills = await fetchApplicantSkills(staffId);
+              const roleSkills = await fetchRoleSkills(roleListingId);
+              const percentageMatch = applicantSkills.filter(skill => roleSkills.includes(skill.skill_name)).length / roleSkills.length * 100;
+              console.log(percentageMatch);
+              return { ...applicant, applicantSkills, percentageMatch};
             }));
             setRolesApplicants(applicantsWithSkills);
           } catch (error) {
             console.error('Error fetching Role Listings:', error);
           }
         };
-      
         fetchRoleApplicants();
       }, []);
 
-    const fetchSkills = async (staffId) => {
+    const fetchApplicantSkills = async (staffId) => {
         try {
             var bodyFormData = new FormData();
             bodyFormData.append('staff_id', staffId);
             const response = await axios.post('http://localhost:5002/get_skills', bodyFormData, {withCredentials: true});
-            console.log(staffId);
-            console.log(response.data.data);
             return response.data.data;
+        }
+        catch (error) {
+            console.error('Error fetching Skills:', error);
+        }
+    };
+
+    const fetchRoleSkills = async (role_listing_id) => {
+        try {
+            const response = await axios.get(`http://localhost:5003/view_role_single_listings/${role_listing_id}`);
+            return response.data.data.skills_list;
         }
         catch (error) {
             console.error('Error fetching Skills:', error);
@@ -111,12 +121,24 @@ return (
             <p><strong>Role Applied: </strong>{roleapplicant.role_name}</p> 
             <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
             <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
-            {roleapplicant.skills && roleapplicant.skills.length > 0 ? (
+            {roleapplicant.applicantSkills && roleapplicant.applicantSkills.length > 0 ? (
                 <div className="bg-light p-3 text-info">
                     <strong>Applicant Skills: </strong>
-                    {roleapplicant.skills.map(skill => (
+                    {roleapplicant.applicantSkills.map(skill => (
                         <span key={skill.skill_id}>{skill.skill_name}, </span>
                     ))}
+                    <div className="progress mt-2">
+                        <div
+                            className="progress-bar bg-success"
+                            role="progressbar"
+                            style={{ width: `${roleapplicant.percentageMatch}%`}}
+                            aria-valuenow={roleapplicant.percentageMatch}
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        >
+                            {roleapplicant.percentageMatch}%
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <div className="bg-light p-3 text-info">
@@ -124,7 +146,7 @@ return (
                     No Skills
                 </div>
             )}
-            </div>
+            </div>  
         </div>
         )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Role Listing found!</p>)}
         </div>
