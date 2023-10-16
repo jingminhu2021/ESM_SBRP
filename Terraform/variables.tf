@@ -1,4 +1,4 @@
-variable "profile" {
+variable "aws_profile" {
   description = "value of the AWS profile to use"
   type        = string
 }

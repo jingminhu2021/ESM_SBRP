@@ -49,7 +49,7 @@ function profile(){
     }, [])
 
     const skillList = (staff_id) =>{
-        let api_endpoint_url = 'http://localhost:5002/get_skills' //Placeholder
+        let api_endpoint_url = 'http://localhost:8000/api/profile/get_skills'
         var bodyFormData = new FormData();
         
         bodyFormData.append('staff_id', staff_id);
@@ -104,7 +104,7 @@ function profile(){
     const handleAddSkillSubmit = (e) => {
         //Add skill to database
         e.preventDefault();
-        let api_endpoint_url = 'http://localhost:5002/add_skills' //Placeholder
+        let api_endpoint_url = 'http://localhost:8000/api/profile/add_skills'
         var bodyFormData = new FormData();
         bodyFormData.append('skill_name', selectedskills.skill_name)
         bodyFormData.append('skill_status', selectedskills.skill_status=="In-progress"?"in-progress":"unverified")
@@ -126,7 +126,7 @@ function profile(){
     const handleUpdateSkillSubmit = (e) => {
         //Add skill to database
         e.preventDefault();
-        let api_endpoint_url = 'http://localhost:5002/update_skills' //Placeholder
+        let api_endpoint_url = 'http://localhost:8000/api/profile/update_skills' 
         var bodyFormData = new FormData();
         bodyFormData.append('skill_name', selectedskills.skill_name)
         bodyFormData.append('skill_status', selectedskills.skill_status=="In-progress"?"in-progress":"unverified")
@@ -152,7 +152,7 @@ function profile(){
 
     const allSkillList = (staff_id) =>{
         // Retrieve all Skills
-        let api_endpoint_url = 'http://localhost:5002/get_all_skills' //Placeholder
+        let api_endpoint_url = 'http://localhost:8000/api/profile/get_all_skills' 
         var bodyFormData = new FormData();
         console.log("--getting full skill list--")
         bodyFormData.append('staff_id', staff_id);
