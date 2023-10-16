@@ -13,18 +13,37 @@ function roleapplicants() {
 
     
     useEffect(() => {
-        axios.get('http://localhost:5003/view_role_applications', {
-       
-    })
-    .then(response => {
-        setRolesApplicants(response.data.data);
-        console.log(response.data.data);
-    })
-    .catch(error => {
-        console.error('Error fetching Role Listings:', error);
-    });
-   
-}, []);
+        const fetchRoleApplicants = async () => {
+          try {
+            const response = await axios.get('http://localhost:5003/view_role_applications');
+            console.log(response.data.data);
+            const applicantsWithSkills = await Promise.all(response.data.data.map(async applicant => {
+              const staffId = applicant.staff_id;
+              const skills = await fetchSkills(staffId);
+              return { ...applicant, skills };
+            }));
+            setRolesApplicants(applicantsWithSkills);
+          } catch (error) {
+            console.error('Error fetching Role Listings:', error);
+          }
+        };
+      
+        fetchRoleApplicants();
+      }, []);
+
+    const fetchSkills = async (staffId) => {
+        try {
+            var bodyFormData = new FormData();
+            bodyFormData.append('staff_id', staffId);
+            const response = await axios.post('http://localhost:5002/get_skills', bodyFormData, {withCredentials: true});
+            console.log(staffId);
+            console.log(response.data.data);
+            return response.data.data;
+        }
+        catch (error) {
+            console.error('Error fetching Skills:', error);
+        }
+    };
 
 // Check if the 'created=true' parameter is present in the URL
 useEffect(() => {
@@ -89,23 +108,36 @@ return (
         <div className="row">
         {roleapplicants ? roleapplicants.map(roleapplicant => (
             <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={roleapplicants.role_listing_id}>
-            <Link to={`/ViewSingleRole/${roleapplicant.role_listing_id}`} className="block__16443 text-center d-block">
+            <Link to={`/ViewSingleRoleApplicant/${roleapplicant.role_listing_id}`} className="block__16443 text-center d-block">
             <h3>Role Listing ID: {roleapplicant.role_listing_id}</h3>
             <h3>Staff ID: {roleapplicant.staff_id}</h3>
             <h3>Staff Name: {roleapplicant.staff_name}</h3>
             <p><strong>Role Applied: </strong>{roleapplicant.role_name}</p> 
             <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
             <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
+            {roleapplicant.skills && roleapplicant.skills.length > 0 ? (
+                <div className="bg-light p-3 text-info">
+                    <strong>Applicant Skills: </strong>
+                    {roleapplicant.skills.map(skill => (
+                        <span key={skill.skill_id}>{skill.skill_name}, </span>
+                    ))}
+                </div>
+            ) : (
+                <div className="bg-light p-3 text-info">
+                    <strong>Applicant Skills: </strong>
+                    No Skills
+                </div>
+            )}
             </Link>
-                        </div>
-                        )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Role Listing found!</p>)}
-                        </div>
-                        </div>
-                        </section>
-                        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
-                        </div>
-                        );
-                    }
-                    
-                    export default roleapplicants;
+    </div>
+    )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Role Listing found!</p>)}
+    </div>
+    </div>
+    </section>
+    <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+    </div>
+    );
+}
+
+export default roleapplicants;
                     
