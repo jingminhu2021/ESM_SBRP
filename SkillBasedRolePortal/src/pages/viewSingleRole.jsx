@@ -140,7 +140,7 @@ function RoleListings() {
 
         useEffect(() => {
             // See if user has applied for the role already
-            axios.get('http://localhost:5003/view_role_applications', {
+            axios.get('http://localhost:8000/api/role/view_role_applications', {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -220,7 +220,7 @@ function RoleListings() {
                 reason: reason,
             };
             console.log("app data", applicationData)
-            const response = await axios.post('http://localhost:5003/apply_role', applicationData, {
+            const response = await axios.post('http://localhost:8000/api/role/apply_role', applicationData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -246,7 +246,7 @@ function RoleListings() {
                 staff_id: staff_id,
             };
 
-            const response = await axios.put('http://localhost:5003/withdraw_role', withdrawData, {
+            const response = await axios.put('http://localhost:8000/api/role/withdraw_role', withdrawData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
