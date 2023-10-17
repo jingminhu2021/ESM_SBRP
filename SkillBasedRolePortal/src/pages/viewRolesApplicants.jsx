@@ -146,6 +146,8 @@ return (
                             {index !== roleapplicant.applicantSkills.length - 1 && ', '}
                         </span>
                     ))}
+                    {sessionStorage.getItem('sys_role') === 'manager' && (
+                    <>
                     <div className="progress mt-2">
                         <div
                             className="progress-bar bg-success"
@@ -159,6 +161,8 @@ return (
                         </div>
                     </div>
                     <span className="text-secondary"><small>{roleapplicant.percentageMatch}% Skill Match to Role</small></span>
+                    </>
+                    )}
                 </div>
                 </Link>
             ) : (
@@ -203,6 +207,8 @@ return (
                     <li key={skill.skill_id}>{skill.skill_name}</li>
                 ))}
                 </ul>
+                {sessionStorage.getItem('sys_role') === 'manager' && (
+                    <>
                 <div className="progress mt-2">
                 <div
                     className="progress-bar bg-success"
@@ -214,10 +220,13 @@ return (
                 >
                     {selectedApplicant.percentageMatch}%
                 </div>
-            </div>
-            <div className="text-center">
-                <span className="text-secondary"><small>{selectedApplicant.percentageMatch}% Skill Match to Role</small></span>
-            </div>
+                </div>
+                
+                <div className="text-center">
+                    <span className="text-secondary"><small>{selectedApplicant.percentageMatch}% Skill Match to Role</small></span>
+                </div>
+                </>
+                )}
             </div>
           ) : (
             <div className="bg-light text-info p-3">

@@ -38,7 +38,7 @@ function navbar(){
     }
 
     // Display if Manager is logged in
-    function checkHr() {
+    function checkManager() {
       if (sessionStorage.getItem('sys_role') === 'manager') {
         return (
           <>
@@ -64,6 +64,7 @@ function navbar(){
                         <Nav.Link href="/contact">Contact</Nav.Link>
                         
                         {checkHr()}
+                        {checkManager()}
                     </Nav>
                     <Nav className='m-auto'>
                         {checkUser()}
