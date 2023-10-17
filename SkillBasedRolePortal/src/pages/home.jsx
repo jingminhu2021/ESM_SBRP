@@ -52,7 +52,7 @@ function home(){
       event.preventDefault()
       navigate(
         "/searchRole",
-        {state: {data:{roleName: formData.jobTitle, skill: skillSelect}}}
+        {state: {data:{roleTitle: formData.jobTitle, skill: skillSelect}}}
       )
     }
 
