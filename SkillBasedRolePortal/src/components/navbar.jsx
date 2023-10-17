@@ -37,6 +37,17 @@ function navbar(){
       }
     }
 
+    // Display if Manager is logged in
+    function checkManager() {
+      if (sessionStorage.getItem('sys_role') === 'manager') {
+        return (
+          <>
+            <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
+          </>
+        );
+      }
+    }
+
  
     return(
         <>
@@ -53,6 +64,7 @@ function navbar(){
                         <Nav.Link href="/contact">Contact</Nav.Link>
                         
                         {checkHr()}
+                        {checkManager()}
                     </Nav>
                     <Nav className='m-auto'>
                         {checkUser()}
