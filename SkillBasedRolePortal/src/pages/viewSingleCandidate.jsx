@@ -107,7 +107,7 @@ else {
                         <div className="col-sm-12 col-md-6 mb-4 col-lg-6">
                             <strong className="d-block text-black mb-3">Staff Skills</strong>
                                 {skills === null ? (
-                                <span>(empty)</span>
+                                <span>(no skills listed)</span>
                                 ) : (
                                 <ul>
                                     {skills.map((skill) => (
