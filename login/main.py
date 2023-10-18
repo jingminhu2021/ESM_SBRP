@@ -18,7 +18,6 @@ db = SQLAlchemy(app)
 
 # For Cross-Origin Resource Sharing
 # CORS(app, supports_credentials=True)
-
 # Create a SQLAlchemy model for the accounts table
 class Account(db.Model):
     __tablename__ = 'ACCOUNT'
