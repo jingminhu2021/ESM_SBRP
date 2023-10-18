@@ -167,6 +167,7 @@ class ROLE_APPLICATIONS(db.Model):
     staff_id=db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_app_status=db.Column(db.Enum("draft","applied","withdrawn"), nullable=False)
     role_app_ts_create=db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    app_reason=db.Column(db.String(255), nullable=False)
 
     def json(self):
         item = {
@@ -175,6 +176,7 @@ class ROLE_APPLICATIONS(db.Model):
             'staff_id': self.staff_id,
             'role_app_status': self.role_app_status,
             'role_app_ts_create': self.role_app_ts_create.strftime('%Y-%m-%d %H:%M:%S'),  # Format as DD-MM-YYYY HH:MM:SS
+            'app_reason': self.app_reason,
         }
         return item
 
@@ -650,6 +652,7 @@ def view_role_applications():
                     "staff_id": staff_details.staff_id,
                     "staff_dept": staff_details.dept,
                     "role_app_status": role_applications.role_app_status,
+                    "app_reason": role_applications.app_reason,
                     "staff_name": staff_details.fname + " " + staff_details.lname,
                     "manager_staff_id": role_listing.role_listing_source
                    
@@ -661,6 +664,51 @@ def view_role_applications():
         return jsonify({"code": 200, "data": combined_data}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# apply for role  
+@app.route("/apply_role", methods=['POST'])
+def apply_role():
+    try:
+        role_listing_id = request.json['role_listing_id']
+        staff_id = request.json['staff_id']
+        reason = request.json['reason']
+
+        role_application = ROLE_APPLICATIONS(role_listing_id=role_listing_id, staff_id=staff_id, role_app_status="applied", app_reason=reason)
+
+        db.session.add(role_application)
+        db.session.commit()
+        return jsonify("Role application created successfully!"), 200
+    
+    except Exception as e:
+        return jsonify("Error: " + str(e)), 400
+    
+# withdraw from role  
+@app.route("/withdraw_role", methods=['PUT'])
+def withdraw_role():
+    try:
+        role_listing_id = request.json['role_listing_id']
+        staff_id = request.json['staff_id']
+        application = ROLE_APPLICATIONS.query.filter_by(role_listing_id = role_listing_id, staff_id = staff_id, role_app_status = "applied").first()
+
+        # If application does not exist
+        if application is None:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Application not found!"
+                }
+            ), 404
+        
+        # Update application status
+        application.role_app_status = "withdrawn"
+
+        # Commit changes to database
+        db.session.commit()
+
+        return jsonify("Role application withdrawn successfully."), 200
+    
+    except Exception as e:
+        return jsonify("Error: " + str(e)), 400
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5003, debug=True) #testing purpose
