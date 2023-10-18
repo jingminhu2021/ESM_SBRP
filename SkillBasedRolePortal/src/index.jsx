@@ -6,6 +6,7 @@ import ViewSingleRole from './pages/viewSingleRole.jsx'
 import CreateRoleListing from './pages/createRoleListing.jsx'
 import UpdateRoleListing from './pages/updateRoleListing.jsx'
 import ViewRolesApplicants from './pages/viewRolesApplicants.jsx'
+import ViewCandidates from './pages/viewCandidates.jsx'
 import Profile from './pages/profile.jsx'
 import SearchRole from './pages/searchRole.jsx'
 import ViewSkills from './pages/viewSkills.jsx'
@@ -40,6 +41,7 @@ export default function App() {
           {/* <Route path="/contact" element={<Contact />} /> */}
           <Route path="/CreateRoleListing" element={<CreateRoleListing />} />
           <Route path="/ViewRolesApplicants" element={<ViewRolesApplicants />} />
+          <Route path="/ViewCandidates" element={<ViewCandidates />} />
           <Route path="/viewSkills" element={<ViewSkills />} />  
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />
