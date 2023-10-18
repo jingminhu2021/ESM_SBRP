@@ -110,6 +110,17 @@ else {
 
     console.log(staffList);
 
+    function viewStaff(staff) {
+        return () => {
+            sessionStorage.setItem('staff_id', staff.staff_id);
+            sessionStorage.setItem('fname', staff.fname);
+            sessionStorage.setItem('lname', staff.lname);
+            sessionStorage.setItem('email', staff.email);
+            sessionStorage.setItem('dept', staff.dept);
+            sessionStorage.setItem('phone', staff.phone);
+        };
+    }
+
   return (
     <div>
       {navbar()}
@@ -137,6 +148,7 @@ else {
               isMulti
               value={selectedOptions}
               placeholder="Search Skills..."
+              noOptionsMessage={() => "No skills found"}
             />
             </div>
 
@@ -168,8 +180,8 @@ else {
                                         <td>{uniqueStaff.dept}</td>
                                         <td>{uniqueStaff.sys_role}</td>
                                         <td>
-                                            <Link to={`/viewSingleCandidate/${uniqueStaff.staff_id}`}>
-                                                <button className="btn btn-primary">View</button>
+                                            <Link to={`/ViewCandidate/${uniqueStaff.staff_id}`}>
+                                                <button className="btn btn-primary" onClick={viewStaff(uniqueStaff)}>View</button>
                                             </Link>
                                         </td>
                                     </tr>
