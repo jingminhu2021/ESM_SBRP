@@ -122,7 +122,7 @@ services:
   #######################################
 
   skill:
-    image: spmg7t6/is212_skill:rc-9d414d668156dff7795f314785a44135b76e5d8d
+    image: spmg7t6/is212_skill:rc-latest
     networks:
       - kong-net
     ports:
@@ -164,7 +164,7 @@ services:
   #######################################
 
   web:
-    image: spmg7t6/is212_web:rc-dd2fb6b9afd130edf2f92845a7daa7ebaffadb6d
+    image: spmg7t6/is212_web:rc-latest
     networks:
       - kong-net
     ports:
