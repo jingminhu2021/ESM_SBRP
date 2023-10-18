@@ -58,7 +58,7 @@ else {
   useEffect(() => {
     const getSkills = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/view_skills");
+        const response = await axios.get("http://localhost:8000/api/skill/view_skills");
         if (response.status === 200) {
           setAllSkills(response.data.data);
         }
@@ -128,7 +128,7 @@ else {
       skill_status: skillStatus,
     };
     //call api to create skill
-    const response = await axios.post('http://localhost:5001/create_skill', skillData, {
+    const response = await axios.post('http://localhost:8000/api/skill/create_skill', skillData, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -182,7 +182,7 @@ else {
                       <div className="alert alert-danger" role="alert">
                         {errors.skillName}{duplicate} &nbsp;
                         {(duplicate !== '') && (
-                          <a className="text-secondary" href={`http://localhost:5173/ViewSkill/${duplicateSkillId}`}>Click here to view</a>
+                          <a className="text-secondary" href={`/ViewSkill/${duplicateSkillId}`}>Click here to view</a>
                         )}
                         </div>
                     )}

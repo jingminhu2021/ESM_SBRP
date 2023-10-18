@@ -26,7 +26,7 @@ function roleapplicants() {
     useEffect(() => {
         const fetchRoleApplicants = async () => {
           try {
-            const response = await axios.get('http://localhost:5003/view_role_applications');
+            const response = await axios.get('http://localhost:8000/api/role/view_role_applications');
             const applicantsWithSkills = await Promise.all(response.data.data.map(async applicant => {
                 const staffId = applicant.staff_id;
                 const roleListingId = applicant.role_listing_id;
@@ -50,7 +50,7 @@ function roleapplicants() {
         try {
             var bodyFormData = new FormData();
             bodyFormData.append('staff_id', staffId);
-            const response = await axios.post('http://localhost:5002/get_skills', bodyFormData, {withCredentials: true});
+            const response = await axios.post('http://localhost:8000/api/profile/get_skills', bodyFormData, {withCredentials: true});
             return response.data.data;
         }
         catch (error) {
@@ -60,7 +60,7 @@ function roleapplicants() {
 
     const fetchRoleSkills = async (role_listing_id) => {
         try {
-            const response = await axios.get(`http://localhost:5003/view_role_single_listings/${role_listing_id}`);
+            const response = await axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`);
             return response.data.data.skills_list;
         }
         catch (error) {
