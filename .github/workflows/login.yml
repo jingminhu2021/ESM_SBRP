@@ -56,12 +56,12 @@ jobs:
       - name: Build the Docker image for main
         if: github.ref == 'refs/heads/main'
         run: |
-          docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }}
+          docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }} --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-latest
 
       - name: Build the Docker image for staging
         if: startsWith(github.ref, 'refs/heads/') && endsWith(github.ref,'_staging')
         run: |
-          docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }}
+          docker build ${{env.dir_path}} --file ${{env.dir_path}}/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }} --tag ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:latest
 
       - name: Docker Push for main
         if: github.ref == 'refs/heads/main'
