@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import ViewRoles from './pages/viewRoles.jsx'
 import ViewSingleRole from './pages/viewSingleRole.jsx'
+import StaffSkillList from './pages/staffSkillList.jsx'
+import UpdateStaffProfile from './pages/updateStaffProfile.jsx'
 import CreateRoleListing from './pages/createRoleListing.jsx'
 import UpdateRoleListing from './pages/updateRoleListing.jsx'
 import ViewRolesApplicants from './pages/viewRolesApplicants.jsx'
@@ -40,6 +42,8 @@ export default function App() {
           <Route path="/searchRole" element={<SearchRole />} />
           <Route path="/updateRoleListing" element={<UpdateRoleListing />} />
           {/* <Route path="/contact" element={<Contact />} /> */}
+          <Route path="/StaffSkillList" element={<StaffSkillList />} />
+          <Route path="/UpdateStaffProfile/:staff_id" element={<UpdateStaffProfile />} />
           <Route path="/CreateRoleListing" element={<CreateRoleListing />} />
           <Route path="/ViewRolesApplicants" element={<ViewRolesApplicants />} />
           <Route path="/ViewCandidates" element={<ViewCandidates />} />

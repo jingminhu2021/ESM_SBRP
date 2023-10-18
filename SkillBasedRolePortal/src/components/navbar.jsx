@@ -33,6 +33,7 @@ function navbar(){
             <Nav.Link href="/viewSkills">Skills</Nav.Link>
             <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
             <Nav.Link href="/viewCandidates">Staffs</Nav.Link>
+            <Nav.Link href="/staffSkillList">Update Staff Skills</Nav.Link>
           </>
         );
       }
