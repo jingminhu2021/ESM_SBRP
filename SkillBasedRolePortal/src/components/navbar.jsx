@@ -32,6 +32,7 @@ function navbar(){
           <>
             <Nav.Link href="/viewSkills">Skills</Nav.Link>
             <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
+            <Nav.Link href="/viewCandidates">Staffs</Nav.Link>
           </>
         );
       }
@@ -43,6 +44,7 @@ function navbar(){
         return (
           <>
             <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
+            <Nav.Link href="/viewCandidates">Staffs</Nav.Link>
           </>
         );
       }
