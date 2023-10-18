@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 from flask import Flask, request, jsonify
-# from flask_cors import CORS
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 DB_USERNAME = os.environ.get('DB_USERNAME')
@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 # For Cross-Origin Resource Sharing
-# CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True)
 # Create a SQLAlchemy model for the accounts table
 class Account(db.Model):
     __tablename__ = 'ACCOUNT'

@@ -65,8 +65,12 @@ jobs:
 
       - name: Docker Push for main
         if: github.ref == 'refs/heads/main'
-        run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }} --all-tags
+        run: |
+          docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-${{ github.sha }}
+          docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:rc-latest
 
       - name: Docker Push for staging
         if: startsWith(github.ref, 'refs/heads/') && endsWith(github.ref,'_staging')
-        run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }} --all-tags
+        run: |
+          docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:${{ github.sha }}
+          docker push ${{secrets.DOCKER_USERNAME}}/${{env.repo_name}}:latest
