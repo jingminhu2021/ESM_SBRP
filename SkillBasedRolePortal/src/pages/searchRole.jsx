@@ -7,20 +7,23 @@ import navbar from '../components/navbar.jsx'
 
 function searchRole(){
 
+    const location = useLocation()
+    const data = location.state.data
+    const roleTitle = data.roleTitle.toLowerCase()
+    const skill = data.skill
+
     const [roleList, setRoleList] = useState([])
     const [roleTitleSearch, setRoleTitleSearch] = useState([])
     const [roleSkillSearch, setRoleSkillSearch] = useState([])
     const [displayMatchingRoles, setDisplayMatchingRoles] = useState([])
-
-    const location = useLocation()
-    const data = location.state.data
-    const roleTitle = data.roleName.toLowerCase()
-    const skill = data.skill
     const [fuseSearch, setFuseSearch] = useState(true)
+
+    //Render dependencies
     const [roleSearchSuccess, setRoleSearchSuccess] = useState(null)
     const [titleResultSuccess, setTitleResultSuccess] = useState(null)
     const [skillResultSuccess, setSkillResultSuccess] = useState(null)
 
+    // Get all roles from database
     const getAllRoles = () =>{
         let api_endpoint_url = "http://localhost:5003/view_role_listings"
 
@@ -47,9 +50,10 @@ function searchRole(){
         })
     };
 
+    // Title Filtering
     const searchTitleResult = () =>{
+        setTitleResultSuccess(true)
         if (roleTitle == ""){
-            setTitleResultSuccess(true)
             return
         }
         for (let i = 0; i < roleList.length; i++){
@@ -73,9 +77,9 @@ function searchRole(){
                 setRoleTitleSearch(roleTitleSearch => [...roleTitleSearch, fuse.search(roleTitle)[i].item])
             }
         }
-        setTitleResultSuccess(true)
     }
 
+    // Skill Filtering
     const searchSkillResult = () =>{
         loop1:
         for (let i = 0; i < roleList.length; i++){
@@ -91,6 +95,7 @@ function searchRole(){
         setSkillResultSuccess(true)
     }
 
+    // Combine both title and skill filtering
     const allMatchingRoles = () =>{
         for (let i = 0; i < roleTitleSearch.length; i++){
             setDisplayMatchingRoles(displayMatchingRoles => [...displayMatchingRoles, roleTitleSearch[i]])
@@ -103,6 +108,7 @@ function searchRole(){
         
     }
 
+    // Render all matching roles
     const renderMatchingRoles = () =>{
         const array = []
         if (displayMatchingRoles.length == 0){
@@ -133,6 +139,7 @@ function searchRole(){
         }
         return array
     }
+
     console.log("1:", roleTitleSearch, "2:",   roleSkillSearch, displayMatchingRoles)
 
     useEffect(() => {
@@ -145,12 +152,6 @@ function searchRole(){
             searchSkillResult()
         }
     }, [roleSearchSuccess])
-
-    // useEffect(() => {
-    //     if (roleSearchSuccess){
-    //         searchSkillResult()
-    //     }
-    // }, [roleSearchSuccess])
 
     useEffect(() => {
         if (titleResultSuccess && skillResultSuccess){

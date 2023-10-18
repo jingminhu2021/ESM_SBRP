@@ -33,7 +33,7 @@ function login(){
       };
     
     const send_onsubmit = (email, password) => {
-        let api_endpoint_url = 'http://localhost:5000/login' //Placeholder
+        let api_endpoint_url = 'http://localhost:8000/api/login/login'
         var bodyFormData = new FormData();
         bodyFormData.append('email', email);
         bodyFormData.append('password', password);
