@@ -108,7 +108,7 @@ services:
   #######################################
 
   login:
-    image: spmg7t6/is212_login:rc-857f429eebbd1344340230d452fedea3d3e97600
+    image: spmg7t6/is212_login:rc-latest
     networks:
       - kong-net
     ports:
