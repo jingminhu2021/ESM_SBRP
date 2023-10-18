@@ -36,12 +36,12 @@ else {
     const [skills, setSkills] = useState([])
 
     if(sessionStorage.getItem('status') == 'true'){
-        var staff_id = sessionStorage.getItem('staff_id')
-        var fname = sessionStorage.getItem('fname')
-        var lname = sessionStorage.getItem('lname')
-        var email = sessionStorage.getItem('email')
-        var phone = sessionStorage.getItem('phone')
-        var dept = sessionStorage.getItem('dept')
+        var staff_id = sessionStorage.getItem('staffID')
+        var fname = sessionStorage.getItem('s_fname')
+        var lname = sessionStorage.getItem('s_lname')
+        var email = sessionStorage.getItem('s_email')
+        var phone = sessionStorage.getItem('s_phone')
+        var dept = sessionStorage.getItem('s_dept')
     }else{
         const navigate = useNavigate();
         useEffect(() => {

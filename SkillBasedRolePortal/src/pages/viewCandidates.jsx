@@ -112,12 +112,12 @@ else {
 
     function viewStaff(staff) {
         return () => {
-            sessionStorage.setItem('staff_id', staff.staff_id);
-            sessionStorage.setItem('fname', staff.fname);
-            sessionStorage.setItem('lname', staff.lname);
-            sessionStorage.setItem('email', staff.email);
-            sessionStorage.setItem('dept', staff.dept);
-            sessionStorage.setItem('phone', staff.phone);
+            sessionStorage.setItem('staffID', staff.staff_id);
+            sessionStorage.setItem('s_fname', staff.fname);
+            sessionStorage.setItem('s_lname', staff.lname);
+            sessionStorage.setItem('s_email', staff.email);
+            sessionStorage.setItem('s_dept', staff.dept);
+            sessionStorage.setItem('s_phone', staff.phone);
         };
     }
 
