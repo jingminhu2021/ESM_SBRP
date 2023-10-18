@@ -35,7 +35,7 @@ function StaffSkillList() {
 
     useEffect(() => {
       // get staff with skills
-      axios.get('http://localhost:5002/get_staff_skill', {
+      axios.get('http://localhost:8000/api/profile/get_staff_skill', {
         headers: {
           'Content-Type': 'application/json',
         },

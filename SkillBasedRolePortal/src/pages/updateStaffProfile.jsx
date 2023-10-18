@@ -70,7 +70,7 @@ function UpdateStaffProfile() {
 
         useEffect(() => {
             // Get to obtain skill details
-            axios.get('http://localhost:5002/get_staff_profile/' + staff_id, {
+            axios.get('http://localhost:8000/api/profile/get_staff_profile/' + staff_id, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -94,7 +94,7 @@ function UpdateStaffProfile() {
                 });
 
             // Get all skills
-            axios.post('http://localhost:5002/get_all_skills')
+            axios.post('http://localhost:8000/api/profile/get_all_skills')
                 .then(function (response) {
                     for (let i = 0; i < response.data.data.length; i++) {
                         setAllSkill(allSkill => [...allSkill, { value: response.data.data[i].skill_name, label: response.data.data[i].skill_name }])
@@ -139,7 +139,7 @@ function UpdateStaffProfile() {
         const handleAddSkillSubmit = (e) => {
             //Add skill to database
             e.preventDefault();
-            let api_endpoint_url = 'http://localhost:5002/add_skills'
+            let api_endpoint_url = 'http://localhost:8000/api/profile/add_skills'
             var bodyFormData = new FormData();
             bodyFormData.append('skill_name', selectedskills.skill_name)
             bodyFormData.append('skill_status', mapStatus[selectedskills.skill_status])
@@ -160,7 +160,7 @@ function UpdateStaffProfile() {
         const handleUpdateSkillSubmit = (e) => {
             //Add skill to database
             e.preventDefault();
-            let api_endpoint_url = 'http://localhost:5002/update_skills'
+            let api_endpoint_url = 'http://localhost:8000/api/profile/update_skills'
             var bodyFormData = new FormData();
             bodyFormData.append('skill_name', selectedskills.skill_name)
             bodyFormData.append('skill_status', mapStatus[selectedskills.skill_status])
