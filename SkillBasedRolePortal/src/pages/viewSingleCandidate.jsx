@@ -59,7 +59,7 @@ else {
         try {
             var bodyFormData = new FormData();
             bodyFormData.append('staff_id', staffId);
-            const response = await axios.post('http://localhost:5002/get_skills', bodyFormData, {withCredentials: true});
+            const response = await axios.post('http://localhost:8000/api/profile/get_skills', bodyFormData, {withCredentials: true});
             return response.data.data;
         }
         catch (error) {
