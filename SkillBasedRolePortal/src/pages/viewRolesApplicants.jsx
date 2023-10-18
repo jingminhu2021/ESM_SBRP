@@ -13,7 +13,7 @@ function roleapplicants() {
 
     
     useEffect(() => {
-        axios.get('http://localhost:5003/view_role_applications', {
+        axios.get('http://localhost:8000/api/role/view_role_applications', {
        
     })
     .then(response => {
