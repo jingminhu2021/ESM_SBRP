@@ -44,6 +44,7 @@ function navbar(){
         return (
           <>
             <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
+            <Nav.Link href="/viewCandidates">Staffs</Nav.Link>
           </>
         );
       }

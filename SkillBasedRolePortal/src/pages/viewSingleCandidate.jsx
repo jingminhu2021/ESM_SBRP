@@ -5,8 +5,8 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function viewStaff(){
-    // Check if HR is logged in
-  if (sessionStorage.getItem('sys_role') != 'hr') {
+    // Check if HR , Manager is logged in
+  if (sessionStorage.getItem('sys_role') !== 'hr' && sessionStorage.getItem('sys_role') !== 'manager') {
     return (
         <div>
             {navbar()}
