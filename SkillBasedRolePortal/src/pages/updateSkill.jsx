@@ -47,7 +47,7 @@ function skill() {
 
     useEffect(() => {
       // Get to obtain skill details
-      axios.get('http://localhost:5001/view_skill/' + skillId, {
+      axios.get('http://localhost:8000/api/skill/view_skill/' + skillId, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -64,7 +64,7 @@ function skill() {
       // Get to check on duplicate skill name
       const getSkills = async () => {
         try {
-          const response = await axios.get("http://localhost:5001/view_skills");
+          const response = await axios.get("http://localhost:8000/api/skill/view_skills");
           if (response.status === 200) {
             setAllSkills(response.data.data);
           }
@@ -136,7 +136,7 @@ function skill() {
         skill_description: skillDescription,
       };
 
-      const response = await axios.put('http://localhost:5001/update_skill', skillData, {
+      const response = await axios.put('http://localhost:8000/api/skill/update_skill', skillData, {
         headers: {
           'Content-Type': 'application/json',
         },
