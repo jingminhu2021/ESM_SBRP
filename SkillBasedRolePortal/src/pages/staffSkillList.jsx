@@ -69,7 +69,7 @@ function StaffSkillList() {
           <div className="container">
             <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
               <p className="font-weight-bold">Staff List</p>
-              <table className="table table-striped table-bordered">
+              <table className="table table-striped table-bordered text-center">
                 <thead>
                   <tr>
                     <th>Staff ID</th>
@@ -86,7 +86,7 @@ function StaffSkillList() {
                       <td>{staff.staff_name}</td>
                       <td>{staff.dept}</td>
                       <td>{staff.sys_role}</td>
-                      <td><Link to={`/UpdateStaffSkills/${staff.staff_id}`} className="btn btn-info btn-md">Update Skills</Link></td>
+                      <td><Link to={`/UpdateStaffSkills/${staff.staff_id}`} className="btn btn-info">Update</Link></td>
                     </tr>
                   ))}
                 </tbody>
