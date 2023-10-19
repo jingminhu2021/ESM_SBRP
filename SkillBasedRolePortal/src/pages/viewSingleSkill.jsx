@@ -43,7 +43,7 @@ function skill() {
         const message = location.state?.message;
 
         useEffect(() => {
-            axios.get('http://localhost:5001/view_skill/' + skillId, {
+            axios.get('http://localhost:8000/api/skill/view_skill/' + skillId, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
