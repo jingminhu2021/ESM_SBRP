@@ -78,7 +78,7 @@ else {
                             <div className="custom-breadcrumbs">
                                 <a href="/">Home</a><span className="mx-2 slash">/</span>
                                 <a href="/ViewCandidates">Staffs</a><span className="mx-2 slash">/</span>
-                                <span className="text-white"><strong>{fname} {fname}</strong></span>
+                                <span className="text-white"><strong>{fname} {lname}</strong></span>
                             </div>                          
                         </div>
                     </div>
