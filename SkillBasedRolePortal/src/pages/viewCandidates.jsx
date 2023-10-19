@@ -41,7 +41,7 @@ else {
     useEffect(() => {
     const getActiveSkills = async () => {
         try {
-            const response = await axios.get("http://localhost:5001/get_skills_by_status/active");
+            const response = await axios.get("http://localhost:8000/api/skill/get_skills_by_status/active");
             if (response.status === 200) {
             setActiveSkills(response.data.data);
             }
@@ -56,7 +56,7 @@ else {
     useState(() => {
         const getAllStaffs = async () => {
             try {
-                const response = await axios.get("http://localhost:5001/get_all_staffs");
+                const response = await axios.get("http://localhost:8000/api/skill/get_all_staffs");
                 if (response.status === 200) {
                     setStaffList(response.data.data);
                     setAllStaffs(response.data.data);
@@ -97,7 +97,7 @@ else {
     const getStaffsBySkillsId = async (skillId) => {
         try {
             const response = await axios.post(
-                "http://localhost:5001/get_staffs_by_skill_id", 
+                "http://localhost:8000/api/skill/get_staffs_by_skill_id", 
                 { skill_id: skillId }, 
                 { withCredentials: true}
             );
