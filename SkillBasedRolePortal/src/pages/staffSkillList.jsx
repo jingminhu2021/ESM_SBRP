@@ -65,7 +65,7 @@ function StaffSkillList() {
           </div>
         </section>
 
-        <section className="site-section" id="next-section">
+        <section className="site-section p-sm-5" id="next-section">
           <div className="container">
             <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
               <p className="font-weight-bold">Staff List</p>
