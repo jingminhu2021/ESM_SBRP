@@ -86,7 +86,7 @@ function StaffSkillList() {
                       <td>{staff.staff_name}</td>
                       <td>{staff.dept}</td>
                       <td>{staff.sys_role}</td>
-                      <td><Link to={`/UpdateStaffProfile/${staff.staff_id}`} className="btn btn-info btn-md">Update Skills</Link></td>
+                      <td><Link to={`/UpdateStaffSkills/${staff.staff_id}`} className="btn btn-info btn-md">Update Skills</Link></td>
                     </tr>
                   ))}
                 </tbody>

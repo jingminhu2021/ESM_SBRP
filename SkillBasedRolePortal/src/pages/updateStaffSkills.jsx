@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import { Form, Button, Modal, Badge } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-function UpdateStaffProfile() {
+function UpdateStaffSkills() {
     // Check if HR is logged in
     if (sessionStorage.getItem('sys_role') != 'hr') {
         return (
@@ -308,4 +308,4 @@ function UpdateStaffProfile() {
         )
     }
 }
-export default UpdateStaffProfile
+export default UpdateStaffSkills
