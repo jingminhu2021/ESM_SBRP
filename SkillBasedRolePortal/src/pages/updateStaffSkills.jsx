@@ -68,6 +68,8 @@ function UpdateStaffSkills() {
             "Unverified": "unverified"
         };
 
+        const [msg, setMsg] = useState('');
+
         useEffect(() => {
             // Get to obtain skill details
             axios.get('http://localhost:8000/api/profile/get_staff_profile/' + staff_id, {
@@ -151,6 +153,7 @@ function UpdateStaffSkills() {
 
                         setSkill(skill => [...skill, { skill_status: response.data.data.ss_status, skill_name: response.data.data.skill_name }])
                         setSelectedSkills([])
+                        setMsg("Skill: " + selectedskills.skill_name + " has been added!");
                     }
                 })
             handleAddSkillClose()
@@ -178,6 +181,7 @@ function UpdateStaffSkills() {
                             }
                         }))
                         setSelectedSkills([])
+                        setMsg("Skill: " + selectedskills.skill_name + " has been updated!");
                     }
                 })
             handleUpdateskillClose()
@@ -202,6 +206,9 @@ function UpdateStaffSkills() {
                 </section>
                 <div className="container">
                     <div className="row mb-5 mt-5">
+                        {msg && (
+                            <div className="alert alert-success" role="alert">{msg}</div>
+                        )}
                         <div className="row mb-4">
                             <div className="col-sm-12 col-md-6 mb-4 col-lg-6">
                                 <strong className="d-block text-black">Name</strong>
@@ -220,7 +227,7 @@ function UpdateStaffSkills() {
                                 {phone}
                             </div>
                             <div className="col-sm-12 col-md-6 mb-4 col-lg-6">
-                                <strong className="d-block text-black mb-3">My Skills</strong>
+                                <strong className="d-block text-black mb-3">Skills</strong>
                                 <ul>
                                     {skill.map((s, index) => (
 
