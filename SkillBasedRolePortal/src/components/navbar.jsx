@@ -25,15 +25,37 @@ function navbar(){
         }
       }
 
+    // Display if Staff is logged in
+    function checkStaff() {
+      if (sessionStorage.getItem('sys_role') === 'staff') {
+        return (
+          <>
+            <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
+          </>
+        );
+      }
+    }
+
     // Display if HR is logged in
     function checkHr() {
       if (sessionStorage.getItem('sys_role') === 'hr') {
         return (
           <>
-            <Nav.Link href="/viewSkills">Skills</Nav.Link>
-            <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
-            <Nav.Link href="/viewCandidates">Staffs</Nav.Link>
-            <Nav.Link href="/staffSkillList">Update Staff Skills</Nav.Link>
+            <Nav>
+              <NavDropdown title="Role Management" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/viewRoles">View All Roles</NavDropdown.Item>
+                <NavDropdown.Item href="/createRoleListing">Create New Role</NavDropdown.Item>
+                <NavDropdown.Item href="/updateRoleListing">Update Existing Role</NavDropdown.Item>
+                <NavDropdown.Item href="/viewRolesApplicants">View Role Applicants</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <NavDropdown title="Staff Management" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/viewCandidates">Search for Candidates</NavDropdown.Item>
+                <NavDropdown.Item href="/staffSkillList">Update Staff Skills</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav.Link href="/viewSkills">Skills Directory</Nav.Link>
           </>
         );
       }
@@ -44,8 +66,11 @@ function navbar(){
       if (sessionStorage.getItem('sys_role') === 'manager') {
         return (
           <>
-            <Nav.Link href="/viewRolesApplicants">Role Applicants</Nav.Link>
-            <Nav.Link href="/viewCandidates">Staffs</Nav.Link>
+            <NavDropdown title="Role Management" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/viewRoles">View All Roles</NavDropdown.Item>
+              <NavDropdown.Item href="/viewRolesApplicants">View Role Applicants</NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="/viewCandidates">Search for Candidates</Nav.Link>
           </>
         );
       }
@@ -60,12 +85,7 @@ function navbar(){
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className='mr-auto'>
-                        <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
-                        <Nav.Link href="/createRoleListing">Create Role Listing</Nav.Link>,
-                        <Nav.Link href="/updateRoleListing">Update Role Listing</Nav.Link>
-                        <Nav.Link href="/about">About</Nav.Link>
-                        <Nav.Link href="/contact">Contact</Nav.Link>
-                        
+                        {checkStaff()}
                         {checkHr()}
                         {checkManager()}
                     </Nav>
