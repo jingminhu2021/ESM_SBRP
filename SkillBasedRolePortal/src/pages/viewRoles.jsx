@@ -11,7 +11,7 @@ function RoleListings() {
     const location = useLocation();
 
     useEffect(() => {
-        axios.get('http://localhost:5003/view_role_listings')
+        axios.get('http://localhost:8000/api/role/view_role_listings')
         .then(response => {
             setRoles(response.data.data);
             console.log(response.data.data);
@@ -75,12 +75,13 @@ function RoleListings() {
             <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{ padding: '0' }}>
                 <div className="container">
                     <div className="row">
+                        
                         {/* {activeRoleListings.length > 0 ? activeRoleListings.map(rolelisting => ( */}
                         {rolelistings ? rolelistings.map(rolelisting => (
                             <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={rolelisting.role_listing_id}>
                                 <Link to={`/ViewSingleRole/${rolelisting.role_listing_id}`} className="block__16443 text-center d-block font-weight-bold">
                                     <h3>{rolelisting.role_listing_id}</h3>
-                                    <h3>{rolelisting.role_name}</h3>
+                                    <h3>{rolelisting.role_name}</h3> 
                                     {rolelisting.role_listing_desc !== null ? (
                                         <p>
                                             <strong>Description:</strong> {rolelisting.role_listing_desc.length > 50

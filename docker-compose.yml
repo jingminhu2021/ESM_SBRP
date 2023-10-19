@@ -150,7 +150,7 @@ services:
   #######################################
 
   role:
-    image: spmg7t6/is212_role:2874fdfd5785a6c826b7fd4af1faf423124b60ef
+    image: spmg7t6/is212_role:rc-latest
     networks:
       - kong-net
     ports:

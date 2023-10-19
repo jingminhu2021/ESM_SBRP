@@ -10,18 +10,6 @@ function home(){
     const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
     const [skillList, setSkillList] = useState([])
 
-    const region = [
-        { value: '', label: 'Anywhere' },
-        { value: 'San Francisco', label: 'San Francisco' },
-        { value: 'Palo Alto', label: 'Palo Alto' },
-        { value: 'New York', label: 'New York' },
-        { value: 'Mahattan', label: 'Mahattan' },
-        { value: 'Ontario', label: 'Ontario' },
-        { value: 'Toronto', label: 'Toronto' },
-        { value: 'Kansas', label: 'Kansas' },
-        { value: 'Mountain View', label: 'Mountain View' }
-    ]
-
     const getAllSkills = () =>{
         let api_endpoint_url = "http://localhost:5003/view_skills"
 
@@ -52,7 +40,7 @@ function home(){
       event.preventDefault()
       navigate(
         "/searchRole",
-        {state: {data:{roleName: formData.jobTitle, skill: skillSelect}}}
+        {state: {data:{roleTitle: formData.jobTitle, skill: skillSelect}}}
       )
     }
 
@@ -73,13 +61,13 @@ function home(){
                 </div>
                 <form className="search-jobs-form" onSubmit={handleSubmit}>
                     <div className="row mb-5">
-                    <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                    <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
                         <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title..."></input>
                     </div>
-                    <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                    <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
                         <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
                     </div>
-                    <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                    <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
                         <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
                     </div>
                     </div>
