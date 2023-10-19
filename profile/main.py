@@ -51,6 +51,30 @@ class Skill_Details(db.Model):
         }
         return item
     
+class Staff_Details(db.Model):
+    __tablename__ = 'STAFF_DETAILS'
+    staff_id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(50), nullable=False)
+    lname = db.Column(db.String(50), nullable=False)
+    dept = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    biz_address = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    sys_role = db.Column(db.Enum("staff","hr","manager"), nullable=False)
+
+    def json(self):
+        item = {
+            'staff_id': self.staff_id,
+            'email': self.email,
+            'fname': self.fname,
+            'lname': self.lname,
+            'phone': self.phone,
+            'sys_role': self.sys_role,
+            'dept': self.dept,
+            'biz_address': self.biz_address,
+        }
+        return item
+    
 
 @app.route("/get_skills", methods=['POST'])
 def get_skills():
@@ -168,5 +192,88 @@ def update_skills():
     
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+# get list of staff with skills
+@app.route("/get_staff_skill", methods=['GET'])
+def get_staff_skill():
+    try:
+        # Get staff details of staff with skills
+        results = db.session.query(Staff_Skills, Staff_Details)\
+                            .join(Staff_Details, Staff_Skills.staff_id == Staff_Details.staff_id)\
+                            .all()
+
+        result_dict = {}
+
+        for staff_skills, staff_details in results:
+            staff_id = staff_skills.staff_id
+            # Only store 1 copy of the staff details
+            if staff_id not in result_dict:
+                result_dict[staff_id] = {
+                    'staff_id': staff_id,
+                    'staff_name': staff_details.fname + ", " + staff_details.lname,
+                    'dept': staff_details.dept,
+                    'sys_role': staff_details.sys_role,
+                }
+
+        return list(result_dict.values()), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+# get staff profile
+@app.route("/get_staff_profile/<int:staff_id>", methods=['GET'])
+def get_staff_profile(staff_id):
+    try:
+        staff_details = Staff_Details.query.filter_by(staff_id=staff_id).first()
+        if not staff_details:
+            return jsonify(
+                {
+                    'message': 'Staff details not found',
+                    'status': 'error', 
+                    'data': None
+                }
+            ), 404
+    
+        skills = Staff_Skills.query.filter_by(staff_id=staff_id).all()
+        if not skills:
+            return jsonify(
+                {
+                    'message': 'get_skills: No skills found',
+                    'status': 'success', 
+                    'data': None
+                }
+            )
+        
+        skills_list = []
+        
+        for skill in skills:
+            
+            skill_details = Skill_Details.query.filter_by(skill_id=skill.skill_id).first()
+            
+            full_skill = {}
+            full_skill= skill.json()
+            full_skill['skill_name']=skill_details.skill_name
+            
+            if skill_details.skill_status == 'active':
+                skills_list.append(full_skill)
+
+        return jsonify(
+            {
+                'message': 'Profile retrieved',
+                'status': 'success', 
+                'data': skills_list,
+                'staff_details': {
+                    'fname': staff_details.fname,
+                    'lname': staff_details.lname,
+                    'email': staff_details.email,
+                    'phone': staff_details.phone,
+                    'dept': staff_details.dept
+                }
+            }
+        ), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True) #testing purpose

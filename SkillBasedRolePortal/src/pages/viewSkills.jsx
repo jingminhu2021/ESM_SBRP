@@ -37,7 +37,7 @@ function skill() {
         const location = useLocation();
 
         useEffect(() => {
-            axios.get('http://localhost:5001/view_skills')
+            axios.get('http://localhost:8000/api/skill/view_skills')
                 .then(response => {
                     setSkills(response.data.data);
                 })
