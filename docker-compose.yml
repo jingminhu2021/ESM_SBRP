@@ -136,7 +136,7 @@ services:
   #######################################
 
   profile:
-    image: spmg7t6/is212_profile:latest
+    image: spmg7t6/is212_profile:rc-latest
     networks:
       - kong-net
     ports:
@@ -164,7 +164,7 @@ services:
   #######################################
 
   web:
-    image: spmg7t6/is212_web:latest
+    image: spmg7t6/is212_web:rc-latest
     networks:
       - kong-net
     ports:
