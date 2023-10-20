@@ -212,7 +212,7 @@ scheduler.add_job(
 )
     
 @app.route("/view_role_listings_hr", methods=['GET'])
-def view_role_listings():
+def view_role_listings_hr():
     try:
         # Query all role listings
         role_listings = RoleListing.query.all()
@@ -251,7 +251,7 @@ def view_role_listings():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/view_role_listings_manager/<manager_id>", methods=['GET'])
-def view_role_listings(manager_id):
+def view_role_listings_manager(manager_id):
     try:
         # Query all role listings
         role_listings = RoleListing.query.filter_by(role_listing_source=manager_id).all()
