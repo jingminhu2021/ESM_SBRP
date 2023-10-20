@@ -44,9 +44,9 @@ function navbar(){
             <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
             <Nav>
               <NavDropdown title="Role Management" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/viewRoles_management">View All Roles</NavDropdown.Item>
-                <NavDropdown.Item href="/createRoleListing">Create New Role</NavDropdown.Item>
-                <NavDropdown.Item href="/updateRoleListing">Update Existing Role</NavDropdown.Item>
+                <NavDropdown.Item href="/viewRoles_management">View All Roles Listings</NavDropdown.Item>
+                <NavDropdown.Item href="/createRoleListing">Create New Role Listing</NavDropdown.Item>
+                <NavDropdown.Item href="/updateRoleListing">Update Existing Role Listing</NavDropdown.Item>
                 <NavDropdown.Item href="/viewRolesApplicants">View Role Applicants</NavDropdown.Item>
               </NavDropdown>
             </Nav>
@@ -69,7 +69,7 @@ function navbar(){
           <>
             <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
             <NavDropdown title="Role Management" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/viewRoles_management">View All Roles</NavDropdown.Item>
+              <NavDropdown.Item href="/viewRoles_management">View My Roles Listings</NavDropdown.Item>
               <NavDropdown.Item href="/viewRolesApplicants">View Role Applicants</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="/viewCandidates">Search for Candidates</Nav.Link>
