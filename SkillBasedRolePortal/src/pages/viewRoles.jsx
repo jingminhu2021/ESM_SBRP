@@ -9,9 +9,12 @@ function RoleListings() {
     
     const [rolelistings, setRoles] = useState([]);
     const location = useLocation();
-
+    const api_link = 'http://localhost:8000/api/role/view_role_listings_hr'
+    if (sessionStorage.getItem('sys_role') === 'manager') {
+        api_link = 'http://localhost:8000/api/role/view_role_listings_manager/' + sessionStorage.getItem('staff_id')
+    }
     useEffect(() => {
-        axios.get('http://localhost:8000/api/role/view_role_listings')
+        axios.get(api_link)
         .then(response => {
             setRoles(response.data.data);
             console.log(response.data.data);
