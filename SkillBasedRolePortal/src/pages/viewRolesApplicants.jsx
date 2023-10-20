@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import navbar from '../components/navbar.jsx';
 import axios from 'axios';
@@ -180,7 +180,7 @@ return (
         </div>
         </section>
 
-        {/* Show Model */}
+        {/* Show Model for application listings*/}
         <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
             <Modal.Title>Skills Details</Modal.Title>
