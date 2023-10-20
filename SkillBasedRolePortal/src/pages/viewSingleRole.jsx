@@ -223,7 +223,7 @@ function RoleListings() {
                             break;
                         }
                         // Check if logged in user is the creator of listing
-                        if (application.manager_staff_id == staff_id) {
+                        if (application.manager_staff_id == staff_id && application.role_listing_id == role_listing_id) {
                             console.log(application.manager_staff_id);
                             setSourceApply(true);
                             break;
