@@ -41,9 +41,10 @@ function navbar(){
       if (sessionStorage.getItem('sys_role') === 'hr') {
         return (
           <>
+            <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
             <Nav>
               <NavDropdown title="Role Management" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/viewRoles">View All Roles</NavDropdown.Item>
+                <NavDropdown.Item href="/viewRoles_management">View All Roles</NavDropdown.Item>
                 <NavDropdown.Item href="/createRoleListing">Create New Role</NavDropdown.Item>
                 <NavDropdown.Item href="/updateRoleListing">Update Existing Role</NavDropdown.Item>
                 <NavDropdown.Item href="/viewRolesApplicants">View Role Applicants</NavDropdown.Item>
@@ -66,8 +67,9 @@ function navbar(){
       if (sessionStorage.getItem('sys_role') === 'manager') {
         return (
           <>
+            <Nav.Link href="/viewRoles">Role Listings</Nav.Link>
             <NavDropdown title="Role Management" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/viewRoles">View All Roles</NavDropdown.Item>
+              <NavDropdown.Item href="/viewRoles_management">View All Roles</NavDropdown.Item>
               <NavDropdown.Item href="/viewRolesApplicants">View Role Applicants</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="/viewCandidates">Search for Candidates</Nav.Link>
