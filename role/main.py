@@ -8,6 +8,9 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv
+
+load_dotenv('db.env')
 
 ENDPOINT = os.environ.get("DB_HOST")
 DB_USERNAME = os.environ.get("DB_USERNAME")
@@ -113,7 +116,7 @@ class RoleDetails(db.Model):
         self.role_status = role_status
     
     def json(self):
-        item = {
+        item = { 
             'role_id': self.role_id,
             'role_name': self.role_name,
             'role_description': self.role_description,

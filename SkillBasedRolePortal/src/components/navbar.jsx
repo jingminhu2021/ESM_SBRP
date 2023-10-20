@@ -89,7 +89,7 @@ function navbar(){
                         {checkHr()}
                         {checkManager()}
                     </Nav>
-                    <Nav className='m-auto'>
+                    <Nav>
                         {checkUser()}
                     </Nav>
                 </Navbar.Collapse>
