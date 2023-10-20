@@ -325,9 +325,9 @@ function RoleListings() {
 
         // Calculate the percentage of matched skills
         const totalSkills = skill_name.split(',').length; // Assuming skills are comma-separated
-        const matchedSkills = matchingSkillsString.split(',').length;
+        const matchedSkills = matchingSkillsString.trim() === '' ? 0 : matchingSkillsString.split(',').length;
         const percentage = (matchedSkills / totalSkills) * 100;
-
+        console.log(totalSkills, matchedSkills, percentage)
         return (
             <div>
                 {navbar()}
@@ -370,7 +370,7 @@ function RoleListings() {
                                 {sessionStorage.getItem('sys_role') === 'staff' && (
                                     <div className="col-lg-8" style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
                                         <p><strong>Your Role-Skill Match</strong></p>
-                                        <div className="progress">
+                                        <div className="progress" style={{position: 'relative'}}>
                                             <div
                                                 className="progress-bar bg-success"
                                                 role="progressbar"
@@ -379,7 +379,7 @@ function RoleListings() {
                                                 aria-valuemin="0"
                                                 aria-valuemax="100"
                                             >
-                                                {percentage}% Match
+                                                <span style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', color: 'black'}}>{percentage}% Match</span>
                                             </div>
                                         </div>
 

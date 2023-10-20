@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 var staff_id = sessionStorage.getItem('staff_id')
 console.log("staff_id: " + staff_id)
 
+const queryParameters = new URLSearchParams(window.location.search)
+const param_role_listing_id = {value: queryParameters.get("role_listing_id"), label: queryParameters.get("role_listing_id")}
+
+
 function updateRoleListing() {
   // Check if HR is logged in
   if (sessionStorage.getItem('sys_role') !== 'hr') {
@@ -34,7 +38,6 @@ function updateRoleListing() {
       </div>
     )
   } else {
-    
     const [formData, setFormData] = useState({
       role_listing_id: '',
       role_listing_open: '',
@@ -59,6 +62,9 @@ function updateRoleListing() {
             }));
             console.log('Role Listing Options:', options); // Add this line
             setRoleListingOptions(options);
+            if (param_role_listing_id.value != null) {
+              handleRoleListingSelect(param_role_listing_id)
+            }
           } else {
             console.error('Error fetching Role Listing IDs:', response.data);
           }
@@ -70,7 +76,7 @@ function updateRoleListing() {
 
     const handleRoleListingSelect = (selectedOption) => {
       setSelectedRoleListing(selectedOption);
-    
+      
       if (selectedOption) {
         // Fetch corresponding role listing details here
         axios.get(`http://localhost:8000/api/role/role_listing_details/${selectedOption.value}`)
@@ -149,6 +155,7 @@ function updateRoleListing() {
           });
       }
     };    
+
 
     const [managerOptions, setManagerOptions] = useState([]);
     const [selectedManager, setSelectedManager] = useState(null);
@@ -458,8 +465,8 @@ function updateRoleListing() {
               <div className="col-md-7">
                 <h1 className="text-white font-weight-bold">Edit Role</h1>
                 <div className="custom-breadcrumbs">
-                  <a href="#">Role Listings</a> <span className="mx-2 slash">/</span>
-                  <a href="#">Role</a> <span className="mx-2 slash">/</span>
+                  <a href="/">Home</a><span className="mx-2 slash">/</span>
+                  <a href="/viewRoles">Role Listings</a> <span className="mx-2 slash">/</span>
                   <span className="text-white"><strong>Edit Role</strong></span>
                 </div>
               </div>
