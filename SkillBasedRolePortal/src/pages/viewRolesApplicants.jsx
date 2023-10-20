@@ -24,18 +24,49 @@ function roleapplicants() {
     }
     
     useEffect(() => {
-        axios.get('http://localhost:8000/api/role/view_role_applications', {
-       
-    })
-    .then(response => {
-        setRolesApplicants(response.data.data);
-        console.log(response.data.data);
-    })
-    .catch(error => {
-        console.error('Error fetching Role Listings:', error);
-    });
-   
-}, []);
+        const fetchRoleApplicants = async () => {
+            try {
+              const response = await axios.get('http://localhost:8000/api/role/view_role_applications');
+              const applicantsWithSkills = await Promise.all(response.data.data.map(async applicant => {
+                  const staffId = applicant.staff_id;
+                  const roleListingId = applicant.role_listing_id;
+                  const applicantSkills = await fetchApplicantSkills(staffId);
+                  const roleSkills = await fetchRoleSkills(roleListingId);
+                  let percentageMatch = 0;
+                  if (applicantSkills !== null){
+                      percentageMatch = applicantSkills.filter(skill => roleSkills.includes(skill.skill_name)).length / roleSkills.length * 100;
+                  }
+                  return { ...applicant, applicantSkills, percentageMatch, roleSkills};
+              }));
+              setRolesApplicants(applicantsWithSkills);
+            } catch (error) {
+              console.error('Error fetching Role Listings:', error);
+            }
+          };
+          fetchRoleApplicants();
+        }, []);
+  
+      const fetchApplicantSkills = async (staffId) => {
+          try {
+              var bodyFormData = new FormData();
+              bodyFormData.append('staff_id', staffId);
+              const response = await axios.post('http://localhost:8000/api/profile/get_skills', bodyFormData, {withCredentials: true});
+              return response.data.data;
+          }
+          catch (error) {
+              console.error('Error fetching Skills:', error);
+          }
+      };
+  
+      const fetchRoleSkills = async (role_listing_id) => {
+          try {
+              const response = await axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`);
+              return response.data.data.skills_list;
+          }
+          catch (error) {
+              console.error('Error fetching Skills:', error);
+          }
+      };
 
 // Check if the 'created=true' parameter is present in the URL
 useEffect(() => {
