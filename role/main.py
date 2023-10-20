@@ -18,7 +18,7 @@ scheduler = BackgroundScheduler(daemon=True)
 scheduler.start()
 
 # Set up CORS
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:80"}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -336,32 +336,6 @@ def matching_and_missing_skills(role_id, staff_id):
 
     except Exception as e:
         return jsonify({'error': 'An error occurred: ' + str(e)})
-
-@app.route("/view_skills", methods=['GET'])
-def view_skills():
-    try:
-        # Get all skills in descending order (Latest created skill first)
-        skills = SKILL_DETAILS.query.order_by(SKILL_DETAILS.skill_id.desc()).all()
-        
-        # If no skill
-        if len(skills) == 0:
-            return jsonify(
-                {
-                    "code": 404,
-                    "message": "No skills found!"
-                }
-            ), 404
-        
-        # Return success response
-        return jsonify(
-            {
-                "code": 200,
-                "data": [skill.json() for skill in skills]
-            }
-        ), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
     
 # Display all active role listing IDs
 @app.route("/role_listing_id_option", methods=["GET"])

@@ -25,7 +25,7 @@ function searchRole(){
 
     // Get all roles from database
     const getAllRoles = () =>{
-        let api_endpoint_url = "http://localhost:5003/view_role_listings"
+        let api_endpoint_url = "http://localhost:8000/api/role/view_role_listings"
 
         axios.get(api_endpoint_url)
         .then(function (response) {
