@@ -58,8 +58,11 @@ else {
             try {
                 const response = await axios.get("http://localhost:8000/api/skill/get_all_staffs");
                 if (response.status === 200) {
-                    setStaffList(response.data.data);
-                    setAllStaffs(response.data.data);
+                    // Filter out user's staff id from the list of all staffs
+                    
+                    const filteredStaffs = response.data.data.filter(staff => staff.staff_id != sessionStorage.getItem('staff_id'));
+                    setStaffList(filteredStaffs);
+                    setAllStaffs(filteredStaffs);
                 }
             }
             catch (error) {
