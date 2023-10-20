@@ -82,7 +82,7 @@ function RoleListings() {
                         {/* {activeRoleListings.length > 0 ? activeRoleListings.map(rolelisting => ( */}
                         {rolelistings ? rolelistings.map(rolelisting => (
                             <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={rolelisting.role_listing_id}>
-                                <Link to={`/ViewSingleRole/${rolelisting.role_listing_id}`} className="block__16443 text-center d-block font-weight-bold">
+                                <Link to={`/ViewSingleRole/${rolelisting.role_listing_id}`} className="block__16443 text-center d-block font-weight-bold" style={{transition: 'none', position: 'static', height: '100%'}}>
                                     <h3>{rolelisting.role_listing_id}</h3>
                                     <h3>{rolelisting.role_name}</h3> 
                                     {rolelisting.role_listing_desc !== null ? (

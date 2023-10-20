@@ -83,7 +83,7 @@ function skill() {
                         <div className="row">
                             {skills ? skills.map(skill => (
                                 <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={skill.skill_id}>
-                                    <Link to={`/ViewSkill/${skill.skill_id}`} className="block__16443 text-center d-block">
+                                    <Link to={`/ViewSkill/${skill.skill_id}`} className="block__16443 text-center d-block" style={{transition: 'none', position: 'static', height: '100%'}}>
                                         <h3>{skill.skill_name}</h3>
                                         {skill.skill_description !== null ? (
                                             <p>
