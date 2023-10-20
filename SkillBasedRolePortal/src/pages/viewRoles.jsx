@@ -68,15 +68,16 @@ function RoleListings() {
                 </div>
             </section>
 
-            <div className="text-right mb-5 mt-3" style={{ padding: '0' }}>
-                <span className="mr-3">
-                    {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/createRoleListing'}>Create Role Listing</button>}
-                </span>
-                {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-danger btn-lg" type="button" onClick={() => window.location.href = '/updateRoleListing'}>Edit Role Listings</button>}
-            </div>
+            
 
             <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{ padding: '0' }}>
                 <div className="container">
+                    <div className="text-right mb-5 mt-3" style={{ padding: '0' }}>
+                        <span className="mr-3">
+                            {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-outline-primary btn-lg" type="button" onClick={() => window.location.href = '/createRoleListing'}>Create Role Listing</button>}
+                        </span>
+                        {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-outline-danger btn-lg" type="button" onClick={() => window.location.href = '/updateRoleListing'}>Edit Role Listings</button>}
+                    </div>
                     <div className="row">
                         
                         {/* {activeRoleListings.length > 0 ? activeRoleListings.map(rolelisting => ( */}

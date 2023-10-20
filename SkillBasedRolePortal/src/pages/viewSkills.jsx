@@ -76,9 +76,9 @@ function skill() {
                     <div className="container">
                         <div className="text-right mb-5 mt-3" style={{padding:'0'}}>
                             <span className="mr-3">
-                                <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/createSkill'}>+ Create</button>
+                                <button className="btn btn-outline-primary btn-lg" type="button" onClick={() => window.location.href = '/createSkill'}>+ Create</button>
                             </span>
-                            <button className="btn btn-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteSkills'}>- Delete</button>
+                            <button className="btn btn-outline-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteSkills'}>- Delete</button>
                         </div>
                         <div className="row">
                             {skills ? skills.map(skill => (
