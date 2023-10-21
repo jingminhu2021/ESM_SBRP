@@ -401,6 +401,7 @@ function updateRoleListing() {
         .then((response) => {
           if (response.status === 200) {
             console.log('Role Listing updated successfully:', response.data);
+            alert('Role listing updated successfully!');
             // You can handle success actions here, such as showing a success message
 
             // Reload the page after a successful update
@@ -436,6 +437,7 @@ function updateRoleListing() {
           .then((response) => {
             if (response.status === 200) {
               console.log('Role Listing deleted successfully:', response.data);
+              alert('Role listing deleted successfully!');
               // Handle success actions, e.g., show a success message and navigate to another page
               // You can use the navigate function from react-router-dom for navigation
 
