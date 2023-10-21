@@ -113,6 +113,9 @@ else {
                                     {skills.map((skill) => (
                                     <li key={skill.skill_id}>
                                         <a href={`/viewSkill/${skill.skill_id}`}>{skill.skill_name}</a>
+                                        <span>
+                                            <strong> <Badge text="light" bg={skill.ss_status === 'unverified' ? 'secondary' : skill.ss_status === 'in-progress' ? 'info' : 'primary'}>{skill.ss_status}</Badge></strong>
+                                        </span>
                                     </li>
                                     ))}
                                 </ul>
