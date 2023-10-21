@@ -61,8 +61,8 @@ function createRoleListing(){
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((role) => ({
-              value: role,
-              label: role,
+              value: role.role_id,
+              label: `${role.role_id} - ${role.role_name}`,
             }));
             setRoleIDOptions(options);
           } else {
@@ -71,6 +71,23 @@ function createRoleListing(){
         })
         .catch((error) => {
           console.error('Error fetching Role IDs:', error);
+        });
+    }, []);
+
+    useEffect(() => {
+      // Fetch the manager options from your Flask API endpoint
+      fetch('http://localhost:8000/api/role/manager_options')
+        .then((response) => response.json())
+        .then((data) => {
+          // Convert the data to the format expected by react-select
+          const options = data.map((manager) => ({
+            value: manager.staff_id, // Set the staff_id as the value
+            label: `${manager.fname} ${manager.lname}`, // Display the full name as the label
+          }));
+          setManagerOptions(options);
+        })
+        .catch((error) => {
+          console.error('Error fetching manager options:', error);
         });
     }, []);
 
@@ -279,7 +296,7 @@ function createRoleListing(){
                         <h3 className="text-black mb-5 border-bottom pb-2">Role Details</h3>
                         
                         <div className="form-group">
-                          <label htmlFor="job-id">Role ID</label>
+                          <label htmlFor="job-id">Role</label>
                           <Select
                             options={roleIDOptions}
                             value={selectedRole}
@@ -287,7 +304,7 @@ function createRoleListing(){
                           />
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                           <label htmlFor="job-title">Role Name</label>
                           <input
                             type="text"
@@ -298,7 +315,7 @@ function createRoleListing(){
                             value={formData.role_name}
                             onChange={handleChange}
                           />
-                        </div>
+                        </div> */}
 
                         <div className="form-group">
                           <label htmlFor="role_listing_open">Role Application Start Date</label>

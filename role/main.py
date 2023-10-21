@@ -21,7 +21,7 @@ scheduler = BackgroundScheduler(daemon=True)
 scheduler.start()
 
 # Set up CORS
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:80"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:81"}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -288,6 +288,45 @@ def view_role_listings_manager(manager_id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/view_role_listings", methods=['GET'])
+def view_role_listings():
+    try:
+        # Query all role listings
+        role_listings = RoleListing.query.all()
+
+        # Create a list to store the response data
+        response_data = []
+
+        for role_listing in role_listings:
+            # Get the associated role details
+            role_detail = RoleDetails.query.filter_by(role_id=role_listing.role_id).first()
+
+            if role_detail:
+                # Get the skills associated with the role listing
+                skills = db.session.query(SKILL_DETAILS.skill_name)\
+                                   .join(ROLE_SKILLS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id)\
+                                   .filter(ROLE_SKILLS.role_id == role_detail.role_id).all()
+
+                # Format the data
+                formatted_data = {
+                    "role_name": role_detail.role_name,
+                    "role_id": role_detail.role_id,
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_listing_desc": role_listing.role_listing_desc,
+                    "role_listing_status": role_listing.role_listing_status,
+                    "role_listing_open": role_listing.role_listing_open.strftime('%d/%m/%Y'),
+                    "role_listing_close": role_listing.role_listing_close.strftime('%d/%m/%Y'),
+                    "skills_list": [skill[0] for skill in skills]
+                }
+
+                response_data.append(formatted_data)
+
+        # Return the response
+        return jsonify({"code": 200, "data": response_data}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 #View a single role listing
 @app.route("/view_role_single_listings/<role_listing_id>", methods=['GET'])
@@ -389,6 +428,28 @@ def get_all_role_listings():
         return jsonify(active_role_listing_ids), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/role_listings", methods=["GET"])
+def get_all_role_listings_with_details():
+    try:
+        # Fetch all active role listings along with their details
+        role_listings = RoleListing.query.filter_by(role_listing_status='active').all()
+        role_listing_data = []
+
+        for role in role_listings:
+            role_data = {
+                "role_listing_id": role.role_listing_id,
+                "role_id": role.role_id,
+                "role_listing_desc": role.role_listing_desc,
+                "role_listing_source": role.role_listing_source,
+                "role_listing_open": role.role_listing_open,
+                "role_listing_close": role.role_listing_close
+            }
+            role_listing_data.append(role_data)
+
+        return jsonify(role_listing_data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     
 # Display information for a specific role listing ID
@@ -418,14 +479,23 @@ def get_role_listing_details(role_listing_id):
         return jsonify({"error": str(e)}), 500
 
     
-# Display all available role IDs   
+# Display all available role IDs with Role Name
 @app.route("/role_id_options", methods=["GET"])
 def get_role_id_options():
     try:
-        # Fetch all role_id values from the RoleDetails table
-        role_ids = [str(role.role_id) for role in RoleDetails.query.all()]
-        
-        return jsonify(role_ids), 200
+        # Fetch all role details from the RoleDetails table
+        roles = RoleDetails.query.all()
+
+        # Create a list of dictionaries with both ID and Name
+        role_options = [
+            {
+                "role_id": role.role_id,
+                "role_name": role.role_name
+            }
+            for role in roles
+        ]
+
+        return jsonify(role_options), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
