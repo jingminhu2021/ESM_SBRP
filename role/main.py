@@ -8,9 +8,9 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from apscheduler.schedulers.background import BackgroundScheduler
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv('db.env')
+load_dotenv('db.env')
 
 ENDPOINT = os.environ.get("DB_HOST")
 DB_USERNAME = os.environ.get("DB_USERNAME")
