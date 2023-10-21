@@ -279,7 +279,7 @@ function createRoleListing(){
                         <h3 className="text-black mb-5 border-bottom pb-2">Role Details</h3>
                         
                         <div className="form-group">
-                          <label htmlFor="job-id">Role ID</label>
+                          <label htmlFor="job-id">Role</label>
                           <Select
                             options={roleIDOptions}
                             value={selectedRole}
@@ -287,7 +287,7 @@ function createRoleListing(){
                           />
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                           <label htmlFor="job-title">Role Name</label>
                           <input
                             type="text"
@@ -298,7 +298,7 @@ function createRoleListing(){
                             value={formData.role_name}
                             onChange={handleChange}
                           />
-                        </div>
+                        </div> */}
 
                         <div className="form-group">
                           <label htmlFor="role_listing_open">Role Application Start Date</label>
