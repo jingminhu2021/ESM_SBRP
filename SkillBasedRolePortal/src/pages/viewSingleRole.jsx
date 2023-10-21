@@ -69,7 +69,7 @@ function RoleListings() {
         }
 
         useEffect(() => {
-            axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`, {
+            axios.get(`http://localhost:5003/view_role_single_listings/${role_listing_id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -101,7 +101,7 @@ function RoleListings() {
             // Check if role_id is available before making the request
             if (role_id) {
                 // Fetch matching and missing skills data from Flask API
-                axios.get(`http://localhost:8000/api/role/matching_and_missing_skills/${role_id}/${staff_id}`)
+                axios.get(`http://localhost:5003/matching_and_missing_skills/${role_id}/${staff_id}`)
                     .then(response => {
                         // Extract data from the response
                         const { matching_skills, missing_skills } = response.data;
@@ -126,13 +126,16 @@ function RoleListings() {
                 // Check if role_listing_source is available
                 if (role_listing_source) {
                     try {
-                        const response = await axios.get(`http://localhost:8000/api/role/view_role_applications_by_rls/${role_listing_source}/${role_listing_id}`);
+                        const response = await axios.get(`http://localhost:5003/view_role_applications_by_rls/${role_listing_source}/${role_listing_id}`);
                         const applicantsWithSkills = await Promise.all(response.data.data.map(async applicant => {
                             const staffId = applicant.staff_id;
                             const roleListingId = applicant.role_listing_id;
                             const applicantSkills = await fetchApplicantSkills(staffId);
                             const roleSkills = await fetchRoleSkills(roleListingId);
                             let percentageMatch = 0;
+                            console.log('applicantSkills:', applicantSkills);
+                            console.log('roleSkills:', roleSkills);
+                            console.log(applicantSkills !==null);
                             if (applicantSkills !== null) {
                                 percentageMatch = applicantSkills.filter(skill => roleSkills.includes(skill.skill_name)).length / roleSkills.length * 100;
                             }
@@ -148,12 +151,11 @@ function RoleListings() {
             fetchData();
         }, [role_listing_source]);
 
-
           const fetchApplicantSkills = async (staffId) => {
               try {
                   var bodyFormData = new FormData();
                   bodyFormData.append('staff_id', staffId);
-                  const response = await axios.post('http://localhost:8000/api/profile/get_skills', bodyFormData, {withCredentials: true});
+                  const response = await axios.post('http://localhost:5002/get_skills', bodyFormData, {withCredentials: true});
                   return response.data.data;
               }
               catch (error) {
@@ -163,7 +165,7 @@ function RoleListings() {
       
           const fetchRoleSkills = async (role_listing_id) => {
               try {
-                  const response = await axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`);
+                  const response = await axios.get(`http://localhost:5003/view_role_single_listings/${role_listing_id}`);
                   return response.data.data.skills_list;
               }
               catch (error) {
@@ -207,7 +209,7 @@ function RoleListings() {
 
         useEffect(() => {
             // See if user has applied for the role already
-            axios.get('http://localhost:8000/api/role/view_role_applications', {
+            axios.get('http://localhost:5003/view_role_applications', {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -287,7 +289,7 @@ function RoleListings() {
                 reason: reason,
             };
             console.log("app data", applicationData)
-            const response = await axios.post('http://localhost:8000/api/role/apply_role', applicationData, {
+            const response = await axios.post('http://localhost:5003/apply_role', applicationData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -313,7 +315,7 @@ function RoleListings() {
                 staff_id: staff_id,
             };
 
-            const response = await axios.put('http://localhost:8000/api/role/withdraw_role', withdrawData, {
+            const response = await axios.put('http://localhost:5003/withdraw_role', withdrawData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
