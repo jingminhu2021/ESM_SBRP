@@ -402,10 +402,9 @@ function updateRoleListing() {
           if (response.status === 200) {
             console.log('Role Listing updated successfully:', response.data);
             alert('Role listing updated successfully!');
-            // You can handle success actions here, such as showing a success message
 
             // Reload the page after a successful update
-            window.location.reload();
+            // window.location.reload();
           } else if (response.status === 404) {
             console.error('Role Listing not found:', response.data);
             // Handle the case where the specified role listing was not found
