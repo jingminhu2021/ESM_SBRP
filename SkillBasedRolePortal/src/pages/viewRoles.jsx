@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from '../components/navbar.jsx';
+import Select from 'react-select'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +14,46 @@ function RoleListings() {
     // if (sessionStorage.getItem('sys_role') === 'manager') {
     //     api_link = 'http://localhost:8000/api/role/view_role_listings_manager/' + sessionStorage.getItem('staff_id')
     // }
+
+    const navigate = useNavigate();
+    const [selectedOption, setSelectedOption, selectedRegion, selectedType] = useState(null)
+    const [skillList, setSkillList] = useState([])
+
+    const getAllSkills = () =>{
+        let api_endpoint_url = "http://localhost:8000/api/skill/view_skills"
+
+        axios.get(api_endpoint_url)
+        .then(function (response) {
+            if (response.data.data != null){
+                for (let i = 0; i < response.data.data.length; i++){
+                  if (response.data.data[i].skill_status == "active"){
+                    setSkillList(skillList => [...skillList, {label: response.data.data[i].skill_name, value: response.data.data[i].skill_name}])
+                  }
+                }
+            }
+        })
+    }
+
+    const [formData, setFormData] = useState({jobTitle: "",jobRegion: "",jobType: []});
+    const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    };
+
+    const skillSelect = []
+    const handleDropdownChange = (event, selected) => {
+      skillSelect.push({skillName: selected.option.value})
+    };
+
+    const handleSubmit = (event) => {
+      event.preventDefault()
+      navigate(
+        "/searchRole",
+        {state: {data:{roleTitle: formData.jobTitle, skill: skillSelect}}}
+      )
+    }
+
+
     useEffect(() => {
         axios.get(api_link)
         .then(response => {
@@ -51,6 +92,12 @@ function RoleListings() {
         
     // });
 
+
+
+    useEffect(() => {
+      getAllSkills()
+  }, [])
+
     return (
         <div>
             <Navbar />
@@ -66,9 +113,29 @@ function RoleListings() {
                         </div>
                     </div>
                 </div>
+                <div className="container">
+                    <div className="row align-items-center justify-content-center">
+                        <div className="col-md-12">
+                        <div className="mb-5 text-center">
+                            <h1 className="text-white font-weight-bold">The Easiest Way To Get Your Dream Role</h1>
+                        </div>
+                        <form className="search-jobs-form" onSubmit={handleSubmit}>
+                            <div className="row mb-5">
+                            <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                                <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title..."></input>
+                            </div>
+                            <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                                <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
+                            </div>
+                            <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                                <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
+                            </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
             </section>
-
-            
 
             <section className="site-section services-section bg-light block__62849 pt-4" id="next-section" style={{ padding: '0' }}>
                 <div className="container">
