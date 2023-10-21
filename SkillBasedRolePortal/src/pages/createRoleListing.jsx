@@ -247,7 +247,8 @@ function createRoleListing(){
         .post('http://localhost:8000/api/role/create_rolelisting', formData) // Replace with your Flask API endpoint
         .then((response) => {
           if (response.status === 200) {
-            console.log('Role created successfully:', response.data);
+            console.log('Role Listing created successfully:', response.data);
+            alert('Role listing created successfully!');
             // navigate('/viewRoles?created=true');
           } else {
             console.error('Error creating role:', response.data);
