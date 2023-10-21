@@ -208,13 +208,9 @@ function createRoleListing(){
       if (formData.role_id === '') {
         errors.role_id = 'Role ID is required';
       }
-      if (formData.role_name === '') {
-        errors.role_name = 'Role Name is required';
-      }
       if (formData.role_listing_open === '') {
         errors.role_listing_open = 'Role Application Start Date is required';
       }
-
       if (formData.role_listing_source === '') {
         errors.role_listing_source = 'Role Manager is required';
       }
