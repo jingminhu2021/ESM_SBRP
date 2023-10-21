@@ -281,7 +281,7 @@ def get_staffs_by_skill_id():
 def get_all_staffs():
     try:
         # Query all staffs from the STAFF_DETAILS table
-        staffs = STAFF_DETAILS.query.all()
+        staffs = STAFF_DETAILS.query.filter(STAFF_DETAILS.sys_role != "inactive").all()
         # If no staffs exist
         if not staffs:
             return jsonify(
