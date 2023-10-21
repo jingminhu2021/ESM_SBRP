@@ -780,8 +780,8 @@ def view_role_applications_by_rls(role_listing_source, role_lisitng_id):
                     "role_app_status": role_applications.role_app_status,
                     "app_reason": role_applications.app_reason,
                     "staff_name": staff_details.fname + " " + staff_details.lname,
-                    "manager_staff_id": role_listing.role_listing_source
-                   
+                    "manager_staff_id": role_listing.role_listing_source,
+                    "role_listing_source": role_listing.role_listing_source
                 }
         # Convert the role dictionary into the desired output format
         combined_data = list(role_app_data.values())
