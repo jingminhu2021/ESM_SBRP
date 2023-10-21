@@ -11,7 +11,7 @@ function home(){
     const [skillList, setSkillList] = useState([])
 
     const getAllSkills = () =>{
-        let api_endpoint_url = "http://localhost:5003/view_skills"
+        let api_endpoint_url = "http://localhost:8000/api/skill/view_skills"
 
         axios.get(api_endpoint_url)
         .then(function (response) {

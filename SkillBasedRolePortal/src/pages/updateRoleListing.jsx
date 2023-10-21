@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 var staff_id = sessionStorage.getItem('staff_id')
 console.log("staff_id: " + staff_id)
 
+const queryParameters = new URLSearchParams(window.location.search)
+const param_role_listing_id = {value: queryParameters.get("role_listing_id"), label: queryParameters.get("role_listing_id")}
+
+
 function updateRoleListing() {
   // Check if HR is logged in
   if (sessionStorage.getItem('sys_role') !== 'hr') {
@@ -34,7 +38,6 @@ function updateRoleListing() {
       </div>
     )
   } else {
-    
     const [formData, setFormData] = useState({
       role_listing_id: '',
       role_listing_open: '',
@@ -50,7 +53,7 @@ function updateRoleListing() {
 
     useEffect(() => {
       // Fetch all role listing IDs from your database
-      axios.get('http://localhost:5003/role_listing_id_option')
+      axios.get('http://localhost:8000/api/role/role_listing_id_option')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((roleListing) => ({
@@ -59,6 +62,9 @@ function updateRoleListing() {
             }));
             console.log('Role Listing Options:', options); // Add this line
             setRoleListingOptions(options);
+            if (param_role_listing_id.value != null) {
+              handleRoleListingSelect(param_role_listing_id)
+            }
           } else {
             console.error('Error fetching Role Listing IDs:', response.data);
           }
@@ -70,10 +76,10 @@ function updateRoleListing() {
 
     const handleRoleListingSelect = (selectedOption) => {
       setSelectedRoleListing(selectedOption);
-    
+      
       if (selectedOption) {
         // Fetch corresponding role listing details here
-        axios.get(`http://localhost:5003/role_listing_details/${selectedOption.value}`)
+        axios.get(`http://localhost:8000/api/role/role_listing_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const roleListingData = response.data;
@@ -104,7 +110,7 @@ function updateRoleListing() {
               });
 
               // Now, fetch the manager details from the manager_options table
-              axios.get(`http://localhost:5003/manager_details/${role_listing_source}`)
+              axios.get(`http://localhost:8000/api/role/manager_details/${role_listing_source}`)
               .then((managerResponse) => {
                 if (managerResponse.status === 200) {
                   const managerData = managerResponse.data;
@@ -123,7 +129,7 @@ function updateRoleListing() {
               });
     
               // Now, fetch the role name from the role_details table
-              axios.get(`http://localhost:5003/role_details/${role_id}`)
+              axios.get(`http://localhost:8000/api/role/role_details/${role_id}`)
                 .then((roleResponse) => {
                   if (roleResponse.status === 200) {
                     const roleData = roleResponse.data;
@@ -150,12 +156,13 @@ function updateRoleListing() {
       }
     };    
 
+
     const [managerOptions, setManagerOptions] = useState([]);
     const [selectedManager, setSelectedManager] = useState(null);
 
     useEffect(() => {
       // Fetch manager options from your Flask API
-      axios.get('http://localhost:5003/manager_options')
+      axios.get('http://localhost:8000/api/role/manager_options')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((manager) => ({
@@ -178,7 +185,7 @@ function updateRoleListing() {
     
       if (selectedOption) {
         // Fetch corresponding manager details here
-        axios.get(`http://localhost:5003/manager_details/${selectedOption.value}`)
+        axios.get(`http://localhost:8000/api/role/manager_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const managerData = response.data;
@@ -390,7 +397,7 @@ function updateRoleListing() {
       // Make the PUT request to update the role listing
       // Send the updated data to the server
       axios
-        .put('http://localhost:5003/update_rolelisting', updatedData) // Adjust the API endpoint
+        .put('http://localhost:8000/api/role/update_rolelisting', updatedData) // Adjust the API endpoint
         .then((response) => {
           if (response.status === 200) {
             console.log('Role Listing updated successfully:', response.data);
@@ -425,7 +432,7 @@ function updateRoleListing() {
       if (confirmDeletion) {
         // Send a DELETE request to delete the selected role listing
         axios
-          .delete(`http://localhost:5003/delete_rolelisting/${selectedRoleListing.value}`)
+          .delete(`http://localhost:8000/api/role/delete_rolelisting/${selectedRoleListing.value}`)
           .then((response) => {
             if (response.status === 200) {
               console.log('Role Listing deleted successfully:', response.data);
@@ -458,8 +465,8 @@ function updateRoleListing() {
               <div className="col-md-7">
                 <h1 className="text-white font-weight-bold">Edit Role</h1>
                 <div className="custom-breadcrumbs">
-                  <a href="#">Role Listings</a> <span className="mx-2 slash">/</span>
-                  <a href="#">Role</a> <span className="mx-2 slash">/</span>
+                  <a href="/">Home</a><span className="mx-2 slash">/</span>
+                  <a href="/viewRoles">Role Listings</a> <span className="mx-2 slash">/</span>
                   <span className="text-white"><strong>Edit Role</strong></span>
                 </div>
               </div>

@@ -8,6 +8,9 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from apscheduler.schedulers.background import BackgroundScheduler
+# from dotenv import load_dotenv
+
+# load_dotenv('db.env')
 
 ENDPOINT = os.environ.get("DB_HOST")
 DB_USERNAME = os.environ.get("DB_USERNAME")
@@ -18,7 +21,7 @@ scheduler = BackgroundScheduler(daemon=True)
 scheduler.start()
 
 # Set up CORS
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:81"}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -113,7 +116,7 @@ class RoleDetails(db.Model):
         self.role_status = role_status
     
     def json(self):
-        item = {
+        item = { 
             'role_id': self.role_id,
             'role_name': self.role_name,
             'role_description': self.role_description,
@@ -208,6 +211,84 @@ scheduler.add_job(
     minute=0
 )
     
+@app.route("/view_role_listings_hr", methods=['GET'])
+def view_role_listings_hr():
+    try:
+        # Query all role listings
+        role_listings = RoleListing.query.all()
+
+        # Create a list to store the response data
+        response_data = []
+
+        for role_listing in role_listings:
+            # Get the associated role details
+            role_detail = RoleDetails.query.filter_by(role_id=role_listing.role_id).first()
+
+            if role_detail:
+                # Get the skills associated with the role listing
+                skills = db.session.query(SKILL_DETAILS.skill_name)\
+                                   .join(ROLE_SKILLS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id)\
+                                   .filter(ROLE_SKILLS.role_id == role_detail.role_id).all()
+
+                # Format the data
+                formatted_data = {
+                    "role_name": role_detail.role_name,
+                    "role_id": role_detail.role_id,
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_listing_desc": role_listing.role_listing_desc,
+                    "role_listing_status": role_listing.role_listing_status,
+                    "role_listing_open": role_listing.role_listing_open.strftime('%d/%m/%Y'),
+                    "role_listing_close": role_listing.role_listing_close.strftime('%d/%m/%Y'),
+                    "skills_list": [skill[0] for skill in skills]
+                }
+
+                response_data.append(formatted_data)
+
+        # Return the response
+        return jsonify({"code": 200, "data": response_data}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/view_role_listings_manager/<manager_id>", methods=['GET'])
+def view_role_listings_manager(manager_id):
+    try:
+        # Query all role listings
+        role_listings = RoleListing.query.filter_by(role_listing_source=manager_id).all()
+
+        # Create a list to store the response data
+        response_data = []
+
+        for role_listing in role_listings:
+            # Get the associated role details
+            role_detail = RoleDetails.query.filter_by(role_id=role_listing.role_id).first()
+
+            if role_detail:
+                # Get the skills associated with the role listing
+                skills = db.session.query(SKILL_DETAILS.skill_name)\
+                                   .join(ROLE_SKILLS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id)\
+                                   .filter(ROLE_SKILLS.role_id == role_detail.role_id).all()
+
+                # Format the data
+                formatted_data = {
+                    "role_name": role_detail.role_name,
+                    "role_id": role_detail.role_id,
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_listing_desc": role_listing.role_listing_desc,
+                    "role_listing_status": role_listing.role_listing_status,
+                    "role_listing_open": role_listing.role_listing_open.strftime('%d/%m/%Y'),
+                    "role_listing_close": role_listing.role_listing_close.strftime('%d/%m/%Y'),
+                    "skills_list": [skill[0] for skill in skills]
+                }
+
+                response_data.append(formatted_data)
+
+        # Return the response
+        return jsonify({"code": 200, "data": response_data}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route("/view_role_listings", methods=['GET'])
 def view_role_listings():
     try:
@@ -247,7 +328,6 @@ def view_role_listings():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 #View a single role listing
 @app.route("/view_role_single_listings/<role_listing_id>", methods=['GET'])
 def view_role_single_listing(role_listing_id):
@@ -274,6 +354,7 @@ def view_role_single_listing(role_listing_id):
                     "role_listing_status": role_listing.role_listing_status,
                     "role_listing_open": role_listing.role_listing_open.strftime('%d/%m/%Y'),
                     "role_listing_close": role_listing.role_listing_close.strftime('%d/%m/%Y'),
+                    "role_listing_source": role_listing.role_listing_source,
                     "skills_list": [skill[0] for skill in skills]
                 }
 
@@ -336,32 +417,6 @@ def matching_and_missing_skills(role_id, staff_id):
 
     except Exception as e:
         return jsonify({'error': 'An error occurred: ' + str(e)})
-
-@app.route("/view_skills", methods=['GET'])
-def view_skills():
-    try:
-        # Get all skills in descending order (Latest created skill first)
-        skills = SKILL_DETAILS.query.order_by(SKILL_DETAILS.skill_id.desc()).all()
-        
-        # If no skill
-        if len(skills) == 0:
-            return jsonify(
-                {
-                    "code": 404,
-                    "message": "No skills found!"
-                }
-            ), 404
-        
-        # Return success response
-        return jsonify(
-            {
-                "code": 200,
-                "data": [skill.json() for skill in skills]
-            }
-        ), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
     
 # Display all active role listing IDs
 @app.route("/role_listing_id_option", methods=["GET"])
@@ -371,6 +426,28 @@ def get_all_role_listings():
         active_role_listing_ids = [str(role.role_listing_id) for role in RoleListing.query.filter_by(role_listing_status='active').all()]
         
         return jsonify(active_role_listing_ids), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/role_listings", methods=["GET"])
+def get_all_role_listings_with_details():
+    try:
+        # Fetch all active role listings along with their details
+        role_listings = RoleListing.query.filter_by(role_listing_status='active').all()
+        role_listing_data = []
+
+        for role in role_listings:
+            role_data = {
+                "role_listing_id": role.role_listing_id,
+                "role_id": role.role_id,
+                "role_listing_desc": role.role_listing_desc,
+                "role_listing_source": role.role_listing_source,
+                "role_listing_open": role.role_listing_open,
+                "role_listing_close": role.role_listing_close
+            }
+            role_listing_data.append(role_data)
+
+        return jsonify(role_listing_data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -402,14 +479,18 @@ def get_role_listing_details(role_listing_id):
         return jsonify({"error": str(e)}), 500
 
     
-# Display all available role IDs   
+# Display all available role IDs with Role Name
 @app.route("/role_id_options", methods=["GET"])
 def get_role_id_options():
     try:
-        # Fetch all role_id values from the RoleDetails table
-        role_ids = [str(role.role_id) for role in RoleDetails.query.all()]
-        
-        return jsonify(role_ids), 200
+        # Fetch all role details from the RoleDetails table
+        roles = RoleDetails.query.all()
+
+        # Create a list of dictionaries with both ID and Name
+        role_options = [{'value': str(role.role_id), 'label': f"{role.role_id} - {role.role_name}"}
+                        for role in roles]
+
+        return jsonify(role_options), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -627,7 +708,8 @@ def delete_rolelisting(role_listing_id):
 
     except Exception as e:
         return jsonify({'error': str(e)})
-    #view all role applications
+
+#view all role applications
 @app.route("/view_role_applications", methods=['GET'])
 def view_role_applications():
     try:
@@ -665,6 +747,46 @@ def view_role_applications():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+
+#view role applications by role listing id
+@app.route("/view_role_applications_by_rls/<role_listing_source>/<role_lisitng_id>", methods=['GET'])
+def view_role_applications_by_rls(role_listing_source, role_lisitng_id):
+    try:
+        # Query to fetch the role listing and associated skills based on role_listing_id
+        results = db.session.query(RoleListing, ROLE_APPLICATIONS, StaffDetails,RoleDetails)\
+                            .join(RoleListing, RoleDetails.role_id == RoleListing.role_id)\
+                            .join(ROLE_APPLICATIONS, RoleListing.role_listing_id == ROLE_APPLICATIONS.role_listing_id)\
+                            .join(StaffDetails, ROLE_APPLICATIONS.staff_id == StaffDetails.staff_id)\
+                            .filter(ROLE_APPLICATIONS.role_app_status == 'applied', RoleListing.role_listing_source == role_listing_source, RoleListing.role_listing_id == role_lisitng_id)\
+                            .all()
+        
+        # Dictionary to hold combined data with role_id as key
+        role_app_data = {}
+        
+        for role_listing, role_applications, staff_details, role_details in results:
+            role_app_id = role_applications.role_app_id
+            if role_app_id not in role_app_data:
+                role_app_data[role_app_id] = {
+                    "role_listing_id": role_listing.role_listing_id,
+                    "role_name": role_details.role_name,
+                    "role_app_id": role_applications.role_app_id,
+                    "staff_id": staff_details.staff_id,
+                    "staff_dept": staff_details.dept,
+                    "role_app_status": role_applications.role_app_status,
+                    "app_reason": role_applications.app_reason,
+                    "staff_name": staff_details.fname + " " + staff_details.lname,
+                    "manager_staff_id": role_listing.role_listing_source
+                   
+                }
+        # Convert the role dictionary into the desired output format
+        combined_data = list(role_app_data.values())
+        
+        # Return the combined data
+        return jsonify({"code": 200, "data": combined_data}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
 # apply for role  
 @app.route("/apply_role", methods=['POST'])
 def apply_role():

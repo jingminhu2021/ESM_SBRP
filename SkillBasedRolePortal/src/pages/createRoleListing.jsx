@@ -57,7 +57,7 @@ function createRoleListing(){
 
     useEffect(() => {
       // Fetch all Role IDs from your database
-      axios.get('http://localhost:5003/role_id_options')
+      axios.get('http://localhost:8000/api/role/role_id_options')
         .then((response) => {
           if (response.status === 200) {
             const options = response.data.map((role) => ({
@@ -79,7 +79,7 @@ function createRoleListing(){
 
       // Fetch corresponding role details here
       if (selectedOption) {
-        axios.get(`http://localhost:5003/role_details/${selectedOption.value}`)
+        axios.get(`http://localhost:8000/api/role/role_details/${selectedOption.value}`)
           .then((response) => {
             if (response.status === 200) {
               const roleData = response.data;
@@ -104,7 +104,7 @@ function createRoleListing(){
 
     useEffect(() => {
       // Fetch the manager options from your Flask API endpoint
-      fetch('http://localhost:5003/manager_options')
+      fetch('http://localhost:8000/api/role/manager_options')
         .then((response) => response.json())
         .then((data) => {
           // Convert the data to the format expected by react-select
@@ -227,7 +227,7 @@ function createRoleListing(){
       console.log('Form Data:', formData);
 
       axios
-        .post('http://localhost:5003/create_rolelisting', formData) // Replace with your Flask API endpoint
+        .post('http://localhost:8000/api/role/create_rolelisting', formData) // Replace with your Flask API endpoint
         .then((response) => {
           if (response.status === 200) {
             console.log('Role created successfully:', response.data);
@@ -251,8 +251,8 @@ function createRoleListing(){
                   <div className="col-md-7">
                     <h1 className="text-white font-weight-bold">Create Role</h1>
                     <div className="custom-breadcrumbs">
-                      <a href="#">Role Listings</a> <span className="mx-2 slash">/</span>
-                      <a href="#">Role</a> <span className="mx-2 slash">/</span>
+                      <a href="/">Home</a><span className="mx-2 slash">/</span>
+                      <a href="/viewRoles">Role Listings</a> <span className="mx-2 slash">/</span>
                       <span className="text-white"><strong>Create Role</strong></span>
                     </div>
                   </div>
@@ -279,7 +279,7 @@ function createRoleListing(){
                         <h3 className="text-black mb-5 border-bottom pb-2">Role Details</h3>
                         
                         <div className="form-group">
-                          <label htmlFor="job-id">Role ID</label>
+                          <label htmlFor="job-id">Role</label>
                           <Select
                             options={roleIDOptions}
                             value={selectedRole}
@@ -287,7 +287,7 @@ function createRoleListing(){
                           />
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                           <label htmlFor="job-title">Role Name</label>
                           <input
                             type="text"
@@ -298,7 +298,7 @@ function createRoleListing(){
                             value={formData.role_name}
                             onChange={handleChange}
                           />
-                        </div>
+                        </div> */}
 
                         <div className="form-group">
                           <label htmlFor="role_listing_open">Role Application Start Date</label>

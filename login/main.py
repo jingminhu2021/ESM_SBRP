@@ -18,7 +18,6 @@ db = SQLAlchemy(app)
 
 # For Cross-Origin Resource Sharing
 CORS(app, supports_credentials=True)
-
 # Create a SQLAlchemy model for the accounts table
 class Account(db.Model):
     __tablename__ = 'ACCOUNT'
@@ -77,6 +76,5 @@ def login():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True) #testing purpose
+    app.run(host="0.0.0.0", port=5000,debug=True) #testing purpose
