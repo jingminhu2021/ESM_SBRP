@@ -10,9 +10,9 @@ function RoleListings() {
     const [rolelistings, setRoles] = useState([]);
     const location = useLocation();
     var api_link = 'http://localhost:8000/api/role/view_role_listings_hr'
-    // if (sessionStorage.getItem('sys_role') === 'manager') {
-    //     api_link = 'http://localhost:8000/api/role/view_role_listings_manager/' + sessionStorage.getItem('staff_id')
-    // }
+    if (sessionStorage.getItem('sys_role') === 'manager') {
+        api_link = 'http://localhost:8000/api/role/view_role_listings_manager/' + sessionStorage.getItem('staff_id')
+    }
     useEffect(() => {
         axios.get(api_link)
         .then(response => {
@@ -98,14 +98,14 @@ function RoleListings() {
                                     <p><strong>Skill(s) Required:</strong> {rolelisting.skills_list.join(', ')}</p>
                                     <p><strong>Application Start Date :</strong> {rolelisting.role_listing_open}</p>
                                     <p><strong>Application End Date  :</strong> {rolelisting.role_listing_close}</p>
-                                    {/* Only show Status for 'hr' users
+                                    {/* Only show Status for 'hr' users */}
                                     {sessionStorage.getItem('sys_role') === 'hr' && (
                                         rolelisting.role_listing_status === 'active' ? (
                                             <p className="text-success"><strong>Status:</strong> Active</p>
                                         ) : (
                                             <p className="text-danger"><strong>Status:</strong> Inactive</p>
                                         )
-                                    )} */}
+                                    )}
                                 </Link>
                             </div>
                         )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Active Role Listing Found!</p>)}

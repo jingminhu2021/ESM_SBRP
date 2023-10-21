@@ -2,10 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.jsx'
 import ViewRoles from './pages/viewRoles.jsx'
+import ViewRoles_management from './pages/viewRoles_management.jsx'
 import ViewSingleRole from './pages/viewSingleRole.jsx'
+import StaffSkillList from './pages/staffSkillList.jsx'
+import UpdateStaffSkills from './pages/updateStaffSkills.jsx'
 import CreateRoleListing from './pages/createRoleListing.jsx'
 import UpdateRoleListing from './pages/updateRoleListing.jsx'
 import ViewRolesApplicants from './pages/viewRolesApplicants.jsx'
+import ViewCandidates from './pages/viewCandidates.jsx'
+import ViewCandidate from './pages/viewSingleCandidate.jsx'
 import Profile from './pages/profile.jsx'
 import SearchRole from './pages/searchRole.jsx'
 import ViewSkills from './pages/viewSkills.jsx'
@@ -34,12 +39,16 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/ViewRoles" element={<ViewRoles />} />
+          <Route path="/ViewRoles_management" element={<ViewRoles_management />} />
           <Route path="/ViewSingleRole/:role_listing_id" element={<ViewSingleRole />} />
           <Route path="/searchRole" element={<SearchRole />} />
           <Route path="/updateRoleListing" element={<UpdateRoleListing />} />
-          {/* <Route path="/contact" element={<Contact />} /> */}
+          <Route path="/StaffSkillList" element={<StaffSkillList />} />
+          <Route path="/UpdateStaffSkills/:staff_id" element={<UpdateStaffSkills />} />
           <Route path="/CreateRoleListing" element={<CreateRoleListing />} />
           <Route path="/ViewRolesApplicants" element={<ViewRolesApplicants />} />
+          <Route path="/ViewCandidates" element={<ViewCandidates />} />
+          <Route path="/ViewCandidate/:staff_id" element={<ViewCandidate />} />
           <Route path="/viewSkills" element={<ViewSkills />} />  
           <Route path="/viewSkill/:skillId" element={<ViewSkill />} />
           <Route path="/createSkill" element={<CreateSkill />} />

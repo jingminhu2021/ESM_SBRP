@@ -37,7 +37,7 @@ function skill() {
         const location = useLocation();
 
         useEffect(() => {
-            axios.get('http://localhost:5001/view_skills')
+            axios.get('http://localhost:8000/api/skill/view_skills')
                 .then(response => {
                     setSkills(response.data.data);
                 })
@@ -76,14 +76,14 @@ function skill() {
                     <div className="container">
                         <div className="text-right mb-5 mt-3" style={{padding:'0'}}>
                             <span className="mr-3">
-                                <button className="btn btn-primary btn-lg" type="button" onClick={() => window.location.href = '/createSkill'}>+ Create</button>
+                                <button className="btn btn-outline-primary btn-lg" type="button" onClick={() => window.location.href = '/createSkill'}>+ Create</button>
                             </span>
-                            <button className="btn btn-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteSkills'}>- Delete</button>
+                            <button className="btn btn-outline-danger btn-lg" type="button" onClick={() => window.location.href = '/deleteSkills'}>- Delete</button>
                         </div>
                         <div className="row">
                             {skills ? skills.map(skill => (
                                 <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={skill.skill_id}>
-                                    <Link to={`/ViewSkill/${skill.skill_id}`} className="block__16443 text-center d-block">
+                                    <Link to={`/ViewSkill/${skill.skill_id}`} className="block__16443 text-center d-block" style={{transition: 'none', position: 'static', height: '100%'}}>
                                         <h3>{skill.skill_name}</h3>
                                         {skill.skill_description !== null ? (
                                             <p>

@@ -46,7 +46,7 @@ else {
   useEffect(() => {
     const getActiveSkills = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/get_skills_by_status/active");
+        const response = await axios.get("http://localhost:8000/api/skill/get_skills_by_status/active");
         if (response.status === 200) {
           setActiveSkills(response.data.data);
         }
@@ -93,7 +93,7 @@ else {
   
     for (const skillId of selectedSkills) {
       const response = await axios.put(
-        `http://localhost:5001/delete_skill/${skillId}`,
+        `http://localhost:8000/api/skill/delete_skill/${skillId}`,
         {
           skill_status: "inactive",
         }

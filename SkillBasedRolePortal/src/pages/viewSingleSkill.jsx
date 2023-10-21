@@ -43,7 +43,7 @@ function skill() {
         const message = location.state?.message;
 
         useEffect(() => {
-            axios.get('http://localhost:5001/view_skill/' + skillId, {
+            axios.get('http://localhost:8000/api/skill/view_skill/' + skillId, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -85,11 +85,11 @@ function skill() {
                             <div className="col-lg-8">
                                 <h2 className="mb-4">{skillName}</h2>
                                 {skillDescription !== null ? (
-                                    <p>Description: {skillDescription}</p>
+                                    <p><strong>Description:</strong> {skillDescription}</p>
                                 ) : (
-                                    <p>No description available</p>
+                                    <p><strong>Description:</strong> No description available</p>
                                 )}
-                                <p>Status: {skillStatus}</p>
+                                <p><strong>Status:</strong> {skillStatus}</p>
                                 <Link to={`/UpdateSkill/${skillId}`} className="btn btn-info btn-md mt-4">Update Skill</Link> &nbsp;
                                 <Link to={'/ViewSkills'} className="btn btn-secondary btn-md mt-4">Return to Skills</Link>
                             </div>

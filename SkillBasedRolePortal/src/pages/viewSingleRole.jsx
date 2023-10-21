@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { Form, Button, Modal, Alert } from 'react-bootstrap'
 import navbar from '../components/navbar.jsx';
@@ -48,10 +48,25 @@ function RoleListings() {
         const [skill_name, setSkillName] = useState('');
         const [matchingSkillsString, setMatchingSkillsString] = useState('');
         const [missingSkillsString, setMissingSkillsString] = useState('');
+        const [role_listing_source, setRolelistingSource] = useState('');
 
         // Display success message on successful update
         const location = useLocation();
         const message = location.state?.message;
+
+        const [roleapplicants, setRolesApplicants] = useState([]);
+
+        const [showModal, setShowModal] = useState(false);
+        const [selectedApplicant, setSelectedApplicant] = useState(null);
+
+        const handleShowModal = (applicant) => {
+            setSelectedApplicant(applicant);
+            setShowModal(true);
+        }
+
+        const handleCloseModal = () => {
+            setShowModal(false);
+        }
 
         useEffect(() => {
             axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`, {
@@ -72,6 +87,7 @@ function RoleListings() {
                     setRolelistingClose(response.data.data.role_listing_close);
                     const skillsList = response.data.data.skills_list;
                     setSkillName(skillsList.length > 0 ? skillsList.join(", ") : "None");
+                    setRolelistingSource(response.data.data.role_listing_source);
 
                     checkDate(response.data.data.role_listing_close);
                     checkStatus(response.data.data.role_listing_status);
@@ -103,6 +119,57 @@ function RoleListings() {
                     });
             }
         }, [role_id, staff_id]);
+
+        // Fetch applicants for the role listing
+        useEffect(() => {
+            const fetchData = async () => {
+                // Check if role_listing_source is available
+                if (role_listing_source) {
+                    try {
+                        const response = await axios.get(`http://localhost:8000/api/role/view_role_applications_by_rls/${role_listing_source}/${role_listing_id}`);
+                        const applicantsWithSkills = await Promise.all(response.data.data.map(async applicant => {
+                            const staffId = applicant.staff_id;
+                            const roleListingId = applicant.role_listing_id;
+                            const applicantSkills = await fetchApplicantSkills(staffId);
+                            const roleSkills = await fetchRoleSkills(roleListingId);
+                            let percentageMatch = 0;
+                            if (applicantSkills !== null) {
+                                percentageMatch = applicantSkills.filter(skill => roleSkills.includes(skill.skill_name)).length / roleSkills.length * 100;
+                            }
+                            return { ...applicant, applicantSkills, percentageMatch, roleSkills };
+                        }));
+                        setRolesApplicants(applicantsWithSkills);
+                    } catch (error) {
+                        console.error('Error fetching Role Listings:', error);
+                    }
+                }
+            };
+        
+            fetchData();
+        }, [role_listing_source]);
+
+
+          const fetchApplicantSkills = async (staffId) => {
+              try {
+                  var bodyFormData = new FormData();
+                  bodyFormData.append('staff_id', staffId);
+                  const response = await axios.post('http://localhost:8000/api/profile/get_skills', bodyFormData, {withCredentials: true});
+                  return response.data.data;
+              }
+              catch (error) {
+                  console.error('Error fetching Skills:', error);
+              }
+          };
+      
+          const fetchRoleSkills = async (role_listing_id) => {
+              try {
+                  const response = await axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`);
+                  return response.data.data.skills_list;
+              }
+              catch (error) {
+                  console.error('Error fetching Skills:', error);
+              }
+          };
 
         var applications = [];
         const [applied, setApplied] = useState(false);
@@ -156,7 +223,7 @@ function RoleListings() {
                             break;
                         }
                         // Check if logged in user is the creator of listing
-                        if (application.manager_staff_id == staff_id) {
+                        if (application.manager_staff_id == staff_id && application.role_listing_id == role_listing_id) {
                             console.log(application.manager_staff_id);
                             setSourceApply(true);
                             break;
@@ -265,9 +332,9 @@ function RoleListings() {
 
         // Calculate the percentage of matched skills
         const totalSkills = skill_name.split(',').length; // Assuming skills are comma-separated
-        const matchedSkills = matchingSkillsString.split(',').length;
+        const matchedSkills = matchingSkillsString.trim() === '' ? 0 : matchingSkillsString.split(',').length;
         const percentage = (matchedSkills / totalSkills) * 100;
-
+        console.log(totalSkills, matchedSkills, percentage)
         return (
             <div>
                 {navbar()}
@@ -310,7 +377,7 @@ function RoleListings() {
                                 {sessionStorage.getItem('sys_role') === 'staff' && (
                                     <div className="col-lg-8" style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
                                         <p><strong>Your Role-Skill Match</strong></p>
-                                        <div className="progress">
+                                        <div className="progress" style={{position: 'relative'}}>
                                             <div
                                                 className="progress-bar bg-success"
                                                 role="progressbar"
@@ -319,7 +386,7 @@ function RoleListings() {
                                                 aria-valuemin="0"
                                                 aria-valuemax="100"
                                             >
-                                                {percentage}% Match
+                                                <span style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', color: 'black'}}>{percentage}% Match</span>
                                             </div>
                                         </div>
 
@@ -476,9 +543,132 @@ function RoleListings() {
                                     </Modal>
                                 </div>
                             )}
+
+                            <section className="site-section services-section bg-light block__62849 pt-4 mt-5" id="next-section" style={{ padding: '0' }}>
+                            <div className="container">
+                                <h4 className="text-center mb-3"><strong>List of Applicants</strong></h4>
+                                <div className="row">
+                                {roleapplicants && roleapplicants.length > 0 ? (
+                                    roleapplicants.map(roleapplicant => (
+                                    <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={roleapplicant.role_listing_id}>
+                                        <div className="block__16443 text-center d-block" style={{ transition: 'none', position: 'static', height: '100%' }}>
+                                        <h3>Staff ID: {roleapplicant.staff_id}</h3>
+                                        <h3>Staff Name: {roleapplicant.staff_name}</h3>
+                                        <p><strong>Current Department: </strong> {roleapplicant.staff_dept}</p>
+                                        <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
+
+                                        {/* Display Applicant Skills */}
+                                        {roleapplicant.applicantSkills && roleapplicant.applicantSkills.length > 0 ? (
+                                            <Link onClick={() => handleShowModal(roleapplicant)}>
+                                            <div className="bg-light text-info p-3">
+                                                <strong>Applicant Skills: </strong>
+                                                {roleapplicant.applicantSkills.map((skill, index) => (
+                                                <span key={skill.skill_id}>
+                                                    {skill.skill_name}
+                                                    {index !== roleapplicant.applicantSkills.length - 1 && ', '}
+                                                </span>
+                                                ))}
+                                                {sessionStorage.getItem('sys_role') === 'manager' && (
+                                                <>
+                                                    <div className="progress mt-2">
+                                                    <div
+                                                        className="progress-bar bg-success"
+                                                        role="progressbar"
+                                                        style={{ width: `${roleapplicant.percentageMatch}%` }}
+                                                        aria-valuenow={roleapplicant.percentageMatch}
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"
+                                                    >
+                                                        {roleapplicant.percentageMatch}%
+                                                    </div>
+                                                    </div>
+                                                    <span className="text-secondary"><small>{roleapplicant.percentageMatch}% Skill Match to Role</small></span>
+                                                </>
+                                                )}
+                                            </div>
+                                            </Link>
+                                        ) : (
+                                            <Link onClick={() => handleShowModal(roleapplicant)}>
+                                            <div className="bg-light p-3 text-info ">
+                                                <strong>Applicant Skills: </strong>
+                                                No Skills
+                                            </div>
+                                            </Link>
+                                        )}
+                                        </div>
+                                    </div>
+                                    ))
+                                ) : (
+                                    <p className="text-center" style={{ fontSize: '18px' }}>- No one applied for this role -</p>
+                                )}
+                                </div>
+                            </div>
+                            </section>
                         </div>
                     </div>
                 </section>
+
+                {/* Show Model for application listings*/}
+                <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Skills Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="text-dark p-3" style={{backgroundColor: "silver"}}>
+                    <strong>Role Skill Required: </strong>
+                    <ul>
+                        {selectedApplicant && selectedApplicant.roleSkills && selectedApplicant.roleSkills.length > 0 ? (
+                            selectedApplicant.roleSkills.map(skill => (
+                                <li key={skill}>{skill}</li>
+                            ))
+                        ) : (
+                            <span>No Role Skills</span>
+                            )}
+                    </ul>
+                    </div>
+
+                    {selectedApplicant && selectedApplicant.applicantSkills && selectedApplicant.applicantSkills.length > 0 ? (
+                    <div className="bg-light text-info p-3">
+                        <strong>Applicant Skills: </strong>
+                        <ul>
+                        {selectedApplicant.applicantSkills.map(skill => (
+                            <li key={skill.skill_id}>{skill.skill_name}</li>
+                        ))}
+                        </ul>
+                        {sessionStorage.getItem('sys_role') === 'manager' && (
+                            <>
+                        <div className="progress mt-2">
+                        <div
+                            className="progress-bar bg-success"
+                            role="progressbar"
+                            style={{ width: `${selectedApplicant.percentageMatch}%` }}
+                            aria-valuenow={selectedApplicant.percentageMatch}
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        >
+                            {selectedApplicant.percentageMatch}%
+                        </div>
+                        </div>
+                        
+                        <div className="text-center">
+                            <span className="text-secondary"><small>{selectedApplicant.percentageMatch}% Skill Match to Role</small></span>
+                        </div>
+                        </>
+                        )}
+                    </div>
+                ) : (
+                    <div className="bg-light text-info p-3">
+                    <strong>Applicant Skills: </strong>
+                    No Skills
+                    </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+                </Modal>
             </div>
         );
     }
