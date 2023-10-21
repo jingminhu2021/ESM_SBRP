@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import navbar from '../components/navbar.jsx'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import {Badge} from 'react-bootstrap'
 
 function viewStaff(){
     // Check if HR , Manager is logged in
