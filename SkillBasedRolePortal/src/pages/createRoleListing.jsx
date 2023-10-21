@@ -228,6 +228,7 @@ function createRoleListing(){
         // Prompt the user for missing fields
         const errorMessage = Object.values(errors).join('\n');
         alert(`Please be reminded that:\n\n${errorMessage}`);
+        window.location.reload();
         return;
       }
       
@@ -245,7 +246,6 @@ function createRoleListing(){
           if (response.status === 200) {
             console.log('Role Listing created successfully:', response.data);
             alert('Role listing created successfully!');
-            // navigate('/viewRoles?created=true');
           } else {
             console.error('Error creating role:', response.data);
           }
