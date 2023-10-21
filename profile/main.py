@@ -60,7 +60,7 @@ class Staff_Details(db.Model):
     email = db.Column(db.String(50), nullable=False)
     biz_address = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
-    sys_role = db.Column(db.Enum("staff","hr","manager"), nullable=False)
+    sys_role = db.Column(db.Enum("staff","hr","manager","inactive"), nullable=False)
 
     def json(self):
         item = {
@@ -193,29 +193,30 @@ def update_skills():
     except Exception as e:
         return jsonify({'error': str(e)})
     
-# get list of staff with skills
+# get list of staff
 @app.route("/get_staff_skill", methods=['GET'])
 def get_staff_skill():
     try:
-        # Get staff details of staff with skills
-        results = db.session.query(Staff_Skills, Staff_Details)\
-                            .join(Staff_Details, Staff_Skills.staff_id == Staff_Details.staff_id)\
-                            .all()
+        # get all staff details from staff_details table
+        staff_details = Staff_Details.query.filter(Staff_Details.sys_role != "inactive").all()
 
-        result_dict = {}
-
-        for staff_skills, staff_details in results:
-            staff_id = staff_skills.staff_id
-            # Only store 1 copy of the staff details
-            if staff_id not in result_dict:
-                result_dict[staff_id] = {
-                    'staff_id': staff_id,
-                    'staff_name': staff_details.fname + ", " + staff_details.lname,
-                    'dept': staff_details.dept,
-                    'sys_role': staff_details.sys_role,
+        if not staff_details:
+            return jsonify(
+                {
+                    "code": 404,
+                    'message': 'Staff details not found',
+                    'status': 'error', 
+                    'data': None
                 }
-
-        return list(result_dict.values()), 200
+            ), 404
+        
+        # Return success response
+        return jsonify(
+            {
+                "code": 200,
+                "data": [staff.json() for staff in staff_details]
+            }
+        ), 200
     
     except Exception as e:
         return jsonify({'error': str(e)})
@@ -238,12 +239,21 @@ def get_staff_profile(staff_id):
         if not skills:
             return jsonify(
                 {
-                    'message': 'get_skills: No skills found',
+                    'message': 'Profile retrieved',
                     'status': 'success', 
-                    'data': None
+                    'data': None,
+                    'staff_details': {
+                        'fname': staff_details.fname,
+                        'lname': staff_details.lname,
+                        'email': staff_details.email,
+                        'phone': staff_details.phone,
+                        'dept': staff_details.dept
+                    }
                 }
-            )
+            ), 200
         
+
+        # if skills found, get skill details
         skills_list = []
         
         for skill in skills:
