@@ -11,7 +11,7 @@ function RoleListings() {
     const location = useLocation();
 
     useEffect(() => {
-        axios.get('http://localhost:5003/view_role_listings')
+        axios.get('http://localhost:8000/api/role/view_role_listings')
         .then(response => {
             setRoles(response.data.data);
             console.log(response.data.data);

@@ -54,7 +54,7 @@ function RoleListings() {
         const message = location.state?.message;
 
         useEffect(() => {
-            axios.get(`http://localhost:5003/view_role_single_listings/${role_listing_id}`, {
+            axios.get(`http://localhost:8000/api/role/view_role_single_listings/${role_listing_id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -85,7 +85,7 @@ function RoleListings() {
             // Check if role_id is available before making the request
             if (role_id) {
                 // Fetch matching and missing skills data from Flask API
-                axios.get(`http://localhost:5003/matching_and_missing_skills/${role_id}/${staff_id}`)
+                axios.get(`http://localhost:8000/api/role/matching_and_missing_skills/${role_id}/${staff_id}`)
                     .then(response => {
                         // Extract data from the response
                         const { matching_skills, missing_skills } = response.data;
