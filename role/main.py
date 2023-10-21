@@ -487,8 +487,13 @@ def get_role_id_options():
         roles = RoleDetails.query.all()
 
         # Create a list of dictionaries with both ID and Name
-        role_options = [{'value': str(role.role_id), 'label': f"{role.role_id} - {role.role_name}"}
-                        for role in roles]
+        role_options = [
+            {
+                "role_id": role.role_id,
+                "role_name": role.role_name
+            }
+            for role in roles
+        ]
 
         return jsonify(role_options), 200
     except Exception as e:
