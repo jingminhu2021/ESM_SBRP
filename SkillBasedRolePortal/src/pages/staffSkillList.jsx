@@ -41,7 +41,9 @@ function StaffSkillList() {
         },
       })
         .then(response => {
-          setStaffList(response.data);
+          if (response.data.data != null) {
+            setStaffList(response.data.data);
+          }
         })
         .catch(error => {
           console.error('Error fetching staff list:', error);
@@ -67,31 +69,37 @@ function StaffSkillList() {
 
         <section className="site-section p-sm-5" id="next-section">
           <div className="container">
-            <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
-              <p className="font-weight-bold">Staff List</p>
-              <table className="table table-striped table-bordered text-center">
-                <thead>
-                  <tr>
-                    <th>Staff ID</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Role</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {staffList.map((staff, index) => (
-                    <tr key={index}>
-                      <td>{staff.staff_id}</td>
-                      <td>{staff.staff_name}</td>
-                      <td>{staff.dept}</td>
-                      <td>{staff.sys_role}</td>
-                      <td><Link to={`/UpdateStaffSkills/${staff.staff_id}`} className="btn btn-info">Update</Link></td>
+            {staffList.length === 0 ? (
+              <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4 text-center">
+                <h5>No staff found</h5>
+              </div>
+            ) : (
+              <div className="col-lg-10 mb-5 mb-lg-0 mx-auto mt-4">
+                <p className="font-weight-bold">Staff List</p>
+                <table className="table table-striped table-bordered text-center">
+                  <thead>
+                    <tr>
+                      <th>Staff ID</th>
+                      <th>Name</th>
+                      <th>Department</th>
+                      <th>Role</th>
+                      <th></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {staffList.map((staff, index) => (
+                      <tr key={index}>
+                        <td>{staff.staff_id}</td>
+                        <td>{`${staff.fname} ${staff.lname}`}</td>
+                        <td>{staff.dept}</td>
+                        <td>{staff.sys_role}</td>
+                        <td><Link to={`/UpdateStaffSkills/${staff.staff_id}`} className="btn btn-info">Update</Link></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </section>
       </div>
