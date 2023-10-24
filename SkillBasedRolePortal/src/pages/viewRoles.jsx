@@ -7,6 +7,31 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function RoleListings() {
     
+    if (sessionStorage.getItem('sys_role') == null) {
+        return (
+            <div>
+                {Navbar()}
+                <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url(/images/hero_1.jpg)' }} id="home-section">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-7">
+                                <h1 className="text-white font-weight-bold">View Role Listings</h1>
+                                <div className="custom-breadcrumbs">
+                                    <a href="/">Home</a><span className="mx-2 slash">/</span>
+                                    <span className="text-white"><strong>view role listings</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section className="site-section services-section" id="next-section">
+                    <div className="container text-center">
+                        <p className="font-weight-bold" style={{ fontSize: '24px' }}>You are not authorized to view this page! Please login in </p>
+                    </div>
+                </section>
+            </div>
+        )
+    }
     const [rolelistings, setRoles] = useState([]);
     const location = useLocation();
     var api_link = 'http://localhost:8000/api/role/view_role_listings_hr'
@@ -71,6 +96,7 @@ function RoleListings() {
         {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-outline-danger btn-lg" type="button" onClick={() => window.location.href = '/updateRoleListing'}>Edit Role Listings</button>}
         </div>
         <div className="row">
+            
         {/* append to filter rolelistings.role_listing_close>= currentDate */}
         {rolelistings ? rolelistings.filter(rolelisting => {
             // Assuming currentdate and role_listing_close are in dd/mm/yy format as strings
