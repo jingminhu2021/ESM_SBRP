@@ -22,7 +22,6 @@ scheduler.start()
 
 # Set up CORS
 cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:80"}})
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:81"}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
