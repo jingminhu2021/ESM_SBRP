@@ -228,7 +228,6 @@ function createRoleListing(){
         // Prompt the user for missing fields
         const errorMessage = Object.values(errors).join('\n');
         alert(`Please be reminded that:\n\n${errorMessage}`);
-        window.location.reload();
         return;
       }
       
