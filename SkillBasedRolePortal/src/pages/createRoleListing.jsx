@@ -252,6 +252,7 @@ function createRoleListing(){
         })
         .catch((error) => {
           console.error('Error saving data:', error);
+          alert('Trouble creating role listing. Please refresh the page and try again.');
         });
     }
     
