@@ -404,7 +404,7 @@ function updateRoleListing() {
             alert('Role listing updated successfully!');
 
             // Reload the page after a successful update
-            // window.location.reload();
+            window.location.reload();
           } else if (response.status === 404) {
             console.error('Role Listing not found:', response.data);
             // Handle the case where the specified role listing was not found
