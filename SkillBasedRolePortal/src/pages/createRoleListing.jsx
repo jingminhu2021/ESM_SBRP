@@ -248,6 +248,7 @@ function createRoleListing(){
             alert('Role listing created successfully!');
           } else {
             console.error('Error creating role:', response.data);
+            alert('Trouble creating role listing. Please refresh the page and try again.');
           }
         })
         .catch((error) => {

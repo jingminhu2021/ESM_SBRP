@@ -411,11 +411,13 @@ function updateRoleListing() {
           } else {
             console.error('Error updating Role Listing:', response.data);
             // Handle other errors here, such as showing an error message
+            alert('Trouble updating role listing. Please refresh the page and try again.');
           }
         })
         .catch((error) => {
           console.error('Error updating data:', error);
           // Handle errors here, such as showing an error message
+          alert('Trouble updating role listing. Please refresh the page and try again.');
         });
     };    
 
@@ -437,9 +439,7 @@ function updateRoleListing() {
             if (response.status === 200) {
               console.log('Role Listing deleted successfully:', response.data);
               alert('Role listing deleted successfully!');
-              // Handle success actions, e.g., show a success message and navigate to another page
-              // You can use the navigate function from react-router-dom for navigation
-
+             
               // Reload the page after a successful update
               window.location.reload();
             } else if (response.status === 404) {
@@ -448,11 +448,13 @@ function updateRoleListing() {
             } else {
               console.error('Error deleting Role Listing:', response.data);
               // Handle other errors here, such as showing an error message
+              alert('Trouble deleting role listing. Please refresh the page and try again.');
             }
           })
           .catch((error) => {
             console.error('Error deleting data:', error);
             // Handle errors here, such as showing an error message
+            alert('Trouble deleting role listing. Please refresh the page and try again.');
           });
       }
     };
