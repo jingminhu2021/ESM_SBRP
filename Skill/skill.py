@@ -12,8 +12,11 @@ endpoint = os.environ.get("DB_HOST")
 username = os.environ.get("DB_USERNAME")
 password = os.environ.get("DB_PASSWORD")
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{username}:{password}@{endpoint}:3306/SBRP"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+if __name__ == '__main__':
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{username}:{password}@{endpoint}:3306/SBRP"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
 
 db = SQLAlchemy(app)
 # For Cross-Origin Resource Sharing
