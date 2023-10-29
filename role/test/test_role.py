@@ -660,18 +660,208 @@ class TestRoleListing(TestApp):
         response = self.client.post("/create_rolelisting", data=json.dumps({
             "role_id": 234567891,
             "role_listing_desc": "The Head, Talent Attraction",
-            "role_listing_source": 123456787,
-            "role_listing_open": "10-10-2023",
-            "role_listing_close": "10-12-2023",
-            "role_listing_creator": 123456788,
-            "role_listing_updater": 123456788
+            "role_listing_source": 123456788,
+            "role_listing_open": "30-10-2023",
+            "role_listing_close": "16-11-2023",
+            "role_listing_creator": 123456787,
+            "role_listing_updater": 123456788,
+            "role_name": "Head, Talent Attraction"
         }), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
         data = response.json
         self.assertEqual(data, 'Role listing created successfully', msg= "data = %s" % data)
 
+    def test_delete_role_listing(self):
+        rl1 = RoleListing(
+            role_id=234567891,
+            role_listing_desc="The Head, Talent Attraction",
+            role_listing_source =123456787,
+            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_creator=123456788,
+            role_listing_updater=123456788)
+        
+        db.session.add(rl1)
+        db.session.commit()
+
+        response = self.client.get("/role_listings")
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        role_listing = data[0]['role_listing_id']
+
+        response = self.client.delete("/delete_rolelisting/"+str(role_listing))
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        self.assertEqual(data['message'], 'Role listing deleted successfully!', msg= "data = %s" % data)
+
+    def test_delete_role_listing_invalid(self):
+        response = self.client.delete("/delete_rolelisting/0")
+        self.assertEqual(response.status_code, 404)
+        data = response.json
+        self.assertEqual(data['message'], 'Role listing not found!', msg= "data = %s" % data)
+
+    def test_view_role_applications(self):
+       
+        rl1 = RoleListing(
+            role_id=234567891,
+            role_listing_desc="The Head, Talent Attraction",
+            role_listing_source =123456787,
+            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_creator=123456788,
+            role_listing_updater=123456788)
+        
+        sd1 = StaffDetails(
+            staff_id=123456789,
+            fname = "test",
+            lname = "staff",
+            dept = "test department",
+            email = "test@email.com",
+            phone = "12345678",
+            sys_role="manager"
+        )
+
+        rd1 = RoleDetails(
+            role_id=234567891,
+            role_name="Head, Talent Attraction",
+            role_description="The Head, Talent Attraction",
+            role_status="active"
+        )
+
+        db.session.add(sd1)
+        db.session.add(rl1)
+        db.session.add(rd1)
+        db.session.commit()
+
+        
+        response = self.client.get("/role_listings")
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        role_listing = data[0]['role_listing_id']
+
+        ra1 = ROLE_APPLICATIONS(
+            role_app_id = 123456789,
+            role_listing_id = role_listing,
+            staff_id = 123456789,
+            role_app_status = "applied",
+            app_reason = "test",
+        )
+
+        db.session.add(ra1)
+        db.session.commit()
+
+        response = self.client.get("/view_role_applications")
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        self.assertEqual(data['data'][0]['staff_id'], 123456789, msg= "data = %s" % data)
+
+    def test_view_role_applications_empty(self):
+                
+            response = self.client.get("/view_role_applications")
+            self.assertEqual(response.status_code, 200)
+            data = response.json
+            self.assertEqual(len(data['data']), 0, msg= "data = %s" % data)
+
+    def test_view_role_appliactions_by_rls(self):
+        rl1 = RoleListing(
+            role_id=234567891,
+            role_listing_desc="The Head, Talent Attraction",
+            role_listing_source =123456787,
+            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_creator=123456788,
+            role_listing_updater=123456788)
+        
+        sd1 = StaffDetails(
+            staff_id=123456789,
+            fname = "test",
+            lname = "staff",
+            dept = "test department",
+            email = "test@email.com",
+            phone = "12345678",
+            sys_role="manager"
+        )
+
+        rd1 = RoleDetails(
+            role_id=234567891,
+            role_name="Head, Talent Attraction",
+            role_description="The Head, Talent Attraction",
+            role_status="active"
+        )
+
+        db.session.add(sd1)
+        db.session.add(rl1)
+        db.session.add(rd1)
+        db.session.commit()
+
+        
+        response = self.client.get("/role_listings")
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        role_listing = data[0]['role_listing_id']
+
+        ra1 = ROLE_APPLICATIONS(
+            role_app_id = 123456789,
+            role_listing_id = role_listing,
+            staff_id = 123456789,
+            role_app_status = "applied",
+            app_reason = "test",
+        )
+
+        db.session.add(ra1)
+        db.session.commit()
+
+        response = self.client.get("/view_role_applications_by_rls/123456787/"+str(role_listing))
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        self.assertEqual(data['data'][0]['staff_id'], 123456789, msg= "data = %s" % data)
+
+    def test_view_role_appliactions_by_rls_empty(self):
+    
+        response = self.client.get("/view_role_applications_by_rls/123456787/0")
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        self.assertEqual(len(data['data']), 0, msg= "data = %s" % data)
 
 
+    def test_apply_role(self):
+        response = self.client.post("/apply_role", data=json.dumps({
+            "role_listing_id": 123456789,
+            "staff_id": 123456789,
+            "reason": "test"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        self.assertEqual(data, 'Role application created successfully!', msg= "data = %s" % data)
+
+    def test_withdraw_role(self):
+        ra1 = ROLE_APPLICATIONS(
+            role_app_id = 123456789,
+            role_listing_id = 123456789,
+            staff_id = 123456789,
+            role_app_status = "applied",
+            app_reason = "test",
+        )
+
+        db.session.add(ra1)
+        db.session.commit()
+        
+        response = self.client.put("/withdraw_role", data=json.dumps({
+            "role_listing_id": 123456789,
+            "staff_id": 123456789,
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        data = response.json
+        self.assertEqual(data, 'Role application withdrawn successfully.', msg= "data = %s" % data)
+
+    def test_withdraw_role_invalid(self):
+        response = self.client.put("/withdraw_role", data=json.dumps({
+            "role_listing_id": 123456789,
+            "staff_id": 123456789,
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+        data = response.json
+        self.assertEqual(data['message'], 'Application not found!', msg= "data = %s" % data)
 
 if __name__ == "__main__":
     unittest.main()
