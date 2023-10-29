@@ -37,8 +37,8 @@ class RoleListing(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('ROLE_DETAILS.role_id'), nullable=False)
     role_listing_desc = db.Column(db.String(255), nullable=True)
     role_listing_source = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'))
-    role_listing_open = db.Column(db.String(20), nullable=False)  # Store as string 'DD-MM-YYYY'
-    role_listing_close = db.Column(db.String(20))  # Store as string 'DD-MM-YYYY'
+    role_listing_open = db.Column(db.DateTime, nullable=False)
+    role_listing_close = db.Column(db.DateTime)
     role_listing_creator = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_listing_ts_create = db.Column(db.DateTime, default=db.func.now())
     role_listing_updater = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
