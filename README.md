@@ -28,21 +28,7 @@ Make sure that your WAMP/MAMP Server and Docker is running.
 4. Import table data for Role Listing and Role Applications table respectively.
 
 ## 3. Start Up
-1. Access the website via http://localhost:1337 and create an admin user for Konga.
-
-2. After sign in, connect konga to kong by creating a new connection with the following details.
-    Name: default
-    Kong Admin URL: http://kong:8001
-
-3. On the left panel, under applications, click on snapshots.
-
-4. Click on "import from file", select "SBRP_V3.json" from "API_Gateway_snapshot" folder.
-
-5. Click "details" and click "restore".
-
-6. Select "services" and "routes" and "import objects". If there are any fails after restoring, repeat restore step.
-
-7. Build the docker images.
+1. Build the docker images.
 
 Open a new terminal in vsc.
 
@@ -50,6 +36,19 @@ Open a new terminal in vsc.
 cd sbrp
 docker-compose up -d
 ```
+2. Access the Konga website via http://localhost:1337 and create an admin user for Konga.
+
+3. After sign in, connect konga to kong by creating a new connection with the following details.
+    Name: default
+    Kong Admin URL: http://kong:8001
+
+4. On the left panel, under applications, click on snapshots.
+
+5. Click on "import from file", select "SBRP_V3.json" from "API_Gateway_snapshot" folder.
+
+6. Click "details" and click "restore".
+
+7. Select "services" and "routes" and "import objects". If there are any fails after restoring, repeat restore step.
   
 8. Please check that all the images and containers are running using `docker images` and `docker ps` in your command prompt.
 
