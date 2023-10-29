@@ -3,7 +3,7 @@ SPMG7T6 AY2023/24 2
 
 ## 1. Prerequisites
 ### 1.1 Installation
-Please ensure that you have the following installed on your machine. You can follow this installation guide (https://docs.google.com/document/d/1hSqhVbgbclf-eOvBx5BQhaTJHxbUSUN4wZTrLNUMyUk/edit).
+Please ensure that you have the following installed on your machine.
 
 - Python 3
 - Visual Studio Code
@@ -36,11 +36,11 @@ Make sure that your WAMP/MAMP Server and Docker is running.
 
 3. On the left panel, under applications, click on snapshots.
 
-4. Click on import from file, select "SBRP_1" from snapshot folder.
+4. Click on "import from file", select "SBRP_V3.json" from "API_Gateway_snapshot" folder.
 
-5. Click details and click restore.
+5. Click "details" and click "restore".
 
-6. Select "services" and "routes" and confirm. If there are any fails after restoring, repeat restore step.
+6. Select "services" and "routes" and "import objects". If there are any fails after restoring, repeat restore step.
 
 7. Build the docker images.
 
@@ -53,8 +53,8 @@ docker-compose up -d
   
 8. Please check that all the images and containers are running using `docker images` and `docker ps` in your command prompt.
 
-	**Using `docker images`, you should see the following images.**
-	- spmg7t6/is212_skill
+  **Using `docker images`, you should see the following images.**
+  - spmg7t6/is212_skill
   - spmg7t6/is212_profile
   - spmg7t6/is212_web
   - spmg7t6/is212_role
