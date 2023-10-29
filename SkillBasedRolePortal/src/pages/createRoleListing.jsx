@@ -208,13 +208,9 @@ function createRoleListing(){
       if (formData.role_id === '') {
         errors.role_id = 'Role ID is required';
       }
-      if (formData.role_name === '') {
-        errors.role_name = 'Role Name is required';
-      }
       if (formData.role_listing_open === '') {
         errors.role_listing_open = 'Role Application Start Date is required';
       }
-
       if (formData.role_listing_source === '') {
         errors.role_listing_source = 'Role Manager is required';
       }
@@ -249,13 +245,14 @@ function createRoleListing(){
           if (response.status === 200) {
             console.log('Role Listing created successfully:', response.data);
             alert('Role listing created successfully!');
-            // navigate('/viewRoles?created=true');
           } else {
             console.error('Error creating role:', response.data);
+            alert('Trouble creating role listing. Please refresh the page and try again.');
           }
         })
         .catch((error) => {
           console.error('Error saving data:', error);
+          alert('Trouble creating role listing. Please refresh the page and try again.');
         });
     }
     

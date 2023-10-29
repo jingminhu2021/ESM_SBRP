@@ -288,45 +288,6 @@ def view_role_listings_manager(manager_id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-@app.route("/view_role_listings", methods=['GET'])
-def view_role_listings():
-    try:
-        # Query all role listings
-        role_listings = RoleListing.query.all()
-
-        # Create a list to store the response data
-        response_data = []
-
-        for role_listing in role_listings:
-            # Get the associated role details
-            role_detail = RoleDetails.query.filter_by(role_id=role_listing.role_id).first()
-
-            if role_detail:
-                # Get the skills associated with the role listing
-                skills = db.session.query(SKILL_DETAILS.skill_name)\
-                                   .join(ROLE_SKILLS, ROLE_SKILLS.skill_id == SKILL_DETAILS.skill_id)\
-                                   .filter(ROLE_SKILLS.role_id == role_detail.role_id).all()
-
-                # Format the data
-                formatted_data = {
-                    "role_name": role_detail.role_name,
-                    "role_id": role_detail.role_id,
-                    "role_listing_id": role_listing.role_listing_id,
-                    "role_listing_desc": role_listing.role_listing_desc,
-                    "role_listing_status": role_listing.role_listing_status,
-                    "role_listing_open": role_listing.role_listing_open.strftime('%d/%m/%Y'),
-                    "role_listing_close": role_listing.role_listing_close.strftime('%d/%m/%Y'),
-                    "skills_list": [skill[0] for skill in skills]
-                }
-
-                response_data.append(formatted_data)
-
-        # Return the response
-        return jsonify({"code": 200, "data": response_data}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 #View a single role listing
 @app.route("/view_role_single_listings/<role_listing_id>", methods=['GET'])
