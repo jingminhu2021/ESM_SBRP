@@ -13,16 +13,16 @@ Please ensure that you have the following installed on your machine.
 - Google Chrome
  
 ### 1.2 Launch
-Make sure that your WAMP/MAMP Server and Docker is running.
+Make sure that your Docker is running.
 
 ## 2. Database
 1. Open MySQL Workbench.
 
 2. Set up new connection using the following details.
-    Hostname: myrdsinstance.ctvrxbrt1hnb.ap-southeast-1.rds.amazonaws.com
-    Port: 3306
-    Username: sbrp_admin
-    Password: 30e?lLIy^,248fX9T
+   - Hostname: myrdsinstance.ctvrxbrt1hnb.ap-southeast-1.rds.amazonaws.com
+   - Port: 3306
+   - Username: sbrp_admin
+   - Password: 30e?lLIy^,248fX9T
 
 3. If SBRP database happens to be empty, head to SQL folder and run SBRP_database.sql.
 4. Import table data for Role Listing and Role Applications table respectively.
@@ -39,8 +39,8 @@ docker-compose up -d
 2. Access the Konga website via http://localhost:1337 and create an admin user for Konga.
 
 3. After sign in, connect konga to kong by creating a new connection with the following details.
-    Name: default
-    Kong Admin URL: http://kong:8001
+   - Name: default
+   - Kong Admin URL: http://kong:8001
 
 4. On the left panel, under applications, click on snapshots.
 
