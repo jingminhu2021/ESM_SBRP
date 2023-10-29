@@ -21,10 +21,12 @@ scheduler = BackgroundScheduler(daemon=True)
 scheduler.start()
 
 # Set up CORS
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:80"}})
-
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+# cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:80"}})
+if __name__ == '__main__':
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -37,8 +39,8 @@ class RoleListing(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('ROLE_DETAILS.role_id'), nullable=False)
     role_listing_desc = db.Column(db.String(255), nullable=True)
     role_listing_source = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'))
-    role_listing_open = db.Column(db.String(20), nullable=False)  # Store as string 'DD-MM-YYYY'
-    role_listing_close = db.Column(db.String(20))  # Store as string 'DD-MM-YYYY'
+    role_listing_open = db.Column(db.DateTime, nullable=False)  # Store as string 'DD-MM-YYYY'
+    role_listing_close = db.Column(db.DateTime)  # Store as string 'DD-MM-YYYY'
     role_listing_creator = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
     role_listing_ts_create = db.Column(db.DateTime, default=db.func.now())
     role_listing_updater = db.Column(db.Integer, db.ForeignKey('STAFF_DETAILS.staff_id'), nullable=False)
