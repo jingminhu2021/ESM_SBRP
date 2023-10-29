@@ -10,8 +10,11 @@ ENDPOINT = os.environ.get('DB_HOST')
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+if __name__ == '__main__':
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{ENDPOINT}:3306/SBRP"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
 
 # Initialize the SQLAlchemy database object
 db = SQLAlchemy(app)
@@ -116,7 +119,7 @@ def get_skills():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@app.route("/get_all_skills", methods=['POST'])
+@app.route("/get_all_skills", methods=['GET'])
 def get_all_skills():
     try:
         
