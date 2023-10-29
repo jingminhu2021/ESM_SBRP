@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import navbar from '../components/navbar.jsx'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import {Badge} from 'react-bootstrap'
 
 function viewStaff(){
     // Check if HR , Manager is logged in
@@ -113,6 +114,9 @@ else {
                                     {skills.map((skill) => (
                                     <li key={skill.skill_id}>
                                         <a href={`/viewSkill/${skill.skill_id}`}>{skill.skill_name}</a>
+                                        <span>
+                                            <strong> <Badge text="light" bg={skill.ss_status === 'unverified' ? 'secondary' : skill.ss_status === 'in-progress' ? 'info' : 'primary'}>{skill.ss_status}</Badge></strong>
+                                        </span>
                                     </li>
                                     ))}
                                 </ul>

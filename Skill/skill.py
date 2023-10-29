@@ -2,8 +2,11 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+
+load_dotenv('db.env')
 
 endpoint = os.environ.get("DB_HOST")
 username = os.environ.get("DB_USERNAME")
@@ -281,7 +284,7 @@ def get_staffs_by_skill_id():
 def get_all_staffs():
     try:
         # Query all staffs from the STAFF_DETAILS table
-        staffs = STAFF_DETAILS.query.all()
+        staffs = STAFF_DETAILS.query.filter(STAFF_DETAILS.sys_role != "inactive").all()
         # If no staffs exist
         if not staffs:
             return jsonify(

@@ -86,9 +86,11 @@ function UpdateStaffSkills() {
                     setEmail(staff_details.email);
                     setPhone(staff_details.phone);
 
-                    // Set staff skills
-                    for (let i = 0; i < response.data.data.length; i++) {
-                        setSkill(skill => [...skill, { skill_id: response.data.data[i].skill_id, skill_status: response.data.data[i].ss_status, skill_name: response.data.data[i].skill_name }])
+                    // Set staff skills if not empty
+                    if (response.data.data != null) {
+                        for (let i = 0; i < response.data.data.length; i++) {
+                            setSkill(skill => [...skill, { skill_id: response.data.data[i].skill_id, skill_status: response.data.data[i].ss_status, skill_name: response.data.data[i].skill_name }])
+                        }
                     }
                 })
                 .catch(error => {
@@ -229,12 +231,15 @@ function UpdateStaffSkills() {
                             <div className="col-sm-12 col-md-6 mb-4 col-lg-6">
                                 <strong className="d-block text-black mb-3">Skills</strong>
                                 <ul>
-                                    {skill.map((s, index) => (
-
-                                        <li key={index}>{s.skill_name} <Badge text="light" bg={s.skill_status == 'active' ? "primary" : "secondary"} >{s.skill_status}</Badge></li>
-
-                                    ))}
-
+                                    {skill.length === 0 ? (
+                                        <li>No skill found</li>
+                                    ) : (
+                                        skill.map((s, index) => (
+                                            <li key={index}>
+                                                {s.skill_name} <Badge text="light" bg={s.skill_status == 'active' ? "primary" : "secondary"} >{s.skill_status}</Badge>
+                                            </li>
+                                        ))
+                                    )}
                                 </ul>
                                 <Button variant="outline-primary" className='border-width-2 mr-2' onClick={handleAddSkillShow}>Add Skill</Button>
                                 <Button variant="outline-primary" className='border-width-2' onClick={handleUpdateSkillShow}>Update Skill Status</Button>

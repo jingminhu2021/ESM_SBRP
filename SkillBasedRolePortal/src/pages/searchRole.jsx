@@ -16,7 +16,7 @@ function searchRole(){
     const [roleTitleSearch, setRoleTitleSearch] = useState([])
     const [roleSkillSearch, setRoleSkillSearch] = useState([])
     const [displayMatchingRoles, setDisplayMatchingRoles] = useState([])
-    const [fuseSearch, setFuseSearch] = useState(true)
+    // const [fuseSearch, setFuseSearch] = useState(true)
 
     //Render dependencies
     const [roleSearchSuccess, setRoleSearchSuccess] = useState(null)
@@ -53,15 +53,17 @@ function searchRole(){
     // Title Filtering
     const searchTitleResult = () =>{
         setTitleResultSuccess(true)
+        var fuseSearch = true
         if (roleTitle == ""){
             return
         }
         for (let i = 0; i < roleList.length; i++){
             if (roleList[i].role_name.toLowerCase().includes(roleTitle)){
                 setRoleTitleSearch(roleTitleSearch => [...roleTitleSearch, roleList[i]])
-                setFuseSearch(false)
+                fuseSearch = false
             }
         }
+
         if (fuseSearch){
             
             const fuseOptions = {
@@ -72,7 +74,6 @@ function searchRole(){
                 ]
             }
             const fuse = new Fuse(roleList, fuseOptions)
-            console.log(fuse.search(roleTitle))
             for (let i = 0; i < fuse.search(roleTitle).length; i++){
                 setRoleTitleSearch(roleTitleSearch => [...roleTitleSearch, fuse.search(roleTitle)[i].item])
             }
@@ -141,7 +142,7 @@ function searchRole(){
     }
 
     console.log("1:", roleTitleSearch, "2:",   roleSkillSearch, displayMatchingRoles)
-
+    
     useEffect(() => {
         getAllRoles()
     }, [])

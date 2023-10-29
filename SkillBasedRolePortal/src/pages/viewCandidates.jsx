@@ -104,7 +104,7 @@ else {
                 { skill_id: skillId }, 
                 { withCredentials: true}
             );
-            return response.data.data;
+            return response.data.data.filter(staff => staff.staff_id != sessionStorage.getItem('staff_id'));
         }
         catch (error) {
             console.log(error);
