@@ -33,6 +33,13 @@ class TestSkillAPI(TestApp):
         data = response.json
         self.assertEqual(data['data'][0], {'skill_description': 'This is a test skill', 'skill_id': 345678912, 'skill_name': 'Test Skill', 'skill_status': 'active'},msg="data = %s" % data)
 
+    def test_view_skills_invalid(self):
+
+        response = self.client.get("/view_skills")
+        self.assertEqual(response.status_code, 404)
+        data = response.json
+        self.assertEqual(data['message'], 'No skills found!',msg="data = %s" % data)
+
     def test_view_single_skill(self):
         s1 = Skill(skill_id = 345678912,
                 skill_name = "Test Skill",
@@ -44,6 +51,14 @@ class TestSkillAPI(TestApp):
         self.assertEqual(response.status_code, 200)
         data = response.json
         self.assertEqual(data['data'],{'skill_description': 'This is a test skill', 'skill_id': 345678912, 'skill_name': 'Test Skill', 'skill_status': 'active'},msg="data = %s" % data)
+
+    def test_view_single_skill_invalid(self):
+
+        response = self.client.get("/view_skill/345678912")
+        self.assertEqual(response.status_code, 404)
+        data = response.json
+        self.assertEqual(data['message'], 'Skill not found!',msg="data = %s" % data)
+
 
     # app.config['TESTING'] = True
 
