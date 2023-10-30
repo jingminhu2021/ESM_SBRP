@@ -47,8 +47,8 @@ class RoleListing(db.Model):
     def __init__(self, role_id, role_listing_creator, role_listing_updater, role_listing_open, role_listing_close=None, role_listing_desc=None, role_listing_source=None):
         self.role_listing_id = self.generate_unique_random_id()  # Generate a unique random ID
         self.role_id = role_id
-        self.role_listing_open = role_listing_open
-        self.role_listing_close = role_listing_close
+        self.role_listing_open = datetime.strptime(role_listing_open, '%Y-%m-%d %H:%M:%S')
+        self.role_listing_close = datetime.strptime(role_listing_close, '%Y-%m-%d %H:%M:%S')
         self.role_listing_desc = role_listing_desc
         self.role_listing_source = role_listing_source
         self.role_listing_creator = role_listing_creator

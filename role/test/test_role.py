@@ -27,8 +27,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -78,8 +78,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -123,8 +123,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -177,8 +177,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -221,8 +221,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -406,8 +406,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -433,8 +433,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00", 
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -460,8 +460,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator="123456788",
             role_listing_updater="123456788")
         
@@ -657,6 +657,8 @@ class TestRoleListing(TestApp):
 
 
     def test_create_role_listing(self):
+        
+
         response = self.client.post("/create_rolelisting", data=json.dumps({
             "role_id": 234567891,
             "role_listing_desc": "The Head, Talent Attraction",
@@ -669,15 +671,16 @@ class TestRoleListing(TestApp):
         }), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = response.json
-        self.assertEqual(data, 'Role listing created successfully', msg= "data = %s" % data)
+        self.assertEqual(data, 'Role listing created successfully.', msg= "data = %s" % data)
+
 
     def test_delete_role_listing(self):
         rl1 = RoleListing(
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator=123456788,
             role_listing_updater=123456788)
         
@@ -706,8 +709,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00",
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator=123456788,
             role_listing_updater=123456788)
         
@@ -767,8 +770,8 @@ class TestRoleListing(TestApp):
             role_id=234567891,
             role_listing_desc="The Head, Talent Attraction",
             role_listing_source =123456787,
-            role_listing_open=datetime.strptime("2023-10-13 00:00:00", '%Y-%m-%d %H:%M:%S'),
-            role_listing_close=datetime.strptime("2023-12-30 00:00:00", '%Y-%m-%d %H:%M:%S'),
+            role_listing_open="2023-10-13 00:00:00", 
+            role_listing_close="2023-12-30 00:00:00",
             role_listing_creator=123456788,
             role_listing_updater=123456788)
         
