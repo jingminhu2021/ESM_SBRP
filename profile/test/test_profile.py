@@ -180,3 +180,4 @@ class TestProfileAPI(TestApp):
         data = response.json
         self.assertEqual(data['data'], None,msg="data = %s" % data)
         self.assertEqual(data['message'], 'Staff details not found',msg="data = %s" % data)
+        
