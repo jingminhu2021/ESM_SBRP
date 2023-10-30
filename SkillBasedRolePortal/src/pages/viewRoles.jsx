@@ -68,7 +68,10 @@ function RoleListings() {
 
     const skillSelect = []
     const handleDropdownChange = (event, selected) => {
-      skillSelect.push({skillName: selected.option.value})
+        try{
+          skillSelect.push({skillName: selected.option.value})  
+        } catch (error){
+        }
     };
 
     const handleSubmit = (event) => {
@@ -151,7 +154,7 @@ function RoleListings() {
                                 <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title..."></input>
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
-                                <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
+                                <Select class="jobSkill" styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobSkill" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
                                 <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>

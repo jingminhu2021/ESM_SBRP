@@ -69,6 +69,7 @@ function searchRole(){
             const fuseOptions = {
                 isCaseSensitive: false,
                 minMatchCharLength: 2,
+                threshold: 0.3,
                 keys: [
                     "role_name"
                 ]
