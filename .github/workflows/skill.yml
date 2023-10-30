@@ -67,7 +67,7 @@ jobs:
           python -m unittest discover -s 'skill' -p '*test*' -v
   
   Docker_Image_Builder:
-    needs: Pylint_Test
+    needs: Unit_Test
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
