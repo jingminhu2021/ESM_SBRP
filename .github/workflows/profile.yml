@@ -64,15 +64,15 @@ jobs:
 
       - name: Run unit tests
         run: |
-          cd ${{env.dir_path}}
-          python -m unittest discover -s 'flask' -p '*test*'
+          
+          python -m unittest discover -s 'test' -p '*test*'
 
       - name: Run integration tests
         run: |
           python ${{env.dir_path}}/tests/test_profile.py
-          
+
   Docker_Image_Builder:
-    needs: Pylint_Test
+    needs: Unit_Test
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
