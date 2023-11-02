@@ -19,10 +19,10 @@ Make sure that your Docker is running.
 1. Open MySQL Workbench.
 
 2. Set up new connection using the following details.
-   - Hostname: myrdsinstance.ctvrxbrt1hnb.ap-southeast-1.rds.amazonaws.com
+   - Hostname: {insert your database endpoint}
    - Port: 3306
-   - Username: sbrp_admin
-   - Password: 30e?lLIy^,248fX9T
+   - Username: {insert your username}
+   - Password: {insert your password}
 
 3. If SBRP database happens to be empty, head to SQL folder and run SBRP_database.sql.
 4. Import table data for Role Listing and Role Applications table respectively.
