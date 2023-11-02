@@ -134,6 +134,7 @@ return (
             <p><strong>Role Applied: </strong>{roleapplicant.role_name}</p> 
             <p><strong>Current Department : </strong> {roleapplicant.staff_dept}</p>
             <p><strong>Source Manager ID: {roleapplicant.manager_staff_id}</strong></p>
+            <p><strong>Reason: {roleapplicant.app_reason}</strong></p>
 
             {/* Display Applicant Skills */}
             {roleapplicant.applicantSkills && roleapplicant.applicantSkills.length > 0 ? (
