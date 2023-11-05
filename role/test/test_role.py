@@ -837,6 +837,16 @@ class TestRoleListing(TestApp):
         data = response.json
         self.assertEqual(data, 'Role application created successfully!', msg= "data = %s" % data)
 
+    def test_invalid_apply_role(self):
+        response = self.client.post("/apply_role", data=json.dumps({
+            "role_listing_id": None,
+            "staff_id": None,
+            "reason": "test"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        data = response.json
+        self.assertGreater(len(data), 1, msg= "data = %s" % data)
+
     def test_withdraw_role(self):
         ra1 = ROLE_APPLICATIONS(
             role_app_id = 123456789,
