@@ -673,6 +673,11 @@ class TestRoleListing(TestApp):
         data = response.json
         self.assertEqual(data, 'Role listing created successfully.', msg= "data = %s" % data)
 
+    def test_create_role_listing_invalid(self):
+        response = self.client.post("/create_rolelisting", data=json.dumps({}), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        data = response.json
+        self.assertGreater(len(data), 0, msg= "data = %s" % data)
 
     def test_delete_role_listing(self):
         rl1 = RoleListing(
@@ -878,4 +883,3 @@ class TestRoleListing(TestApp):
 
 if __name__ == "__main__":
     unittest.main()
-

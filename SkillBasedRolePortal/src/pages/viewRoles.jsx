@@ -68,7 +68,10 @@ function RoleListings() {
 
     const skillSelect = []
     const handleDropdownChange = (event, selected) => {
-      skillSelect.push({skillName: selected.option.value})
+        try{
+          skillSelect.push({skillName: selected.option.value})  
+        } catch (error){
+        }
     };
 
     const handleSubmit = (event) => {
@@ -78,7 +81,6 @@ function RoleListings() {
         {state: {data:{roleTitle: formData.jobTitle, skill: skillSelect}}}
       )
     }
-
 
     useEffect(() => {
         axios.get(api_link)
@@ -90,35 +92,6 @@ function RoleListings() {
             console.error('Error fetching Role Listings:', error);
         });
     }, []);
-
-    // Check if the 'created=true' parameter is present in the URL
-    useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const created = searchParams.get('created');
-        if (created === 'true') {
-            toast.success("Role created successfully");
-        }
-    }, [location.search]);
-
-    // Filter active role listings and check date range
-    const currentDate = new Date();
-    console.log("date:" + currentDate)
-
-    // const activeRoleListings = rolelistings.filter(rolelisting => {
-
-    //     console.log("open date: " + new Date(rolelisting.role_listing_open))
-    //     console.log("close date: " + new Date(rolelisting.role_listing_close))
-
-    //     return (
-    //         rolelisting.role_listing_status === 'active' &&
-    //         new Date(rolelisting.role_listing_open) <= currentDate &&
-    //         new Date(rolelisting.role_listing_close) >= currentDate
-    //     );
-
-        
-    // });
-
-
 
     useEffect(() => {
       getAllSkills()
@@ -151,7 +124,7 @@ function RoleListings() {
                                 <input name="jobTitle" value={formData.jobTitle} onChange={handleChange} type="text" className="form-control form-control-lg" placeholder="Job title..."></input>
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
-                                <Select styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobType" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
+                                <Select className="jobSkill" styles={{ control: (baseStyles, state) => ({...baseStyles, padding: 4.5,}),}} name="jobSkill" value={selectedType} placeholder="Select skills" isMulti={true} options={skillList} onChange={handleDropdownChange} />
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
                                 <button type="submit" className="btn btn-primary btn-lg btn-block text-white btn-search"><span className="icon-search icon mr-2"></span>Search Job</button>
@@ -172,9 +145,26 @@ function RoleListings() {
                         {sessionStorage.getItem('sys_role') === 'hr' && <button className="btn btn-outline-danger btn-lg" type="button" onClick={() => window.location.href = '/updateRoleListing'}>Edit Role Listings</button>}
                     </div>
                     <div className="row">
-                        
-                        {/* {activeRoleListings.length > 0 ? activeRoleListings.map(rolelisting => ( */}
-                        {rolelistings ? rolelistings.map(rolelisting => (
+                        {rolelistings ? rolelistings
+                            .filter(rolelisting => {
+                                const parseDate = dateStr => {
+                                    const [day, month, year] = dateStr.split('/').map(Number);
+                                    // Create a new Date in the "mm/dd/yyyy" format (JavaScript's standard format)
+                                    return new Date(year, month - 1, day);
+                                };
+    
+                                const openDate = parseDate(rolelisting.role_listing_open);
+                                const closeDate = parseDate(rolelisting.role_listing_close);
+                                const currentDate = new Date();
+    
+                                // Check if the role listing is active and within date range
+                                return (
+                                    rolelisting.role_listing_status === 'active' && // Role listing has an active status
+                                    openDate <= currentDate && // Role listing opens on or before the current date
+                                    closeDate > currentDate // Role listing closes after the current date
+                                );
+                            })
+                            .map(rolelisting => (
                             <div className="col-6 col-md-6 col-lg-4 mb-4 mb-lg-5" key={rolelisting.role_listing_id}>
                                 <Link to={`/ViewSingleRole/${rolelisting.role_listing_id}`} className="block__16443 text-center d-block font-weight-bold" style={{transition: 'none', position: 'static', height: '100%'}}>
                                     <h3>{rolelisting.role_listing_id}</h3>
@@ -191,14 +181,6 @@ function RoleListings() {
                                     <p><strong>Skill(s) Required:</strong> {rolelisting.skills_list.join(', ')}</p>
                                     <p><strong>Application Start Date :</strong> {rolelisting.role_listing_open}</p>
                                     <p><strong>Application End Date  :</strong> {rolelisting.role_listing_close}</p>
-                                    {/* Only show Status for 'hr' users
-                                    {sessionStorage.getItem('sys_role') === 'hr' && (
-                                        rolelisting.role_listing_status === 'active' ? (
-                                            <p className="text-success"><strong>Status:</strong> Active</p>
-                                        ) : (
-                                            <p className="text-danger"><strong>Status:</strong> Inactive</p>
-                                        )
-                                    )} */}
                                 </Link>
                             </div>
                         )) : (<p className="font-weight-bold" style={{ fontSize: '24px' }}>No Active Role Listing Found!</p>)}

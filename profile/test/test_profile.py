@@ -55,7 +55,7 @@ class TestProfileAPI(TestApp):
 
         db.session.add(s1)
         db.session.commit()
-        response = self.client.get("/get_all_skills")
+        response = self.client.post("/get_all_skills")
         self.assertEqual(response.status_code, 200)
         data = response.json
         self.assertEqual(data['data'][0],{
@@ -66,7 +66,7 @@ class TestProfileAPI(TestApp):
                         },msg="data = %s" % data)
     
     def test_get_all_skills_no_skills(self):
-        response = self.client.get("/get_all_skills")
+        response = self.client.post("/get_all_skills")
         self.assertEqual(response.status_code, 200)
         data = response.json
         self.assertEqual(data['data'], None,msg="data = %s" % data)
@@ -179,4 +179,4 @@ class TestProfileAPI(TestApp):
         self.assertEqual(response.status_code, 404)
         data = response.json
         self.assertEqual(data['data'], None,msg="data = %s" % data)
-        self.assertEqual(data['message'], 'Staff details not found',msg="data = %s" % data)
+        self.assertEqual(data['message'], 'Staff details not found',msg="data = %s" % data) 

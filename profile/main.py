@@ -119,7 +119,7 @@ def get_skills():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@app.route("/get_all_skills", methods=['GET'])
+@app.route("/get_all_skills", methods=['POST'])
 def get_all_skills():
     try:
         
