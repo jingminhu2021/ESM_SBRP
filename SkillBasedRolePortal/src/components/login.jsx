@@ -84,7 +84,6 @@ function login(){
                             value={formData.email}
                             onChange={handleInputChange}
                             autoComplete="off"
-                            dataTestid = "email"
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="password"
@@ -97,7 +96,6 @@ function login(){
                             value={formData.password}
                             onChange={handleInputChange}
                             autoComplete="off"
-                            dataTestid = "password"
                         />
                     </Form.Group>
 
@@ -105,7 +103,7 @@ function login(){
                         Close
                     </Button>
 
-                    <Button className="ml-2" variant = "primary" type="submit" dataTestid="login">
+                    <Button className="ml-2" variant = "primary" type="submit">
                         Login
                     </Button>
                 </Form>
